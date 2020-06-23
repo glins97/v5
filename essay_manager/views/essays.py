@@ -2,7 +2,7 @@ from django.shortcuts import render
 from essay_manager.decorators import login_required, has_permission
 from essay_manager.models import Essay, Correction, ErrorClassification
 from essay_manager.utils import get_view_by_permission, get_user_details
-from essay_manager.views.errors import e403_view
+from bauth.views import e403_view
 from django.shortcuts import redirect
 from django.utils.html import mark_safe
 

@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
-from essay_manager.views.login import login_view
-from essay_manager.views.errors import e403_view
+from bauth.views import login_view
+from bauth.views import e403_view
 
 def login_required(f, *args, **kwargs):
     def wrapper(request, *args, **kwargs):

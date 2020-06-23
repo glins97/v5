@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from essay_manager.decorators import login_required
 from essay_manager.models import Essay
-from essay_manager.views.errors import e403_view, e500_view
+from bauth.views import e403_view, e500_view
 
 import os.path
 import mimetypes

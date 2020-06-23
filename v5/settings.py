@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'essay_manager',
-    'essay_manager.templatetags.permissions',
     'essay_manager.templatetags.attributes',
     'essay_manager.templatetags.chunks',
     'tps',
+    'bauth', 
+    'bauth.templatetags.permissions', 
 ]
 
 MIDDLEWARE = [

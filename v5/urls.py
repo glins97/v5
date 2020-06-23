@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
+
 from essay_manager.views import *
 from essay_manager.apis import *
 from essay_manager.utils import get_uploaded_file
+
+from bauth.views import *
+from bauth.apis import *
 
 urlpatterns = [    
     path('admin/', admin.site.urls),
@@ -34,10 +38,11 @@ urlpatterns = [
     path('corrections/update/<int:id>/', update_correction_endpoint),
     path('profile/', profile_view),
     path('themes/', themes_view),
-    path('login/', login_view),
     
+    path('login/', login_view),
     path('api/logout/', logout_endpoint),
     path('api/login/', login_endpoint),
+
     path('api/profile/update/', update_profile_endpoint),
     path('api/essays/create/', create_essay_endpoint),
     
@@ -46,5 +51,5 @@ urlpatterns = [
   static('essay_manager/templates/', document_root='essay_manager/templates/') 
 
 
-handler404 = 'essay_manager.views.errors.e404_view'
-handler500 = 'essay_manager.views.errors.e500_view'
+handler404 = 'bauth.views.e404_view'
+handler500 = 'bauth.views.e500_view'
