@@ -61,7 +61,6 @@ urlpatterns = [
     # TPS RELATED
     # - views
     path('tps/<str:campus>/<str:subject>/<int:week>/', tps_view),
-    path('tps/success/', success_view),
 
     # - apis
     path('tps/answer/<str:campus>/<str:subject>/<int:week>', save_tps_answer)

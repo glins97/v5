@@ -5,6 +5,10 @@ def save_tps_answer(request, campus, subject, week):
     tpses = list(TPS.objects.all().filter(campus=campus.upper(), subject=subject.upper(), week=week))
     if len(tpses):
         tps = tpses[0]
+        answers = list(Answer.objects.all().filter(tps=tps))
+        if len(answers) >= tps.max_answers:
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Número limite de respostas já atingido.'})
+
         print(request.POST)
         answer = Answer(
             email = request.POST.get('email', ''),
@@ -23,5 +27,6 @@ def save_tps_answer(request, campus, subject, week):
             if getattr(tps, 'q'+str(q)) == getattr(answer, 'q'+str(q)):
                 answer.grade += 1
         answer.save()
-    return render(request, 'success.html')
+        return render(request, 'feed.html', {'title': 'Resposta salva', 'description': 'Obrigado pelo empenho!'})
+    return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Nenhum tps foi encontrado. Entre em contato com o responsável.'})
 

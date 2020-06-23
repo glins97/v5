@@ -4,6 +4,11 @@ from tps.models import TPS
 def tps_view(request, campus, subject, week):
     tpses = list(TPS.objects.all().filter(campus=campus.upper(), subject=subject.upper(), week=week))
     if len(tpses):
+        tps = tpses[0]
+        answers = list(Answer.objects.all().filter(tps=tps))
+        if len(answers) >= tps.max_answers:
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Número limite de respostas já atingido.'})
+
         data = {
             'subject': subject,
             'subject_desc': {
@@ -16,7 +21,4 @@ def tps_view(request, campus, subject, week):
             'week': week,
         }
         return render(request, 'tps.html', data)
-
-def success_view(request):
-    return render(request, 'success.html')
-
+    return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Nenhum tps foi encontrado. Entre em contato com o responsável.'})

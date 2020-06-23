@@ -47,7 +47,7 @@ class TPS(models.Model):
     campus = models.CharField(max_length=255, choices=campi, verbose_name='Campus')
     start_date = models.DateTimeField(verbose_name='Data de Início')
     end_date = models.DateTimeField(verbose_name='Data de Término')
-    max_students = models.IntegerField(default=40, verbose_name='Quantidade de alunos')
+    max_answers = models.IntegerField(default=40, verbose_name='Número de respostas')
 
     q1 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 1')
     q2 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 2')
@@ -65,6 +65,7 @@ class TPS(models.Model):
 
 class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    tps = models.ForeignKey(TPS, on_delete=models.CASCADE)
     email = models.CharField(max_length=255)
     grade = models.IntegerField(default=0)
     q1 = models.CharField(max_length=1, choices=answers)
