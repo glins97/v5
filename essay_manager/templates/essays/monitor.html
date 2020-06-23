@@ -14,13 +14,54 @@
           <div class="content">
             <div class="container-fluid">
               <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                  <div class="card card-stats">
+                    <div class="card-header card-header-{{uncorrected_essays_card_type}} card-header-icon">
+                      <div class="card-icon">
+                        <i class="material-icons">{{uncorrected_essays_icon}}</i>
+                      </div>
+                      <p class="card-category">Redações a corrigir</p>
+                      <h3 class="card-title">{{ uncorrected_essays_count }}</h3>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                  <div class="card card-stats">
+                    <div class="card-header card-header-{{active_corrections_essays_card_type}} card-header-icon">
+                      <div class="card-icon">
+                        <i class="material-icons">{{ active_corrections_essays_icon }}</i>
+                      </div>
+                      <p class="card-category">Total de correções ativas</p>
+                      <h3 class="card-title">{{ active_corrections_essays_count }}</h3>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                  <div class="card card-stats">
+                    <div class="card-header card-header-success card-header-icon">
+                      <div class="card-icon">
+                        <i class="material-icons">content_copy</i>
+                      </div>
+                      <p class="card-category">Total de correções concluídas</p>
+                      <h3 class="card-title">{{ done_corrections_count }}</h3>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header card-header-icon card-header-info">
                       <div class="card-icon">
                         <i class="material-icons">assignment</i>
                       </div>
-                      <h4 class="card-title ">Redações a corrigir</h4>
+                      <h4 class="card-title ">Total de redações a corrigir</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">

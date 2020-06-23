@@ -20,13 +20,23 @@ def _student_essays_view(request):
 @has_permission('monitor')
 @login_required
 def _monitor_essays_view(request):
+    corrections = Correction.objects.filter(user=request.user).order_by('-id').order_by('status')
+    essays = Essay.objects.filter().order_by('id')
+    uncorrected_essays = []
+    for essay in essays:
+        if not Correction.objects.filter(essay=essay).count():
+            uncorrected_essays.append(essay)
+    uncorrected_essays_count = len(uncorrected_essays)
+
     active_correction_essays = [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay, status='ACTIVE')]
     for index, essay in enumerate(active_correction_essays):
         active_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='ACTIVE').get().user
+    active_corrections_essays_count = len(active_correction_essays)
 
     done_correction_essays = [essay for essay in Essay.objects.filter().order_by('-id') if Correction.objects.filter(essay=essay, status='DONE')]
     for index, essay in enumerate(done_correction_essays):
         done_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='DONE').get().user
+    done_corrections_count = len(done_correction_essays)
 
     data = {
         'title': 'Redações',
@@ -35,6 +45,16 @@ def _monitor_essays_view(request):
         'essays': [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay).count() == 0],
         'active_correction_essays': active_correction_essays,
         'done_correction_essays': done_correction_essays[:10],
+
+        'done_corrections_count': done_corrections_count,
+        'active_corrections_essays_count': active_corrections_essays_count,
+        'uncorrected_essays_count': uncorrected_essays_count,
+        
+        'active_corrections_essays_card_type': 'check' if active_corrections_essays_count == 0 else 'warning',
+        'active_corrections_essays_icon': 'check' if active_corrections_essays_count == 0 else 'warning',
+        'uncorrected_essays_card_type': 'check' if uncorrected_essays_count == 0 else 'warning',
+        'uncorrected_essays_icon': 'check' if uncorrected_essays_count == 0 else 'warning',
+
         'user': get_user_details(request.user),
         'created': request.GET.get('created', None),
         'updated': request.GET.get('updated', None),
