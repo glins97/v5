@@ -58,12 +58,9 @@ urlpatterns = [
     # ---------------------
 
     # tps related
-    path('tps/<subject:str>/<week:int>/', tps_view),
+    path('tps/<str:subject>/<int:week>/', tps_view),
     # ---------------------
-    
-]  + \
-  static('essay_manager/assets/', document_root='essay_manager/assets/') + \
-  static('essay_manager/templates/', document_root='essay_manager/templates/') 
+] 
 
 
 handler404 = 'bauth.views.e404_view'
