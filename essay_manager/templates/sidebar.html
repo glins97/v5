@@ -1,0 +1,57 @@
+{% load permissions %}
+<div class="sidebar" data-color="azure" data-background-color="white" data-image="/static/essay_manager/img/sidebar-1.jpg">
+	<div class="logo"><a href="http://www.creative-tim.com" class="simple-text logo-mini">
+		{{ user.initials }}
+	</a>
+	<a href="http://www.creative-tim.com" class="simple-text logo-normal">
+		{{ user.full_name }}
+	</a></div>
+	<div class="sidebar-wrapper">
+		<ul class="nav">
+			<li class="nav-item {% if title == 'Dashboard' %}active{%endif%}">
+				<a class="nav-link" href="/">
+					<i class="material-icons">dashboard</i>
+					<p>Dashboard</p>
+				</a>
+			</li>
+			{% if user.obj|has_permission:'student' %}
+			<li class="nav-item {% if title == 'Perfil' %}active{%endif%}">
+				<a class="nav-link" href="/profile/">
+					<i class="material-icons">person</i>
+					<p>Perfil</p>
+				</a>
+			</li>
+			{% endif %}
+			<li class="nav-item {% if title == 'Redações' %}active{%endif%}">
+				<a class="nav-link" href="/essays/">
+					<i class="material-icons">assignment</i>
+					<p>Redações </p>
+				</a>
+			</li>
+			{% if user.obj|has_permission:'student' %}
+			<li class="nav-item {% if title == 'Temas' %}active{%endif%}">
+				<a class="nav-link" href="/themes/">
+					<i class="material-icons">content_paste</i>
+					<p>Temas</p>
+				</a>
+			</li>
+			{% endif %}
+			{% if user.obj|has_permission:'student' %}
+			<li class="nav-item {% if title == 'Gráficos' %}active{%endif%}">
+				<a class="nav-link">
+					<i class="material-icons">equalizer</i>
+					<p style="color:#aaaaaa !important;">Gráficos</p>
+				</a>
+			</li>
+			{% endif %}
+			<!-- {% if user.obj|has_permission:'monitor' %}
+			<li class="nav-item {% if title == 'Correções' %}active{%endif%}">
+				<a class="nav-link" href="/corrections/">
+					<i class="material-icons">content_copy</i>
+					<p>Correções</p>
+				</a>
+			</li>
+			{% endif %} -->
+		</ul>
+	</div>
+</div>

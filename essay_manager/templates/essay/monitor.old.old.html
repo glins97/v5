@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "head.html" %}
+<body class="">
+  <div class="wrapper ">
+    {% include "sidebar.html" %}
+    <div class="main-panel">
+      <!-- Navbar -->
+      {% include "navbar.html" %}
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="content">
+          <div class="container-fluid">
+            
+            <div class="row sticky-top" id="btns">
+              <div class="col-md-auto ml-auto mr-auto">
+                <div class="card card-chart text-center">
+                  <div class="card-body text-center">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn shadow-none btn-danger" id="selectColorDanger" style="background-color: #f26621;">
+                        <input type="radio" name="options" id="option4" aria-pressed="false">        |
+                      </label>
+                      <label class="btn shadow-none btn-warning" id="selectColorWarning" style="background-color: #ffc74f;">
+                        <input type="radio" name="options" id="option5" aria-pressed="false">        |
+                      </label>
+                      <label class="btn shadow-none btn-primary" id="selectColorPrimary">
+                        <input type="radio" name="options" id="option1" aria-pressed="false">        |
+                      </label>
+                      <label class="btn shadow-none btn-info" id="selectColorLight">
+                        <input type="radio" name="options" id="option2" aria-pressed="false">        |
+                      </label>
+                      <label class="btn shadow-none btn-success" id="selectColorSuccess">
+                        <input type="radio" name="options" id="option3" aria-pressed="false">        |
+                      </label>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn shadow-none btn-info" style="margin-left: 20px;" id="selectModeLine">
+                        <input type="radio" name="selectModeLine" style="box-shadow:none !important;"  aria-pressed="false"> LINHA
+                      </label>
+                      <label class="btn shadow-none btn-info" id="selectModeRectangle">
+                        <input type="radio" name="selectModeRectangle" style="box-shadow:none !important;"  aria-pressed="false"> RETÂNGULO
+                      </label>
+                      <label class="btn shadow-none btn-info" id="selectModeComment">
+                        <input type="radio" name="selectModeComment" style="box-shadow:none !important;"  aria-pressed="false"> COMENTAR
+                      </label>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" id="card-essay">
+              <div class="col-md-12">
+                <div class="card card-chart">
+                  <div class="card-body">
+                    <h3 class="card-title text-center">Redação #{{essay.id}}</h3>
+                    <h5 class="card-title text-center">{{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h5>
+                    <h4 class="card-title text-center">{{essay.upload_date}}</h4>
+                  </div>
+                  <div class="card-footer">
+                    <i> <img id="src" class="src" src="../../{{essay.file}}" width="100%"/> </i> 
+                  </div>
+                  <canvas id="canvas" class="src"></canvas>
+                  <canvas id="canvasPlaceholder" class="src"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <button hidden="true" id="openModal" class="btn btn-primary btn-round" data-toggle="modal" data-target="#myModal" >
+                  <div class="ripple-container"></div></button>
+                  <div class="modal has-info fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content" style="width:700px !important">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Adicionar comentário</h4>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox7" data-toggle="collapse" data-target="#innerCheckboxesGram" > Gramática
+                                <!-- Gramática  -->
+                                <div id="innerCheckboxesGram" class="container collapse">
+                                  <div class="row" style="margin-left: 5px; margin-top: 10px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="gramCheckbox1" onclick="updateTextfieldValue('gramCheckbox1', 'formTextarea1', 'Atenção às preposições exigidas por nomes ou verbos. ', 'c1')"> Regência
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="gramCheckbox2" onclick="updateTextfieldValue('gramCheckbox2', 'formTextarea1', 'Atenção às normas de concordância. ', 'c1')"> Concordância
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="gramCheckbox3" onclick="updateTextfieldValue('gramCheckbox3', 'formTextarea1', 'Atenção às normas de pontuação. ', 'c1')"> Pontuação
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="gramCheckbox4" onclick="updateTextfieldValue('gramCheckbox4', 'formTextarea1', 'Atenção às normas de paralelismo. ', 'c1')"> Paralelismo
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="gramCheckbox5" onclick="updateTextfieldValue('gramCheckbox5', 'formTextarea1', 'Atenção ao emprego de pronomes. ', 'c1')"> Pronomes
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="gramCheckbox6" onclick="updateTextfieldValue('gramCheckbox6', 'formTextarea1', 'Atenção ao uso emprego indevido ou ausência do acento indicativo de crase. ', 'c1')"> Crase
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox6" data-toggle="collapse" data-target="#innerCheckboxesConv" > Convenção
+                                <!-- Competência  -->
+                                <div id="innerCheckboxesConv" class="container collapse">
+                                  <div class="row" style="margin-left: 5px; margin-top: 10px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="convCheckbox1" onclick="updateTextfieldValue('convCheckbox1', 'formTextarea1', 'Atenção às convenções de acentuação. ', 'c1')"> Acentuação
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="convCheckbox2" onclick="updateTextfieldValue('convCheckbox2', 'formTextarea1', 'Atenção às convenções de hífen. ', 'c1')"> Hífen
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="convCheckbox3" onclick="updateTextfieldValue('convCheckbox3', 'formTextarea1', 'Atenção às convenções de ortografia. ', 'c1')"> Ortografia
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="convCheckbox4" onclick="updateTextfieldValue('convCheckbox4', 'formTextarea1', 'Atenção às conveções envolvendo letras maiúsculas e minúsculas (joão, brasil, [...]). ', 'c1')"> Maísculas/Minúsculas
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                                    <div class="form-check col-sm">
+                                      <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="" id="convCheckbox5" onclick="updateTextfieldValue('convCheckbox5', 'formTextarea1', 'Atenção ao uso de hífen ou sublinha no final da linha e/ou incorreta separação silábica. ', 'c1')"> Translineação
+                                        <span class="form-check-sign">
+                                          <span class="check"></span>
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox3" onclick="updateTextfieldValue('inlineCheckbox3', 'formTextarea1', 'Sobra de elemento sintático. ', 'c1')"> Excesso
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox4" onclick="updateTextfieldValue('inlineCheckbox4', 'formTextarea1', 'Palavras repetidas lado a lado. ', 'c1')"> Repetição
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox5" onclick="updateTextfieldValue('inlineCheckbox5', 'formTextarea1', 'Falta de termo essencial para regência ou semântica. ', 'c1')"> Ausência
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox2" data-toggle="collapse" data-target="#innerCheckboxes2" onclick="updateTextfieldValue('inlineCheckbox2', 'formTextarea1', 'Períodos que deveriam formar períodos independentes, mas estão sem a fragmentação. ', 'c1')"> Justaposição
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox1" onclick="updateTextfieldValue('inlineCheckbox1', 'formTextarea1', 'Separar duas orações coordenadas ou a oração principal da subordinada por ponto final. ', 'c1')"> Truncamento
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox8" onclick="updateTextfieldValue('inlineCheckbox8', 'formTextarea1', 'Informalidade. ', 'c1')"> Registro
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox9" onclick="updateTextfieldValue('inlineCheckbox9', 'formTextarea1', 'Imprecisão vocabular. ', 'c1')"> Vocabulário
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            <div class="col-sm form-check">
+                              <div class="form-group">
+                                <label for="formTextarea1">Comentários</label>
+                                <textarea class="form-control" id="formTextarea1" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea1', 'c1')"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                          <br>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-success btn-link" data-dismiss="modal" onclick="comments.push(document.getElementById('comment-text').value); document.getElementById('comment-text').value = '';">Salvar
+                            <div class="ripple-container"><div class="ripple-decorator ripple-on ripple-out" style="left: 36.0833px; top: 14px; background-color: rgb(244, 67, 54); transform: scale(8.51041);"></div></div></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card has-info card-chart">
+                      <div class="card-body">
+                        <h3 class="card-title text-center">Competência 1</h3>
+                        <br>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions" checked="true"> 200
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions"> 160
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions"> 120
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions"> 80
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option5" type="radio" name="inlineRadioOptions"> 40
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option6" type="radio" name="inlineRadioOptions"> 0
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <div class="form-group">
+                                <label for="formTextarea1">Comentários gerais</label>
+                                <textarea class="form-control" id="formTextarea1" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea1', 'c1')"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card has-info card-chart">
+                      <div class="card-body">
+                        <h3 class="card-title text-center">Competência 2</h3>
+                        <br>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions2" checked="true"> 200
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions2"> 160
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions2"> 120
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions2"> 80
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option5" type="radio" name="inlineRadioOptions2"> 40
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option6" type="radio" name="inlineRadioOptions2"> 0
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="container">
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox21" onclick="updateTextfieldValue('inlineCheckbox21', 'formTextarea2', 'Repertório improdutivo. ', 'c2')"> Improdutivo
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox22" onclick="updateTextfieldValue('inlineCheckbox22', 'formTextarea2', 'Repertório pessoal. ', 'c2')"> Pessoal
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox23"  onclick="updateTextfieldValue('inlineCheckbox23', 'formTextarea2', 'Repertório impertinente. ', 'c2')"> Não pertinente
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox24"  onclick="updateTextfieldValue('inlineCheckbox24', 'formTextarea2', 'Repertório não criativo. ', 'c2')"> Não criativo
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox25" onclick="updateTextfieldValue('inlineCheckbox25', 'formTextarea2', 'Cópia dos textos base. ', 'c2')"> Cópia
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox26" onclick="updateTextfieldValue('inlineCheckbox26', 'formTextarea2', 'Argumento embrionário. ', 'c2')"> Embrionário
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <div class="form-group">
+                                <label for="formTextarea2">Comentários</label>
+                                <textarea class="form-control" id="formTextarea2" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea2', 'c2')"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card has-info card-chart">
+                      <div class="card-body">
+                        <h3 class="card-title text-center">Competência 3</h3>
+                        <br>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions3" checked="true"> 200
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions3"> 160
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions3"> 120
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions3"> 80
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option5" type="radio" name="inlineRadioOptions3"> 40
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option6" type="radio" name="inlineRadioOptions3"> 0
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="container">
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox31" onclick="updateTextfieldValue('inlineCheckbox31', 'formTextarea3', 'Argumento sem retomada devida. ', 'c3')"> Retomada
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox32" onclick="updateTextfieldValue('inlineCheckbox32', 'formTextarea3', 'Não há hierarquisação dos argumentos. ', 'c3')"> Hierarquisação
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox33" onclick="updateTextfieldValue('inlineCheckbox33', 'formTextarea3', 'Proposta de intervenção inadequada. ', 'c3')"> Intervenção
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox34" onclick="updateTextfieldValue('inlineCheckbox34', 'formTextarea3', 'Abandono de argumento. ', 'c3')"> Abandono
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox35" onclick="updateTextfieldValue('inlineCheckbox35', 'formTextarea3', 'Desconexão de argumentos. ', 'c3')"> Desconexão
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox36" onclick="updateTextfieldValue('inlineCheckbox36', 'formTextarea3', 'Não possui progressividade semântica. ', 'c3')"> Progressividade
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <div class="form-group">
+                                <label for="formTextarea3">Comentários</label>
+                                <textarea class="form-control" id="formTextarea3" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea3', 'c3')"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card has-info card-chart">
+                      <div class="card-body">
+                        <h3 class="card-title text-center">Competência 4</h3>
+                        <br>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions4" checked="true"> 200
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions4"> 160
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions4"> 120
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions4"> 80
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option5" type="radio" name="inlineRadioOptions4"> 40
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="container">
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox41" onclick="updateTextfieldValue('inlineCheckbox41', 'formTextarea4', 'Algumas repetições. ', 'c4')"> 1~3 repetições
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox42" onclick="updateTextfieldValue('inlineCheckbox42', 'formTextarea4', 'Repetições frequentes. ', 'c4')"> 4~5 repetições
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox43" onclick="updateTextfieldValue('inlineCheckbox43', 'formTextarea4', 'Muitas repetições. ', 'c4')"> 6+ repetições
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox44" onclick="updateTextfieldValue('inlineCheckbox44', 'formTextarea4', 'Texto em monobloco. ', 'c4')"> Monobloco
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox45" onclick="updateTextfieldValue('inlineCheckbox45', 'formTextarea4', 'Ausência parcial de conectores. ', 'c4')"> Ausência parcial de conectores
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox46" onclick="updateTextfieldValue('inlineCheckbox46', 'formTextarea4', 'Ausência total de conectores. ', 'c4')"> Ausência total de conectores
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <div class="form-group">
+                                <label for="formTextarea4">Comentários</label>
+                                <textarea class="form-control" id="formTextarea4" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea4', 'c4')"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card has-info card-chart">
+                      <div class="card-body">
+                        <h3 class="card-title text-center">Competência 5</h3>
+                        <br>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions5" checked="true"> 200
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions5"> 160
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions5"> 120
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions5"> 80
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option5" type="radio" name="inlineRadioOptions5"> 40
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="col-sm form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" value="option6" type="radio" name="inlineRadioOptions5"> 0
+                                <span class="circle">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="container">
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox51" onclick="updateTextfieldValue('inlineCheckbox51', 'formTextarea5', 'Especificar agente. ', 'c5')"> Agente
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox52" onclick="updateTextfieldValue('inlineCheckbox52', 'formTextarea5', 'Especificar ação. ', 'c5')"> Ação
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox53" onclick="updateTextfieldValue('inlineCheckbox53', 'formTextarea5', 'Especificar modo/meio. ', 'c5')"> Modo/meio
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox54" onclick="updateTextfieldValue('inlineCheckbox54', 'formTextarea5', 'Especificar efeito/finalidade. ', 'c5')"> Finalidade
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox55" onclick="updateTextfieldValue('inlineCheckbox55', 'formTextarea5', 'Trabalhar detalhamento. ', 'c5')"> Detalhamento
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox56" onclick="updateTextfieldValue('inlineCheckbox56', 'formTextarea5', 'Solução condicional. ', 'c5')"> Condicional
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row" style="margin-top: 10px;">
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox57" onclick="updateTextfieldValue('inlineCheckbox57', 'formTextarea5', 'Elementos nulos. ', 'c5')"> Nulidade
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" id="inlineCheckbox58" onclick="updateTextfieldValue('inlineCheckbox58', 'formTextarea5', 'Abordagem incompleta ou inexistente. ', 'c5')"> Incompleto
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                            <div class="form-check col-sm">
+                            </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            <div class="col-sm form-check">
+                              <div class="form-group">
+                                <label for="formTextarea5">Comentários</label>
+                                <textarea class="form-control" id="formTextarea5" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea5', 'c5')"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="button" class="btn btn-success pull-right" style="width:100% !important" onclick="updateExportCorrectionData()"> Salvar </button>
+                    <form id="submitUpdateForm" class="form" method="post" action="/corrections/update/{{essay.id}}/">
+                      {% csrf_token %}
+                      <input type="hidden" class="form-control" name="data" maxlength="150" required="" id="formInput">
+                      <input type="hidden" class="form-control" name="status" maxlength="150" value="DONE">
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {% include "footer.html" %}
+            </div>
+          </div>
+          <!--   Core JS Files   -->
+          <script src="/static/essay_manager/js/core/jquery.min.js"></script>
+          <script src="/static/essay_manager/js/core/popper.min.js"></script>
+          <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
+          <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+          <link href="/static/essay_manager/css/redactor.css" rel="stylesheet" />
+          <script src="/static/essay_manager/js/redactor-monitor.js"></script>
+          <!-- Plugin for the momentJs  -->
+          <script src="/static/essay_manager/js/plugins/moment.min.js"></script>
+          <!--  Plugin for Sweet Alert -->
+          <script src="/static/essay_manager/js/plugins/sweetalert2.js"></script>
+          <!-- Forms Validations Plugin -->
+          <script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
+          <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+          <script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
+          <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+          <script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
+          <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+          <script src="/static/essay_manager/js/plugins/bootstrap-datetimepicker.min.js"></script>
+          <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
+          <script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
+          <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+          <script src="/static/essay_manager/js/plugins/bootstrap-tagsinput.js"></script>
+          <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+          <script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
+          <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+          <script src="/static/essay_manager/js/plugins/fullcalendar.min.js"></script>
+          <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
+          <script src="/static/essay_manager/js/plugins/jquery-jvectormap.js"></script>
+          <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+          <script src="/static/essay_manager/js/plugins/nouislider.min.js"></script>
+          <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+          <!-- Library for adding dinamically elements -->
+          <script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
+          <!--  Google Maps Plugin    -->
+          <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+          <!-- Chartist JS -->
+          <script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
+          <!--  Notifications Plugin    -->
+          <script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
+          <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+          <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+          <!-- Material Dashboard DEMO methods, don't include it in your project! -->
+          <script src="/static/essay_manager/demo/demo.js"></script>
+          <script>
+            $(document).ready(function() {
+              $().ready(function() {
+                {% if created == 'True' %}
+                    md.showNotification('top', 'center', 'Correção iniciada.', 'success');
+                {% elif created == 'False' %}
+                    md.showNotification('top', 'center', 'Falha ao iniciar correção. Contate o administrador e corrija outra redação.', 'danger');
+                {% endif %}
+                $sidebar = $('.sidebar');
+                
+                $sidebar_img_container = $sidebar.find('.sidebar-background');
+                
+                $full_page = $('.full-page');
+                
+                $sidebar_responsive = $('body > .navbar-collapse');
+                
+                window_width = $(window).width();
+                
+                fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+                
+                if (window_width > 767 && fixed_plugin_open == 'Dashboard') {
+                  if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
+                    $('.fixed-plugin .dropdown').addClass('open');
+                  }
+                  
+                }
+                
+                $('.fixed-plugin a').click(function(event) {
+                  // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+                  if ($(this).hasClass('switch-trigger')) {
+                    if (event.stopPropagation) {
+                      event.stopPropagation();
+                    } else if (window.event) {
+                      window.event.cancelBubble = true;
+                    }
+                  }
+                });
+                
+                $('.fixed-plugin .active-color span').click(function() {
+                  $full_page_background = $('.full-page-background');
+                  
+                  $(this).siblings().removeClass('active');
+                  $(this).addClass('active');
+                  
+                  var new_color = $(this).data('color');
+                  
+                  if ($sidebar.length != 0) {
+                    $sidebar.attr('data-color', new_color);
+                  }
+                  
+                  if ($full_page.length != 0) {
+                    $full_page.attr('filter-color', new_color);
+                  }
+                  
+                  if ($sidebar_responsive.length != 0) {
+                    $sidebar_responsive.attr('data-color', new_color);
+                  }
+                });
+                
+                $('.fixed-plugin .background-color .badge').click(function() {
+                  $(this).siblings().removeClass('active');
+                  $(this).addClass('active');
+                  
+                  var new_color = $(this).data('background-color');
+                  
+                  if ($sidebar.length != 0) {
+                    $sidebar.attr('data-background-color', new_color);
+                  }
+                });
+                
+                $('.fixed-plugin .img-holder').click(function() {
+                  $full_page_background = $('.full-page-background');
+                  
+                  $(this).parent('li').siblings().removeClass('active');
+                  $(this).parent('li').addClass('active');
+                  
+                  
+                  var new_image = $(this).find("img").attr('src');
+                  
+                  if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+                    $sidebar_img_container.fadeOut('fast', function() {
+                      $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+                      $sidebar_img_container.fadeIn('fast');
+                    });
+                  }
+                  
+                  if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+                    var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+                    
+                    $full_page_background.fadeOut('fast', function() {
+                      $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                      $full_page_background.fadeIn('fast');
+                    });
+                  }
+                  
+                  if ($('.switch-sidebar-image input:checked').length == 0) {
+                    var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
+                    var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+                    
+                    $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+                    $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                  }
+                  
+                  if ($sidebar_responsive.length != 0) {
+                    $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+                  }
+                });
+                
+                $('.switch-sidebar-image input').change(function() {
+                  $full_page_background = $('.full-page-background');
+                  
+                  $input = $(this);
+                  
+                  if ($input.is(':checked')) {
+                    if ($sidebar_img_container.length != 0) {
+                      $sidebar_img_container.fadeIn('fast');
+                      $sidebar.attr('data-image', '#');
+                    }
+                    
+                    if ($full_page_background.length != 0) {
+                      $full_page_background.fadeIn('fast');
+                      $full_page.attr('data-image', '#');
+                    }
+                    
+                    background_image = true;
+                  } else {
+                    if ($sidebar_img_container.length != 0) {
+                      $sidebar.removeAttr('data-image');
+                      $sidebar_img_container.fadeOut('fast');
+                    }
+                    
+                    if ($full_page_background.length != 0) {
+                      $full_page.removeAttr('data-image', '#');
+                      $full_page_background.fadeOut('fast');
+                    }
+                    
+                    background_image = false;
+                  }
+                });
+                
+                $('.switch-sidebar-mini input').change(function() {
+                  $body = $('body');
+                  
+                  $input = $(this);
+                  
+                  if (md.misc.sidebar_mini_active == true) {
+                    $('body').removeClass('sidebar-mini');
+                    md.misc.sidebar_mini_active = false;
+                    
+                    $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
+                    
+                  } else {
+                    
+                    $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
+                    
+                    setTimeout(function() {
+                      $('body').addClass('sidebar-mini');
+                      
+                      md.misc.sidebar_mini_active = true;
+                    }, 300);
+                  }
+                  
+                  // we simulate the window Resize so the charts will get updated in realtime.
+                  var simulateWindowResize = setInterval(function() {
+                    window.dispatchEvent(new Event('resize'));
+                  }, 180);
+                  
+                  // we stop the simulation of Window Resize after the animations are completed
+                  setTimeout(function() {
+                    clearInterval(simulateWindowResize);
+                  }, 1000);
+                  
+                });
+              });
+            });
+          </script>
+          <script>
+            $(document).ready(function() {
+              // Javascript method's body can be found in assets/js/demos.js
+              md.initDashboardPageCharts();
+              
+              md.initVectorMap();
+              
+            });
+          </script>
+        </body>
+        
+        </html>
+        
