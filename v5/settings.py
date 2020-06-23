@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'essay_manager.templatetags.permissions',
     'essay_manager.templatetags.attributes',
     'essay_manager.templatetags.chunks',
+    'tps',
 ]
 
 MIDDLEWARE = [
