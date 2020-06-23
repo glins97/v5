@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/bauth/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="/static/bauth/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+      TPS | PPA Digital
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link href="/static/bauth/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+  <style>
+    html { 
+      background: url(/static/bauth/img/login-filter-45.png) no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+
+    body {
+      background: transparent;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top text-white">
+      <div class="container">
+        <div class="navbar-wrapper">
+          <a class="navbar-brand" style="color: white;">PPA Digital</a>
+        </div>
+      </div>
+    </nav>
+    <div class="row">
+      <div class="col-lg-6 col-md-8 col-sm-10 ml-auto mr-auto">
+        <form id="login-form" class="form" method="post" action="/tps/answer/{{campus}}/{{subject}}/{{week}}">
+          {% csrf_token %}
+          <div class="card" style="margin-top: 150px;">
+            <div class="card-header card-header-info text-center">
+              <h4 class="card-title"><b>{{subject_desc}}, Semana {{week}}</b></h4>
+              <div class="social-line">
+                Preencha os campos abaixo!
+              </div>
+            </div>
+            <div class="card-body">
+              <span class="bmd-form-group" style="margin-left: 1px;">
+                <div class="input-group has-info">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons">email</i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Email" name="email" maxlength="150" required="">
+                </div>
+              </span>
+              
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 30px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 1
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q1"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q1"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q1"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q1"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q1"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 2
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q2"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q2"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q2"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q2"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q2"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 3
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q3"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q3"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q3"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q3"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q3"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 4
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q4"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q4"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q4"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q4"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q4"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 5
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q5"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q5"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q5"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q5"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q5"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 6
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q6"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q6"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q6"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q6"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q6"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 7
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q7"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q7"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q7"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q7"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q7"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 8
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q8"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q8"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q8"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q8"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q8"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 9
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 31px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q9"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q9"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q9"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q9"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q9"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <span class="bmd-form-group">
+                <div class="input-group has-info" style="margin-top: 20px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      Questão 10
+                    </span>
+                  </div>
+                  <div class="row" style="margin-left: 23px;">
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="A" type="radio" name="q10"> A
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="B" type="radio" name="q10"> B
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="C" type="radio" name="q10"> C
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="D" type="radio" name="q10"> D
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="col-sm form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" value="E" type="radio" name="q10"> E
+                        <span class="circle">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+            </div>
+            <div class="card-footer justify-content-center">
+              <input type="submit" class="btn btn-info btn-link btn-lg" value="ENVIAR">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="copyright float-right" style="color: white">
+          Copyright &copy; PPA Digital
+          <script>
+            document.write(new Date().getFullYear())
+          </script>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

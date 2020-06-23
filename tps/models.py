@@ -23,14 +23,14 @@ weeks = (
 subjects = (
     ('BIO', 'BIO'),
     ('FIS', 'FIS'),
-    ('QUIM', 'QUIM'),
+    ('QUI', 'QUI'),
     ('MAT', 'MAT'),
 )
         
 campi = (
-    ('BRASÍLIA', 'BRASÍLIA'),
-    ('JUAZEIRO', 'JUAZEIRO'),
-    ('GOIANIA', 'GOIANIA'),
+    ('BSB', 'BRASÍLIA'),
+    ('JUA', 'JUAZEIRO'),
+    ('GOI', 'GOIANIA'),
 )
 
 answers = (
@@ -64,7 +64,8 @@ class TPS(models.Model):
         return '{} {} {}'.format(self.campus, self.subject, self.week)
 
 class Answer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    email = models.CharField(max_length=255)
     grade = models.IntegerField(default=0)
     q1 = models.CharField(max_length=1, choices=answers)
     q2 = models.CharField(max_length=1, choices=answers)

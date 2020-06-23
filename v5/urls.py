@@ -25,11 +25,12 @@ from bauth.views import *
 from bauth.apis import *
 
 from tps.views import *
+from tps.apis import *
 
 urlpatterns = [    
     path('admin/', admin.site.urls),
 
-    # essay manager related
+    # ESSAY MANAGER RELATED
     # - views
     path('', dashboard_view),
     path('essays/', essays_view),
@@ -48,7 +49,7 @@ urlpatterns = [
     path('uploads/<str:url>/', get_uploaded_file),
     # ---------------------
 
-    # login related
+    # BAUTH RELATED
     # - views
     path('login/', login_view),
 
@@ -57,8 +58,13 @@ urlpatterns = [
     path('api/login/', login_endpoint),
     # ---------------------
 
-    # tps related
-    path('tps/<str:subject>/<int:week>/', tps_view),
+    # TPS RELATED
+    # - views
+    path('tps/<str:campus>/<str:subject>/<int:week>/', tps_view),
+    path('tps/success/', success_view),
+
+    # - apis
+    path('tps/answer/<str:campus>/<str:subject>/<int:week>', save_tps_answer)
     # ---------------------
 ] 
 
