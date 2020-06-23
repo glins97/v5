@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+def tps_view(request, subject, week):
+    return render(request, 'tps.html', {'saved': request.GET.get('saved', False)})
+

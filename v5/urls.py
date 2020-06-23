@@ -24,6 +24,8 @@ from essay_manager.utils import get_uploaded_file
 from bauth.views import *
 from bauth.apis import *
 
+from tps.views import *
+
 urlpatterns = [    
     path('admin/', admin.site.urls),
 
@@ -55,6 +57,9 @@ urlpatterns = [
     path('api/login/', login_endpoint),
     # ---------------------
 
+    # tps related
+    path('tps/<subject:str>/<week:int>/', tps_view),
+    # ---------------------
     
 ]  + \
   static('essay_manager/assets/', document_root='essay_manager/assets/') + \
