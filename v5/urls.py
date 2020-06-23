@@ -26,25 +26,35 @@ from bauth.apis import *
 
 urlpatterns = [    
     path('admin/', admin.site.urls),
-    path('uploads/<str:url>/', get_uploaded_file),
 
+    # essay manager related
+    # - views
     path('', dashboard_view),
     path('essays/', essays_view),
     path('essays/<int:id>/', essay_view),
     path('essays/new/', create_essay_view),
     path('corrections/', corrections_view),
+    path('profile/', profile_view),
+    path('themes/', themes_view),
+
+    # - apis
     path('mail/<int:id>/', mail_essay_endpoint),
     path('corrections/new/<int:id>/', create_correction_endpoint),
     path('corrections/update/<int:id>/', update_correction_endpoint),
-    path('profile/', profile_view),
-    path('themes/', themes_view),
-    
-    path('login/', login_view),
-    path('api/logout/', logout_endpoint),
-    path('api/login/', login_endpoint),
-
     path('api/profile/update/', update_profile_endpoint),
     path('api/essays/create/', create_essay_endpoint),
+    path('uploads/<str:url>/', get_uploaded_file),
+    # ---------------------
+
+    # login related
+    # - views
+    path('login/', login_view),
+
+    # - apis
+    path('api/logout/', logout_endpoint),
+    path('api/login/', login_endpoint),
+    # ---------------------
+
     
 ]  + \
   static('essay_manager/assets/', document_root='essay_manager/assets/') + \
