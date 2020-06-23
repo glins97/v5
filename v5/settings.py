@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '161.35.103.30',
+    '159.65.226.253',
     'ppa.digital',
     'dev.ppa.digital',
     'redacoes.ppa.digital',
