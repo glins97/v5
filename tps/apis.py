@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from tps.models import TPS, Answer
+from django.utils.timezone import now
 
 def save_tps_answer(request, campus, subject, week):
     tpses = list(TPS.objects.all().filter(campus=campus.upper(), subject=subject.upper(), week=week))
@@ -8,7 +9,7 @@ def save_tps_answer(request, campus, subject, week):
         answers = list(Answer.objects.all().filter(tps=tps))
         if len(answers) >= tps.max_answers:
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Número limite de respostas já atingido.'})
-        if len(list(Answer.objects.all().filter(tps=tps, email=request.POST.get('email', '')))):
+        if len(list(Answer.objects.all().filter(tps=tps, name=request.POST.get('name', '')))):
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Apenas uma resposta por aluno.'})
         if tps.start_date > now():
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Respostas serão liberadas apenas em {}.'.format(tps.start_date)})
@@ -17,7 +18,7 @@ def save_tps_answer(request, campus, subject, week):
 
         print(request.POST)
         answer = Answer(
-            email = request.POST.get('email', ''),
+            name = request.POST.get('name', ''),
             q1 = request.POST.get('q1', 'X'),
             q2 = request.POST.get('q2', 'X'),
             q3 = request.POST.get('q3', 'X'),

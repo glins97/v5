@@ -66,7 +66,8 @@ class TPS(models.Model):
 class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     tps = models.ForeignKey(TPS, on_delete=models.CASCADE)
-    email = models.CharField(max_length=255)
+    submission_date = models.DateTimeField(auto_now_add=True) 
+    name = models.CharField(max_length=255)
     grade = models.IntegerField(default=0)
     q1 = models.CharField(max_length=1, choices=answers)
     q2 = models.CharField(max_length=1, choices=answers)
