@@ -27,6 +27,11 @@ from bauth.apis import *
 from tps.views import *
 from tps.apis import *
 
+def base_redirect(request):
+    if request.user.groups.filter(name='tps').exists():
+        return redirect('/admin/')
+    return dashboard_view(request)
+
 urlpatterns = [    
     path('admin/', admin.site.urls),
 

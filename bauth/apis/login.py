@@ -10,6 +10,4 @@ def login_endpoint(request):
     if user is not None:
         authed = True
         login_(request, user)
-    if user.groups.filter(name='tps').exists():
-        return redirect(f'/admin/')
     return redirect(f'/?authed={authed}')
