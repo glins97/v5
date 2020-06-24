@@ -75,3 +75,7 @@ urlpatterns = [
 
 handler404 = 'bauth.views.e404_view'
 handler500 = 'bauth.views.e500_view'
+
+admin.site.site_header = 'PPA Digital'
+admin.site.site_title = 'PPA Digital'
+admin.site.index_title = 'PPA Digital'
