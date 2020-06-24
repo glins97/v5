@@ -63,6 +63,10 @@ class TPS(models.Model):
     def __str__(self):
         return '{} {} {}'.format(self.campus, self.subject, self.week)
 
+    class Meta:
+        verbose_name = 'Formulário'
+        verbose_name_plural = 'Formulários'
+
 class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     tps = models.ForeignKey(TPS, on_delete=models.CASCADE)
@@ -79,3 +83,10 @@ class Answer(models.Model):
     q8 = models.CharField(max_length=1, choices=answers)
     q9 = models.CharField(max_length=1, choices=answers)
     q10 = models.CharField(max_length=1, choices=answers)
+
+    def __str__(self):
+        return '{}: {} {} {}'.format(self.name, self.tps.campus, self.tps.subject, self.tps.week)
+
+    class Meta:
+        verbose_name = 'Resposta'
+        verbose_name_plural = 'Respostas'
