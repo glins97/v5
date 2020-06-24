@@ -8,6 +8,12 @@ def save_tps_answer(request, campus, subject, week):
         answers = list(Answer.objects.all().filter(tps=tps))
         if len(answers) >= tps.max_answers:
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Número limite de respostas já atingido.'})
+        if len(list(Answer.objects.all().filter(tps=tps, email=request.POST.get('email', '')))):
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Apenas uma resposta por aluno.'})
+        if tps.start_date > now():
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Respostas serão liberadas apenas em {}.'.format(tps.start_date)})
+        if tps.end_date < now():
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Tempo limite de resposta excedido.'})
 
         print(request.POST)
         answer = Answer(
@@ -22,11 +28,12 @@ def save_tps_answer(request, campus, subject, week):
             q8 = request.POST.get('q8', 'X'),
             q9 = request.POST.get('q9', 'X'),
             q10 = request.POST.get('q10', 'X'),
+            tps=tps,
         )
         for q in range(1, 11):
             if getattr(tps, 'q'+str(q)) == getattr(answer, 'q'+str(q)):
                 answer.grade += 1
         answer.save()
-        return render(request, 'feed.html', {'title': 'Resposta salva', 'description': 'Obrigado pelo empenho!'})
+        return render(request, 'feed.html', {'title': 'Salvo!', 'description': 'Obrigado pelo empenho!'})
     return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Nenhum tps foi encontrado. Entre em contato com o responsável.'})
 
