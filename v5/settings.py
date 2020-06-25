@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     '161.35.103.30',
     '159.65.226.253',
     'ppa.digital',
+    'www.ppa.digital',
     'dev.ppa.digital',
     'redacoes.ppa.digital',
 ]

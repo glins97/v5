@@ -7,6 +7,12 @@ from .models import TPS, Answer
 
 import subprocess
 
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'tps', 'grade', )
+    list_filter = ('tps', 'grade', )
+    # search_fields = (,)
+    list_per_page = 100
+ 
 class TPSAdmin(admin.ModelAdmin):
     list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'url', 'relatórios',)
     list_filter = ('campus', 'subject', 'week',)
@@ -62,4 +68,4 @@ class TPSAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TPS, TPSAdmin)
-admin.site.register(Answer)
+admin.site.register(Answer, AnswerAdmin)

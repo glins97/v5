@@ -37,6 +37,7 @@ var countErrorsC4 = 0;
 var countErrorsC5 = 0;
 var PEN_SIZE = 34;
 var RECT_PEN_CORRECTION = 8;
+var savedImagePos = undefined;
 
 function isDrawEnabled() {
     return color != "#00000000" && mode != "";
@@ -208,6 +209,7 @@ function importCorrectionData(data) {
 }
 
 function updateExportCorrectionData(){
+    console.log('@updateExportCorrectionData');
     var data = {};
     var objects = [];
     var a = 0;
@@ -255,6 +257,7 @@ function updateExportCorrectionData(){
     }
     data['objects'] = objects;
     data['competencies'] = competencies;
+    console.log('@updateExportCorrectionData data', data);
     document.getElementById('formInput').value = JSON.stringify(data);
     document.getElementById('submitUpdateForm').submit(); 
 }
@@ -418,6 +421,7 @@ function mouseUpEvent(e) {
         addImage(rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight);
         lastImage = undefined;
         document.getElementById("openModal").click();
+        savedImagePos = [rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight]
     }
     
     rect_x0 = 0;
@@ -478,23 +482,46 @@ function showCompetencyErrors(id) {
 }
 
 function saveComment(){
-    comments[comments.length - 1] = document.getElementById('comment-text').value;
-    document.getElementById('comment-text').value = '';
-    var checkboxes = document.getElementsByName('competencyError');
-    for (var i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].checked = false;
-    }
     assignGrades();
+
+    // whenever modal closes, remove last added comment
+    // as a side effect, saved comments will also be removed.
+    // so, if we wish to save a comment, we must add another one, since
+    // only the last added will be saved.
+    //
+    // add latest comment AGAIN
+    addImage(savedImagePos[0], savedImagePos[1]);
 }
 
 $(window).on('DOMContentLoaded load resize scroll', showBtnsOnEssayVisible);
 $(document).ready(function() {
-    $('#myModal').on('hidden.bs.modal', function () {
+    $('#myModal').on('hide.bs.modal', function () {
         console.log('modalclose');
+        
+        // whenever modal closes, remove last added comment
+        // as a side effect, saved comments will also be removed.
+        // so, if we wish to save a comment, we must add another one, since
+        // only the last added will be saved.
+        //
+        // remove last added comment;
         images.pop();
+        pushes.pop();
+        comments.pop();
+
+        // redraw;
         updateCanvas();
         drawRectangles();
         drawImages();
+
+        // clear comments
+        comments[comments.length - 1] = document.getElementById('comment-text').value;
+        document.getElementById('comment-text').value = '';
+
+        // uncheck every checkbox
+        var checkboxes = document.getElementsByName('competencyError');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+        }
     });
 
     competencies['grades'] = {};

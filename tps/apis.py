@@ -35,6 +35,6 @@ def save_tps_answer(request, campus, subject, week):
             if getattr(tps, 'q'+str(q)) == getattr(answer, 'q'+str(q)):
                 answer.grade += 1
         answer.save()
-        return render(request, 'feed.html', {'title': 'Salvo!', 'description': 'Obrigado pelo empenho!'})
+        return render(request, 'feed.html', {'title': 'Salvo!', 'description': 'O trabalho duro vence o talento.'})
     return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Nenhum tps foi encontrado. Entre em contato com o responsável.'})
 

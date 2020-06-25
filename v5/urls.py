@@ -37,7 +37,7 @@ urlpatterns = [
 
     # ESSAY MANAGER RELATED
     # - views
-    path('', dashboard_view),
+    path('', base_redirect),
     path('essays/', essays_view),
     path('essays/<int:id>/', essay_view),
     path('essays/new/', create_essay_view),

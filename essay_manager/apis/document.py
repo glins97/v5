@@ -22,9 +22,10 @@ class Document():
             im = Image.open(source)
             width, height = im.size
 
-            self.width = 595
-            self.height = int(height / width) * self.width
+            self.width = im.width
+            self.height = height
             self.size = self.width, self.height
+
             im = im.resize(self.size, Image.ANTIALIAS)
             im.save(source)
             self.ratio = self.height / 2000

@@ -1,6 +1,7 @@
 
 import os, django
 django.setup()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "v5.settings")
 
 import pickle
 import os.path
@@ -14,7 +15,6 @@ from essay_manager.models import Essay, Theme
 import datetime
 from time import time
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "v5.settings")
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/gmail.settings.basic',
