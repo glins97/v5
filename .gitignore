@@ -1,5 +1,7 @@
 *.pyc
 db.sqlite3
 uploads/
+uploads/*
+*.png
 *.pdf
 *.xlsx
