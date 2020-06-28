@@ -138,7 +138,7 @@ function drawRectangles() {
             ctx.rect(obj[0] * canvasWidth, obj[1] * canvasHeight, obj[2] * canvasWidth - obj[0] * canvasWidth, obj[3] * canvasHeight - obj[1] * canvasHeight);
             ctx.fillStyle = "#00000000";
             ctx.fill()
-            ctx.strokeStyle = color;
+            ctx.strokeStyle = obj[4];
             ctx.stroke();
         }
         ctx.stroke();

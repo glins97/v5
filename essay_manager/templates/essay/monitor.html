@@ -71,7 +71,7 @@
             </div>
             <div class="row">
               <div class="col-md-auto ml-auto mr-auto">
-                <button hidden="true" id="openModal" class="btn btn-primary btn-round" data-toggle="modal" data-target="#myModal">
+                <button hidden="true" id="openModal" class="btn btn-primary btn-round" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
                   <div class="ripple-container"></div></button>
                   <div class="modal has-info show" id="myModal" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
                     <div class="modal-dialog" style="width:900px !important; max-width:900px !important;">
@@ -210,8 +210,8 @@
                           <div class="row">
                             <div class="col-sm form-check">
                               <div class="form-group">
-                                <label for="formTextarea-c1">Comentários gerais</label>
-                                <textarea class="form-control" id="formTextarea-c1" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea-c1', 'c1')"></textarea>
+                                <label for="formTextareac1">Comentários gerais</label>
+                                <textarea class="form-control" id="formTextareac1" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac1', 'c1')"></textarea>
                               </div>
                             </div>
                           </div>
@@ -282,8 +282,8 @@
                           <div class="row">
                             <div class="col-sm form-check">
                               <div class="form-group">
-                                <label for="formTextarea-c2">Comentários gerais</label>
-                                <textarea class="form-control" id="formTextarea-c2" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea-c2', 'c2')"></textarea>
+                                <label for="formTextareac2">Comentários gerais</label>
+                                <textarea class="form-control" id="formTextareac2" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac2', 'c2')"></textarea>
                               </div>
                             </div>
                           </div>
@@ -348,8 +348,8 @@
                           <div class="row">
                             <div class="col-sm form-check">
                               <div class="form-group">
-                                <label for="formTextarea-c3">Comentários gerais</label>
-                                <textarea class="form-control" id="formTextarea-c3" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea-c3', 'c3')"></textarea>
+                                <label for="formTextareac3">Comentários gerais</label>
+                                <textarea class="form-control" id="formTextareac3" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac3', 'c3')"></textarea>
                               </div>
                             </div>
                           </div>
@@ -414,8 +414,8 @@
                           <div class="row">
                             <div class="col-sm form-check">
                               <div class="form-group">
-                                <label for="formTextarea-c4">Comentários gerais</label>
-                                <textarea class="form-control" id="formTextarea-c4" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea-c4', 'c4')"></textarea>
+                                <label for="formTextareac4">Comentários gerais</label>
+                                <textarea class="form-control" id="formTextareac4" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac4', 'c4')"></textarea>
                               </div>
                             </div>
                           </div>
@@ -495,8 +495,8 @@
                           <div class="row">
                             <div class="col-sm form-check">
                               <div class="form-group">
-                                <label for="formTextarea-c5">Comentários gerais</label>
-                                <textarea class="form-control" id="formTextarea-c5" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextarea-c5', 'c5')"></textarea>
+                                <label for="formTextareac5">Comentários gerais</label>
+                                <textarea class="form-control" id="formTextareac5" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac5', 'c5')"></textarea>
                               </div>
                             </div>
                           </div>
@@ -525,8 +525,7 @@
           <script src="/static/essay_manager/js/core/popper.min.js"></script>
           <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
           <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-          <link href="/static/essay_manager/css/redactor.css" rel="stylesheet" />
-          <script src="/static/essay_manager/js/redactor-monitor.js"></script>
+          <script src="/static/essay_manager/js/redactor-monitor.js?{% now 'U' %}"></script>
           <!-- Plugin for the momentJs  -->
           <script src="/static/essay_manager/js/plugins/moment.min.js"></script>
           <!--  Plugin for Sweet Alert -->

@@ -69,8 +69,11 @@ class Document():
             # 'RECT': self.add_rect,
         }
         for obj in objects:
-            funcs.get(obj['mode'], lambda **kwargs: -1)(**obj['attributes'])
-
+            try:
+                funcs.get(obj['mode'], lambda **kwargs: -1)(**obj['attributes'])
+            except:
+                pass
+            
         self.pdf.write(open(fn, 'wb'))
 
     def _add_image(self, source, x, y):
