@@ -81,13 +81,13 @@ def _monitor_essay_view(request, id):
     corrections = Correction.objects.filter(essay=id)
     if not corrections.count():
         return redirect(f'/corrections/new/{id}/')
-    print('corrections[0].data', corrections[0].data)
 
     error_classifications_c1 = [o.get_html() for o in ErrorClassification.objects.filter(competency='1') if o.parent is None]
     error_classifications_c2 = [o.get_html() for o in ErrorClassification.objects.filter(competency='2') if o.parent is None]
     error_classifications_c3 = [o.get_html() for o in ErrorClassification.objects.filter(competency='3') if o.parent is None]
     error_classifications_c4 = [o.get_html() for o in ErrorClassification.objects.filter(competency='4') if o.parent is None]
     error_classifications_c5 = [o.get_html() for o in ErrorClassification.objects.filter(competency='5') if o.parent is None]
+    error_classifications_g0 = [o.get_html() for o in ErrorClassification.objects.filter(competency='0') if o.parent is None]
     data = {
         'title': 'Redações',
         'essay': Essay.objects.get(id=id),
@@ -98,6 +98,7 @@ def _monitor_essay_view(request, id):
         'error_classifications_c3': error_classifications_c3,
         'error_classifications_c4': error_classifications_c4,
         'error_classifications_c5': error_classifications_c5,
+        'error_classifications_g0': error_classifications_g0,
         'data': mark_safe(corrections[0].data),
     }
     return render(request, 'essay/monitor.html', data)

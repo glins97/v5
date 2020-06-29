@@ -38,6 +38,7 @@ var countErrorsC5 = 0;
 var PEN_SIZE = 34;
 var RECT_PEN_CORRECTION = 8;
 var savedImagePos = undefined;
+var nullified = false;
 
 function isDrawEnabled() {
     return color != "#00000000" && mode != "";
@@ -194,6 +195,7 @@ function importCorrectionData(data) {
         }
     }
 
+    nullified = data['nullified'];
     grades = data['competencies']['grades'];
     textfieldComments = data['competencies']['comments'];
     competencies['grades'] = grades;
@@ -215,6 +217,7 @@ function updateExportCorrectionData(){
     var a = 0;
     var b = 0;
     data['PEN_SIZE'] = PEN_SIZE;
+    data['nullified'] = nullified;
     for (var i = 0; i < pushes.length; i++) {
         var object = {};
         object['mode'] = pushes[i];

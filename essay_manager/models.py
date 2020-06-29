@@ -60,6 +60,7 @@ class Correction(models.Model):
     status = models.CharField(max_length=255, choices=correction_statuses, default='ACTIVE')
     upload_date = models.DateField(auto_now=True)
     data = models.TextField(default="{}")
+    nullified = models.BooleanField(default=False, verbose_name='redação anulada')
 
     def __str__(self):
         return '{} - {} {}, {}'.format(self.essay.id, self.essay.user.first_name, self.essay.user.last_name, self.essay.theme)
@@ -82,6 +83,7 @@ competencies = (
     ('3', 'Competência 3'),
     ('4', 'Competência 4'),
     ('5', 'Competência 5'),
+    ('0', 'Nota 0'),
 )
 
 class ErrorClassification(models.Model):
@@ -91,7 +93,7 @@ class ErrorClassification(models.Model):
     competency = models.CharField(max_length=255, default='1', choices=competencies)
     has_children = models.BooleanField(default=False, editable=False)
     parent = models.ForeignKey('ErrorClassification', on_delete=models.CASCADE, blank=True, null=True)
-    p_parent = models.ForeignKey('ErrorClassification', on_delete=models.CASCADE, blank=True, null=True, related_name='previous_parent')
+    p_parent = models.ForeignKey('ErrorClassification', on_delete=models.CASCADE, blank=True, null=True, related_name='previous_parent', editable=False)
     weight = models.IntegerField(default=1)
     active = models.BooleanField(default=True)
     apply_on_select = models.BooleanField(default=False)
