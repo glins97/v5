@@ -89,9 +89,9 @@
                           <tbody>
                             {% for essay in essays %}
                             <tr>
-                              <td><a href='/essays/{{essay.id}}/'> {{ essay.id }}     </a></td>
+                              <td><div style="width: 25px !important"><a href='/essays/{{essay.id}}/'>{{ essay.id }}</a></div></td>
                               <td><div style=""><a href='/essays/{{essay.id}}/'> {{ essay.user.first_name }}{{ " " }}{{ essay.user.last_name }} </a></div></td>
-                              <td><div style="width: 60px !important"><a href='/essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></div></td>
+                              <td><div style="width: 40px !important"><a href='/essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></div></td>
                               <td><div style="max-width: 300px !important"><a href='/essays/{{essay.id}}/'> {{ essay.theme }} </a></div></td>
                               <td><div style="width: 130px !important; height: 40px !important; display: table-cell; vertical-align: middle;"><a href='/essays/{{essay.id}}/'> {{ essay.upload_date }} </a></div></td>
                             </tr>
