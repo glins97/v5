@@ -87,7 +87,7 @@ def _monitor_essay_view(request, id):
     error_classifications_c3 = [o.get_html() for o in ErrorClassification.objects.filter(competency='3') if o.parent is None]
     error_classifications_c4 = [o.get_html() for o in ErrorClassification.objects.filter(competency='4') if o.parent is None]
     error_classifications_c5 = [o.get_html() for o in ErrorClassification.objects.filter(competency='5') if o.parent is None]
-    error_classifications_g0 = [o.get_html() for o in ErrorClassification.objects.filter(competency='0') if o.parent is None]
+    error_classifications_g0 = sorted([o.get_html() for o in ErrorClassification.objects.filter(competency='0') if o.parent is None], key=lambda item: str(item))
     data = {
         'title': 'Redações',
         'essay': Essay.objects.get(id=id),
