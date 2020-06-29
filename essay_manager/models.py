@@ -141,13 +141,10 @@ class ErrorClassification(models.Model):
         return mark_safe("""
         <div class="form-check col-sm">
             <label class="form-check-label">
-                <input class="form-check-input" name="competencyError" type="checkbox" value="" id="checkbox-{code}" data-toggle="collapse" data-target="#innerCheckboxes{code}"> {name}
-                <div id="innerCheckboxes{code}" class="container collapse">
+                <input class="form-check-input" name="competencyError" type="" value="" data-toggle="" data-target="#innerCheckboxes{code}"> {name}
+                <div id="innerCheckboxes{code}" class="container">
                     {children}
                 </div>
-                <span class="form-check-sign">
-                    <span class="check"></span>
-                </span>
             </label>
         </div>
         """.format(code=self.get_verbose_code().replace('.', '-'), desc=self.description if self.description else '', name='{} {}'.format(self.get_verbose_code(), self.name), children='\n'.join([self.encapsulate_row(child.get_html()) for child in ErrorClassification.objects.filter(parent=self)])))

@@ -85,7 +85,7 @@
                         <div class="modal-body" style="margin-top: -10px; !important">
                           <div class="row">
                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                              <label class="btn shadow-none btn-outline-info" style="margin-left: 130px; margin-right: -1px;"  onclick="showCompetencyErrors('errorsC1');">
+                              <label class="btn shadow-none btn-outline-info" style="margin-left: 45px; margin-right: -1px;"  onclick="showCompetencyErrors('errorsC1');">
                                 <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 1
                               </label>
                               <label class="btn shadow-none btn-outline-info" style="margin-right: -2px;" onclick="showCompetencyErrors('errorsC2');">
@@ -96,6 +96,9 @@
                               </label>
                               <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" onclick="showCompetencyErrors('errorsC4');">
                                 <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 4
+                              </label>
+                              <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" onclick="showCompetencyErrors('errorsC5');">
+                                <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 5
                               </label>
                             </div>
                           </div>
@@ -128,6 +131,15 @@
                           </div>
                           <div class="container collapse" id="errorsC4">
                             {% for chunk in error_classifications_c4|chunks:3 %}
+                            <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                              {% for error_classification_html in chunk %}
+                                {{ error_classification_html }}
+                              {% endfor %}
+                            </div>
+                            {% endfor %}
+                          </div>
+                          <div class="container collapse" id="errorsC5">
+                            {% for chunk in error_classifications_c5|chunks:3 %}
                             <div class="row" style="margin-left: 20px; margin-top: 10px;">
                               {% for error_classification_html in chunk %}
                                 {{ error_classification_html }}

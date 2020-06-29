@@ -311,21 +311,27 @@ function loadModeSelectionButtons() {
 function loadColorSelectionButtons() {
     $('#selectColorPrimary').click(function(){
         setColor(COLOR_PRIMARY);
+        document.getElementById("selectModeLine").click();
     });
     $('#selectColorInfo').click(function(){
         setColor(COLOR_INFO);
+        document.getElementById("selectModeLine").click();
     });
     $('#selectColorSuccess').click(function(){
         setColor(COLOR_SUCCESS);
+        document.getElementById("selectModeLine").click();
     });
     $('#selectColorDanger').click(function(){
         setColor(COLOR_DANGER);
+        document.getElementById("selectModeRectangle").click();
     });
     $('#selectColorWarning').click(function(){
         setColor(COLOR_WARNING);
+        document.getElementById("selectModeLine").click();
     });
     $('#selectColorGrey').click(function(){
         setColor(COLOR_GREY);
+        document.getElementById("selectModeLine").click();
     });
 }
 
@@ -416,6 +422,11 @@ function mouseUpEvent(e) {
         else {
             addDrawable(rect_x0 - spos[0] / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x1 - spos[0] / canvasWidth, rect_y1 + spos[1] / canvasHeight, color);
         }
+        if (mode == 'RECT' && color == COLOR_DANGER){
+            addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight);
+            document.getElementById("openModal").click();
+            savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
+        }
     }
     if (mode=='COMM'){
         addImage(rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight);
@@ -474,7 +485,7 @@ function removeClass(id, className) {
 }
 
 function showCompetencyErrors(id) {
-    var divs = ['errorsC1', 'errorsC2', 'errorsC3', 'errorsC4'];
+    var divs = ['errorsC1', 'errorsC2', 'errorsC3', 'errorsC4', 'errorsC5'];
     for (var i = 0; i < divs.length; i++){
         addClass(divs[i], 'collapse');
     }
@@ -650,6 +661,7 @@ function updateTextfield(textfield, comp) {
 }
 
 function assignGrades() {
+    console.log('assignGrades', countErrorsC1, countErrorsC2, countErrorsC3, countErrorsC4, countErrorsC5);
     var event = new Event('change');
     if (countErrorsC1 >= 5) {
         document.getElementById('inlineRadioOptions1-40').checked = true;
