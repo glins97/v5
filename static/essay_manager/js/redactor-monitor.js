@@ -219,44 +219,48 @@ function updateExportCorrectionData(){
     data['PEN_SIZE'] = PEN_SIZE;
     data['nullified'] = nullified;
     for (var i = 0; i < pushes.length; i++) {
-        var object = {};
-        object['mode'] = pushes[i];
-        
-        switch (pushes[i]){
-            case 'COMM': 
-            object['attributes'] = {
-                'comment': comments[a],
-                'src': images[a][0],
-                'x0': images[a][1],
-                'y0': images[a][2],
-            };
-            a += 1;
-            break;
+        try {
+            var object = {};
+            object['mode'] = pushes[i];
             
-            case 'LINE':  
-            object['attributes'] = {
-                'x0': drawables[b][0],
-                'y0': drawables[b][1],
-                'x1': drawables[b][2],
-                'y1': drawables[b][3],
-                'color': drawables[b][4],
-            };
-            b += 1;
-            break;
-            
-            case 'RECT':  
-            object['attributes'] = {
-                'x0': drawables[b][0],
-                'y0': drawables[b][1],
-                'x1': drawables[b][2],
-                'y1': drawables[b][3],
-                'color': drawables[b][4],
-            };
-            b += 1;
-            break;
-        } 
-        
-        objects.push(object);
+            switch (pushes[i]){
+                case 'COMM': 
+                object['attributes'] = {
+                    'comment': comments[a],
+                    'src': images[a][0],
+                    'x0': images[a][1],
+                    'y0': images[a][2],
+                };
+                a += 1;
+                break;
+                
+                case 'LINE':  
+                object['attributes'] = {
+                    'x0': drawables[b][0],
+                    'y0': drawables[b][1],
+                    'x1': drawables[b][2],
+                    'y1': drawables[b][3],
+                    'color': drawables[b][4],
+                };
+                b += 1;
+                break;
+                
+                case 'RECT':  
+                object['attributes'] = {
+                    'x0': drawables[b][0],
+                    'y0': drawables[b][1],
+                    'x1': drawables[b][2],
+                    'y1': drawables[b][3],
+                    'color': drawables[b][4],
+                };
+                b += 1;
+                break;
+            } 
+            objects.push(object);
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
     data['objects'] = objects;
     data['competencies'] = competencies;
