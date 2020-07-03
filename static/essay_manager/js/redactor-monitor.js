@@ -39,6 +39,11 @@ var PEN_SIZE = 34;
 var RECT_PEN_CORRECTION = 8;
 var savedImagePos = undefined;
 var nullified = false;
+var username = '';
+
+function setUsername(val) {
+    username = val;
+}
 
 function isDrawEnabled() {
     return color != "#00000000" && mode != "";
@@ -114,7 +119,7 @@ function addDrawable(x0, y0, x1, y1, color, mode_) {
         ctx.lineWidth = PEN_SIZE / RECT_PEN_CORRECTION;
         ctx.rect(x0 * canvasWidth, y0 * canvasHeight, x1 * canvasWidth - x0 * canvasWidth, y1 * canvasHeight - y0 * canvasHeight);
         ctx.fillStyle = "#00000000";
-        ctx.fill()
+        ctx.fill();
         ctx.strokeStyle = color;
         ctx.stroke();
     }
@@ -138,7 +143,7 @@ function drawRectangles() {
             ctx.lineWidth = PEN_SIZE / RECT_PEN_CORRECTION;
             ctx.rect(obj[0] * canvasWidth, obj[1] * canvasHeight, obj[2] * canvasWidth - obj[0] * canvasWidth, obj[3] * canvasHeight - obj[1] * canvasHeight);
             ctx.fillStyle = "#00000000";
-            ctx.fill()
+            ctx.fill();
             ctx.strokeStyle = obj[4];
             ctx.stroke();
         }
@@ -158,7 +163,7 @@ function addImage(x, y, src_) {
         case COLOR_GREY: src += 'light.png'; break;
     }
     images.push([src_ ? src_ : src, x, y]);
-    pushes.push(mode);
+    pushes.push('COMM');
     comments.push('temp-comment')
     drawImage(src_ ? src_ : src, x, y);
 }
@@ -214,53 +219,52 @@ function updateExportCorrectionData(){
     console.log('@updateExportCorrectionData');
     var data = {};
     var objects = [];
-    var a = 0;
-    var b = 0;
+    var imgCount = 0;
+    var rectanglesCount = 0;
     data['PEN_SIZE'] = PEN_SIZE;
     data['nullified'] = nullified;
+    console.log('dasdsa', drawables, imgCount, rectanglesCount);
     for (var i = 0; i < pushes.length; i++) {
-        try {
             var object = {};
             object['mode'] = pushes[i];
-            
+            console.log('rectanglesCount, imgCount', rectanglesCount, imgCount, i, pushes[i]);
             switch (pushes[i]){
-                case 'COMM': 
-                object['attributes'] = {
-                    'comment': comments[a],
-                    'src': images[a][0],
-                    'x0': images[a][1],
-                    'y0': images[a][2],
-                };
-                a += 1;
-                break;
+                case 'COMM': {
+                    object['attributes'] = {
+                        'comment': comments[imgCount],
+                        'src': images[imgCount][0],
+                        'x0': images[imgCount][1],
+                        'y0': images[imgCount][2],
+                    };
+                    imgCount += 1;
+                    break;
+                }
                 
-                case 'LINE':  
-                object['attributes'] = {
-                    'x0': drawables[b][0],
-                    'y0': drawables[b][1],
-                    'x1': drawables[b][2],
-                    'y1': drawables[b][3],
-                    'color': drawables[b][4],
-                };
-                b += 1;
-                break;
+                case 'LINE':{
+                    object['attributes'] = {
+                        'x0': drawables[rectanglesCount][0],
+                        'y0': drawables[rectanglesCount][1],
+                        'x1': drawables[rectanglesCount][2],
+                        'y1': drawables[rectanglesCount][3],
+                        'color': drawables[rectanglesCount][4],
+                    };
+                    rectanglesCount += 1;
+                    break;
+                }  
                 
-                case 'RECT':  
-                object['attributes'] = {
-                    'x0': drawables[b][0],
-                    'y0': drawables[b][1],
-                    'x1': drawables[b][2],
-                    'y1': drawables[b][3],
-                    'color': drawables[b][4],
-                };
-                b += 1;
-                break;
+                case 'RECT':  {
+                    object['attributes'] = {
+                        'x0': drawables[rectanglesCount][0],
+                        'y0': drawables[rectanglesCount][1],
+                        'x1': drawables[rectanglesCount][2],
+                        'y1': drawables[rectanglesCount][3],
+                        'color': drawables[rectanglesCount][4],
+                    };
+                    rectanglesCount += 1;
+                    break;
+                }
             } 
             objects.push(object);
-        }
-        catch (e) {
-            console.log(e);
-        }
     }
     data['objects'] = objects;
     data['competencies'] = competencies;
@@ -301,6 +305,34 @@ function onKeyDown(e) {
         drawRectangles();
         drawImages();
     }
+
+    // competencies 1-6 shortcuts
+    // switch(evtobj.keyCode){
+    //     case 49:
+    //     case 97:
+    //         document.getElementById('selectColorDanger').click();
+    //         break;
+    //     case 50:
+    //     case 98:
+    //         document.getElementById('selectColorPrimary').click();
+    //         break;
+    //     case 51:
+    //     case 99:
+    //         document.getElementById('selectColorGrey').click();
+    //         break;
+    //     case 52:
+    //     case 100:
+    //         document.getElementById('selectColorWarning').click();
+    //         break;
+    //     case 53:
+    //     case 101:
+    //         document.getElementById('selectColorSuccess').click();
+    //         break;
+    //     case 54:
+    //     case 102:
+    //         document.getElementById('selectColorInfo').click();
+    //         break;
+    // }
 }
 
 function loadModeSelectionButtons() {
@@ -430,12 +462,15 @@ function mouseUpEvent(e) {
             addDrawable(rect_x0 - spos[0] / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x1 - spos[0] / canvasWidth, rect_y1 + spos[1] / canvasHeight, color);
         }
         if (mode == 'RECT' && color == COLOR_DANGER){
+            document.getElementById('comment-text').value = username + ', ';
             addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight);
             document.getElementById("openModal").click();
             savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
         }
     }
     if (mode=='COMM'){
+        if (color == COLOR_DANGER)
+            document.getElementById('comment-text').value = username + ', ';
         addImage(rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight);
         lastImage = undefined;
         document.getElementById("openModal").click();

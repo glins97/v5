@@ -49,14 +49,14 @@ def mail_essay_endpoint(request, id):
     # fill joined pdf with data
     fill_pdf_fields(graded_destination, dict(grades, **data['competencies']['comments']) , final_destination)
 
-    # mail to final user
-    mail_body = '<p>Sua redação corrigida se encontra em anexo! (ou, caso não, clique <a href="{}"> aqui</a>)<br>Para uma boa visualização, recomendamos abrir o arquivo com o Adobe Reader em um computador.</p>'.format('http://dev.ppa.digital/{}'.format(final_destination))
-    if send_mail(str(essay.user.username), 'Redação corrigida!', mail_body, final_destination):
-        essay.mailed = True
-        essay.save()
-        return redirect('/essays/?mailed=True')
-    else:
-        return redirect('/essays/?mailed=False')
+    # # mail to final user
+    # mail_body = '<p>Sua redação corrigida se encontra em anexo! (ou, caso não, clique <a href="{}"> aqui</a>)<br>Para uma boa visualização, recomendamos abrir o arquivo com o Adobe Reader em um computador.</p>'.format('http://dev.ppa.digital/{}'.format(final_destination))
+    # if send_mail(str(essay.user.username), 'Redação corrigida!', mail_body, final_destination):
+    #     essay.mailed = True
+    #     essay.save()
+    #     return redirect('/essays/?mailed=True')
+    # else:
+    #     return redirect('/essays/?mailed=False')
 
 import smtplib
 from email.mime.multipart import MIMEMultipart

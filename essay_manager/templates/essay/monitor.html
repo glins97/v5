@@ -647,6 +647,7 @@
         <script>
           $(document).ready(function() {
             $().ready(function() {
+              setUsername('{{username}}');
               importCorrectionData({{data}});
               
               {% if created == 'True' %}

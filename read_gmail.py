@@ -111,7 +111,7 @@ def main():
                 first_name = from_name.split()[0]
                 last_name = from_name.split()[-1]
             student = get_bd_obj(User, username=from_email.lower(), first_name=first_name, last_name=last_name, password='ppadigital')
-            theme = Theme.objects.get(description='Solidário 1')
+            theme = Theme.objects.get(description='Solidário')
             attachment = get_attachments(service, message_id, student)
             if attachment:
                 essay = get_bd_obj(Essay, theme=theme, user=student, file=attachment)

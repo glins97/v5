@@ -22,8 +22,8 @@ class Document():
             im = Image.open(source)
             width, height = im.size
 
-            self.width = im.width
-            self.height = height
+            self.width = 595
+            self.height = height * 1.0 / width * 595
             self.size = self.width, self.height
 
             im = im.resize(self.size, Image.ANTIALIAS)
@@ -51,10 +51,12 @@ class Document():
         self.pdf.getPage(0).mergePage(PdfFileReader(BytesIO(document.getvalue())).getPage(0))
 
     def add_rect(self, x0, y0, x1, y1, color="000000ff"):
+        print('@add_rect', x0, y0, x1, y1, color)
         document = BytesIO()
         canvas = Canvas(document, pagesize=self.size)  
+        canvas.setLineWidth(self.pen_size / 7)
         canvas.setStrokeColorRGB(*hex_to_rgba(color))
-        canvas.rect(x0, y0, x1 - x0, y1 - y0, stroke=1, fill=0) 
+        canvas.rect(x0 * self.width, (1 - y0) * self.height - max((y1 - y0), (y0 - y1)) * self.height, max((x1 - x0), (x0 - x1)) * self.width, max((y1 - y0), (y0 - y1)) * self.height, stroke=1, fill=0) 
         canvas.save()
         self.pdf.getPage(0).mergePage(PdfFileReader(BytesIO(document.getvalue())).getPage(0))
 
@@ -66,13 +68,10 @@ class Document():
         funcs = {
             'LINE': self.add_line,
             'COMM': self.add_note,
-            # 'RECT': self.add_rect,
+            'RECT': self.add_rect,
         }
         for obj in objects:
-            try:
-                funcs.get(obj['mode'], lambda **kwargs: -1)(**obj['attributes'])
-            except:
-                pass
+            funcs.get(obj['mode'], lambda **kwargs: -1)(**obj['attributes'])
             
         self.pdf.write(open(fn, 'wb'))
 

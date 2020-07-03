@@ -89,7 +89,7 @@ competencies = (
 class ErrorClassification(models.Model):
     code = models.CharField(max_length=255, blank=True, null=True, default='')
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True, null=True)
+    description = models.CharField(max_length=1023, blank=True, null=True)
     competency = models.CharField(max_length=255, default='1', choices=competencies)
     has_children = models.BooleanField(default=False, editable=False)
     parent = models.ForeignKey('ErrorClassification', on_delete=models.CASCADE, blank=True, null=True)
