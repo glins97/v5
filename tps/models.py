@@ -42,23 +42,17 @@ answers = (
 )
 
 class TPS(models.Model):
-    subject = models.CharField(max_length=255, choices=subjects, verbose_name='Matéria')
+    subject = models.CharField(max_length=255, verbose_name='Matéria')
     week = models.CharField(max_length=255, choices=weeks, verbose_name='Semana')
     campus = models.CharField(max_length=255, choices=campi, verbose_name='Campus')
-    start_date = models.DateTimeField(verbose_name='Data de Início')
-    end_date = models.DateTimeField(verbose_name='Data de Término')
+    start_date = models.DateTimeField(verbose_name='Início')
+    end_date = models.DateTimeField(verbose_name='Término')
+    max_questions = models.IntegerField(default=10, verbose_name='Número de questões')
     max_answers = models.IntegerField(default=40, verbose_name='Número de respostas')
 
-    q1 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 1')
-    q2 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 2')
-    q3 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 3')
-    q4 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 4')
-    q5 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 5')
-    q6 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 6')
-    q7 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 7')
-    q8 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 8')
-    q9 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 9')
-    q10 = models.CharField(max_length=1, choices=answers, verbose_name='Questão 10')
+    tbl = models.BooleanField(default=True, verbose_name="Produzir TBL")
+    score_z = models.BooleanField(default=True, verbose_name="Produzir Score Z")
+    distractor = models.BooleanField(default=True, verbose_name="Produzir Distrator")
 
     def __str__(self):
         return '{} {} {}'.format(self.campus, self.subject, self.week)
@@ -66,6 +60,18 @@ class TPS(models.Model):
     class Meta:
         verbose_name = 'Formulário'
         verbose_name_plural = 'Formulários'
+
+class Question(models.Model):
+    tps = models.ForeignKey(TPS, on_delete=models.CASCADE)
+    number = models.IntegerField()
+    correct_answer = models.CharField(max_length=255, choices=answers)
+
+    def __str__(self):
+        return '{} {} {}'.format(self.tps, self.number, self.correct_answer)
+
+    class Meta:
+        verbose_name = 'Questão'
+        verbose_name_plural = 'Questões'
 
 class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
