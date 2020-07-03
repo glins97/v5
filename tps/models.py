@@ -50,6 +50,7 @@ class TPS(models.Model):
     max_questions = models.IntegerField(default=10, verbose_name='Número de questões')
     max_answers = models.IntegerField(default=40, verbose_name='Número de respostas')
 
+    solutions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Gabarito comentado')
     tbl = models.BooleanField(default=True, verbose_name="Produzir TBL")
     score_z = models.BooleanField(default=True, verbose_name="Produzir Score Z")
     distractor = models.BooleanField(default=True, verbose_name="Produzir Distrator")
@@ -73,22 +74,13 @@ class Question(models.Model):
         verbose_name = 'Questão'
         verbose_name_plural = 'Questões'
 
-class Answer(models.Model):
+class TPSAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     tps = models.ForeignKey(TPS, on_delete=models.CASCADE)
     submission_date = models.DateTimeField(auto_now_add=True) 
     name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
     grade = models.IntegerField(default=0)
-    q1 = models.CharField(max_length=1, choices=answers)
-    q2 = models.CharField(max_length=1, choices=answers)
-    q3 = models.CharField(max_length=1, choices=answers)
-    q4 = models.CharField(max_length=1, choices=answers)
-    q5 = models.CharField(max_length=1, choices=answers)
-    q6 = models.CharField(max_length=1, choices=answers)
-    q7 = models.CharField(max_length=1, choices=answers)
-    q8 = models.CharField(max_length=1, choices=answers)
-    q9 = models.CharField(max_length=1, choices=answers)
-    q10 = models.CharField(max_length=1, choices=answers)
 
     def __str__(self):
         return '{}: {} {} {}'.format(self.name, self.tps.campus, self.tps.subject, self.tps.week)
@@ -96,3 +88,8 @@ class Answer(models.Model):
     class Meta:
         verbose_name = 'Resposta'
         verbose_name_plural = 'Respostas'
+
+class QuestionAnswer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
+    tps_answer = models.ForeignKey(TPSAnswer, on_delete=models.CASCADE, null=True, blank=True)
+    answer = models.CharField(max_length=255, choices=answers)

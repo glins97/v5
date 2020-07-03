@@ -38,7 +38,7 @@
     </nav>
     <div class="row">
       <div class="col-lg-6 col-md-8 col-sm-10 ml-auto mr-auto">
-        <form id="login-form" class="form" method="post" action="/tps/answer/{{campus}}/{{subject}}/{{week}}">
+        <form id="login-form" class="form" method="post" action="/tps/answer/{{id}}/">
           {% csrf_token %}
           <div class="card" style="margin-top: 150px;">
             <div class="card-header card-header-info text-center">
@@ -58,517 +58,69 @@
                   <input type="text" class="form-control" placeholder="Nome" name="name" maxlength="150" required="">
                 </div>
               </span>
-              
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 30px;">
+              <span class="bmd-form-group" style="margin-left: 1px;">
+                <div class="input-group has-info">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
-                      Questão 1
+                      <i class="material-icons">mail</i>
                     </span>
                   </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q1"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q1"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q1"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q1"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q1"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
+                  <input type="text" class="form-control" placeholder="E-mail" name="email" maxlength="150" required="">
                 </div>
               </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 2
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q2"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
+              {% for question in questions %}
+                <span class="bmd-form-group">
+                  <div class="input-group has-info" style="margin-top: 30px;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        Questão {{question.number}}
+                      </span>
                     </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q2"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q2"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q2"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q2"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 3
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q3"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q3"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q3"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q3"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q3"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
+                    <div class="row" style="margin-left: 31px;">
+                      <div class="col-sm form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" value="A" type="radio" name="q{{question.number}}"> A
+                          <span class="circle">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-sm form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" value="B" type="radio" name="q{{question.number}}"> B
+                          <span class="circle">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-sm form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" value="C" type="radio" name="q{{question.number}}"> C
+                          <span class="circle">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-sm form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" value="D" type="radio" name="q{{question.number}}"> D
+                          <span class="circle">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="col-sm form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" value="E" type="radio" name="q{{question.number}}"> E
+                          <span class="circle">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 4
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q4"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q4"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q4"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q4"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q4"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 5
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q5"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q5"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q5"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q5"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q5"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 6
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q6"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q6"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q6"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q6"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q6"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 7
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q7"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q7"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q7"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q7"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q7"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 8
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q8"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q8"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q8"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q8"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q8"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 9
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 31px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q9"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q9"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q9"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q9"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q9"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span class="bmd-form-group">
-                <div class="input-group has-info" style="margin-top: 20px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      Questão 10
-                    </span>
-                  </div>
-                  <div class="row" style="margin-left: 23px;">
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="A" type="radio" name="q10"> A
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="B" type="radio" name="q10"> B
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="C" type="radio" name="q10"> C
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="D" type="radio" name="q10"> D
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                    <div class="col-sm form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" value="E" type="radio" name="q10"> E
-                        <span class="circle">
-                          <span class="check"></span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
+                </span>
+              {% endfor %}
             </div>
             <div class="card-footer justify-content-center">
               <input type="submit" class="btn btn-info btn-link btn-lg" value="ENVIAR">

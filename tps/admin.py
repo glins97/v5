@@ -5,12 +5,12 @@ from django.http import FileResponse
 from django import forms
 
 from tps.auxiliary import generate_score_z, generate_tbl, generate_distrator
-from .models import TPS, Answer, Question
+from .models import TPS, TPSAnswer, Question
 
 import subprocess
 
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'tps', 'grade', )
+class TPSAnswerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'email', 'tps', 'grade', )
     list_filter = ('tps', 'grade', )
     # search_fields = (,)
     list_per_page = 100
@@ -42,7 +42,8 @@ class TPSAdminForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(TPSAdminForm, self).save(commit=False)
-        print(repr(instance))
+        instance.save()
+
         for index, field in enumerate([attr for attr in self.cleaned_data if attr[0] == 'q']):
             if self.cleaned_data[field] != 'NA':
                 # gets matching model or creates object if no matches exist 
@@ -67,7 +68,7 @@ class TPSAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Conteúdo', {
-            'fields': ('subject', 'week', 'campus',),
+            'fields': ('subject', 'week', 'campus', 'solutions'),
         }),
         ('Informações', {
             'fields': ('max_answers', 'max_questions', 'tbl', 'score_z', 'distractor'),
@@ -99,10 +100,10 @@ class TPSAdmin(admin.ModelAdmin):
     list_per_page = 20
 
     def url(self, obj):
-        return 'ppa.digital/tps/{}/{}/{}/'.format(obj.campus.lower(), obj.subject.lower(), obj.week)
+        return 'ppa.digital/tps/{}/{}/{}/{}/'.format(obj.id, obj.campus.lower(), obj.subject.lower()[:3], obj.week)
     
     def respostas(self, obj):
-        return '{} / {}'.format(len(list(Answer.objects.filter(tps=obj))), obj.max_answers)
+        return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj).count(), obj.max_answers)
 
     def relatórios(self, obj):
         return format_html(
@@ -122,16 +123,12 @@ class TPSAdmin(admin.ModelAdmin):
     def _gen_pdf(self, id, func):
         output = None
         fn = ''
-        tps = TPS.objects.get(id=id)
         if func == 'score_z':
-            fn = f'SCORE Z {tps}'
-            output = generate_score_z(fn, id)
+            output = generate_score_z(id)
         if func == 'tbl':
-            fn = f'TBL {tps}'
-            output = generate_tbl(fn, id)
+            output = generate_tbl(id)
         if func == 'distrator':
-            fn = f'DISTRATOR {tps}'
-            output = generate_distrator(fn, id)
+            output = generate_distrator(id)
         
         subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', output, '--outdir', 'tps/outputs/pdfs'])
         return FileResponse(open(output.replace('xlsx', 'pdf'), 'rb'), as_attachment=True, filename=(fn + '.pdf'))
@@ -169,4 +166,4 @@ class QuestionAdmin(admin.ModelAdmin):
 
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(TPS, TPSAdmin)
-admin.site.register(Answer, AnswerAdmin)
+admin.site.register(TPSAnswer, TPSAnswerAdmin)
