@@ -51,9 +51,8 @@ class TPS(models.Model):
     max_answers = models.IntegerField(default=40, verbose_name='Número de respostas')
 
     solutions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Gabarito comentado')
-    tbl = models.BooleanField(default=True, verbose_name="Produzir TBL")
-    score_z = models.BooleanField(default=True, verbose_name="Produzir Score Z")
-    distractor = models.BooleanField(default=True, verbose_name="Produzir Distrator")
+    tbl = models.BooleanField(default=True, verbose_name="Notificar TBL")
+    score_z = models.BooleanField(default=True, verbose_name="Notificar Score Z")
 
     def __str__(self):
         return '{} {} {}'.format(self.campus, self.subject, self.week)
@@ -81,6 +80,7 @@ class TPSAnswer(models.Model):
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     grade = models.IntegerField(default=0)
+    mailed = models.BooleanField(default=False)
 
     def __str__(self):
         return '{}: {} {} {}'.format(self.name, self.tps.campus, self.tps.subject, self.tps.week)

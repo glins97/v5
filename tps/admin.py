@@ -71,7 +71,7 @@ class TPSAdmin(admin.ModelAdmin):
             'fields': ('subject', 'week', 'campus', 'solutions'),
         }),
         ('Informações', {
-            'fields': ('max_answers', 'max_questions', 'tbl', 'score_z', 'distractor'),
+            'fields': ('max_answers', 'max_questions', 'tbl', 'score_z',),
         }),
         ('Data', {
             'fields': ('start_date', 'end_date',),
@@ -94,7 +94,7 @@ class TPSAdmin(admin.ModelAdmin):
             '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
             '/static/tps/js/fields.js',
         )
-    list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'url', 'relatórios',)
+    list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'emails', 'url', 'relatórios',)
     list_filter = ('campus', 'subject', 'week',)
     search_fields = ('campus', 'subject', 'week', )
     list_per_page = 20
@@ -104,6 +104,9 @@ class TPSAdmin(admin.ModelAdmin):
     
     def respostas(self, obj):
         return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj).count(), obj.max_answers)
+
+    def emails(self, obj):
+        return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj, mailed=True).count(), obj.max_answers)
 
     def relatórios(self, obj):
         return format_html(
