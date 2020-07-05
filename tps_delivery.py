@@ -3,6 +3,9 @@ import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "v5.settings")
 django.setup()
 
+import logging
+logger = logging.getLogger('django')
+
 from django.utils.timezone import now
 from tps.models import TPS, TPSAnswer, Question, QuestionAnswer
 
@@ -28,7 +31,6 @@ def get_rank(tps_answer):
 def is_tbl(tps_answer):
     sorted_tps_answers = sorted(TPSAnswer.objects.filter(tps=tps_answer.tps), key=lambda answer: (-answer.grade, answer.submission_date))
     
-    print(tps_answer.name, tps_answer.grade, sorted_tps_answers.index(tps_answer), 0.8 * len(sorted_tps_answers))
     if tps_answer.tps.campus == 'GOI':
         if sorted_tps_answers.index(tps_answer) <= 0.8 * len(sorted_tps_answers) - 1:
             return False
@@ -56,6 +58,7 @@ def is_score_z(tps_answer):
 
 def main():
     for tps_answer in TPSAnswer.objects.filter(mailed=False, tps__end_date__gte=now()):
+        logger.info(f'Mailing TPS Answer {tps_answer}')
         try:
             questions = sorted(Question.objects.filter(tps=tps_answer.tps), key=lambda question: question.number)
 
@@ -100,8 +103,9 @@ def main():
                 tps_answer.mailed = True
                 tps_answer.save()
         except Exception as e:
-            send_mail('gabriel.lins97@gmail.com', 'Error @tps_delivery::main', traceback.format_exc().replace('\n', '<br>'))
-
+            logger.error(f'Error mailing TPS Answer {tps_answer}. Error {e}')
+            logger.error('Stack trace: {}'.format(traceback.format_exc()))
+            
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -109,8 +113,6 @@ from email.mime.application import MIMEApplication
 from email.encoders import encode_base64
 import codecs
 from threading import _start_new_thread
-import logging
-logger = logging.getLogger('mailer')
 
 def send_mail(email, subject, message):
     try:

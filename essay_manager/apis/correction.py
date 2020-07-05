@@ -4,6 +4,9 @@ from essay_manager.models import Correction, Essay
 import logging
 import json 
 
+import logging
+logger = logging.getLogger('django')
+
 @has_permission('monitor')
 @login_required
 def create_correction_endpoint(request, id):
@@ -12,7 +15,7 @@ def create_correction_endpoint(request, id):
             Correction(user=request.user, essay=Essay.objects.get(id=id), data='{}').save()
         return redirect('/essays/{}/?created=True'.format(id))
     except Exception as e:
-        print(repr(e))
+        logger.error(f'create_correction_endpoint@correction::Exception thrown | {request.user} {request} {id} {repr(e)}')
         return redirect('/essays/?created=False')
         
 @has_permission('monitor')
@@ -26,5 +29,5 @@ def update_correction_endpoint(request, id):
         correction.save()
         return redirect('/essays/?updated=True')
     except Exception as e:
-        print(repr(e))
+        logger.error(f'create_correction_endpoint@correction::Exception thrown | {request.user} {request} {id} {repr(e)}')
         return redirect('/essays/{}/?updated=False'.format(id))

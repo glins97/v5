@@ -2,12 +2,15 @@ from django.shortcuts import redirect
 from bauth.views import login_view
 from bauth.views import e403_view
 
+import logging
+logger = logging.getLogger('django')
+
 def login_required(f, *args, **kwargs):
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
             return f(request, *args, **kwargs)
         else:
-            print('request', request, args, kwargs)
+            logger.info(f'login_required@decorators::Unauthorized user | {request.user} {request} {args} {kwargs}')
             return login_view(request)
     return wrapper
 

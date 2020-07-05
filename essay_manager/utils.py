@@ -9,7 +9,6 @@ import mimetypes
 @login_required
 def get_uploaded_file(request, url):
     url = 'uploads/' + url
-    print(url)
     mimetypes.init()
     try:
         matched = request.user.groups.filter(name='monitor').exists()
@@ -21,7 +20,6 @@ def get_uploaded_file(request, url):
 
         fsock = open(url, "rb")
         file_name = os.path.basename(url) 
-        file_size = os.path.getsize(url) 
         mime_type_guess = mimetypes.guess_type(file_name)
         if mime_type_guess is not None:
             response = HttpResponse(fsock, content_type=mime_type_guess[0])

@@ -114,6 +114,58 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+from v5.filters import mail_errors
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'send_mail': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': mail_errors,
+        },
+    },
+    'handlers': {
+        'general_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'simple',
+            'filename': 'logs/general_debug.log',
+        },
+        'general_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'simple',
+            'filename': 'logs/general_info.log',
+        },
+        'general_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': 'logs/general_error.log',
+            'filters': ['send_mail'],
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['general_debug', 'general_info', 'general_error', 'console'],
+            'filters': ['send_mail'],
+            'propagate': True,
+        },
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
