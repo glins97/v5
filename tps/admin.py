@@ -133,8 +133,9 @@ class TPSAdmin(admin.ModelAdmin):
         if func == 'distrator':
             output = generate_distrator(id)
         
+        print(['libreoffice', '--headless', '--convert-to',  'pdf', output, '--outdir', 'tps/outputs/pdfs'])
         subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', output, '--outdir', 'tps/outputs/pdfs'])
-        return FileResponse(open(output.replace('xlsx', 'pdf'), 'rb'), as_attachment=True, filename=(fn + '.pdf'))
+        return FileResponse(open(output.replace('xlsx', 'pdf'), 'rb'), as_attachment=True, filename=(func.upper() + '.pdf'))
 
     def download_pdf_score_z(self, request, id):
         return self._gen_pdf(id, 'score_z')

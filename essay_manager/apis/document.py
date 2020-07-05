@@ -22,8 +22,8 @@ class Document():
             im = Image.open(source)
             width, height = im.size
 
-            self.width = 595
-            self.height = height * 1.0 / width * 595
+            self.width = 2 * 595
+            self.height = 2 * int(height * 1.0 / width * 595)
             self.size = self.width, self.height
 
             im = im.resize(self.size, Image.ANTIALIAS)

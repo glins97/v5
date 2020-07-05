@@ -187,7 +187,7 @@ def generate_score_z(tps_id):
         ws['G' + str(9 + len(students))].border = copy(ws['G6'].border)
 
     wb.save('tps/outputs/xlsxs/SCORE_Z_' + str(tps).replace(' ', '_').upper() + '.xlsx')
-    return 'tps/outputs/xlsxs/SCORE_Z' + str(tps).replace(' ', '_').upper() + '.xlsx'
+    return 'tps/outputs/xlsxs/SCORE_Z_' + str(tps).replace(' ', '_').upper() + '.xlsx'
 
 def generate_distrator(tps_id):
     tps = TPS.objects.get(id=tps_id)

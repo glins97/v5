@@ -1,3 +1,4 @@
+import traceback
 import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "v5.settings")
 django.setup()
@@ -6,16 +7,23 @@ from django.utils.timezone import now
 from tps.models import TPS, TPSAnswer, Question, QuestionAnswer
 
 def get_question_html(question, question_answer):
+    answer = ''
+    if question_answer:
+        answer = question_answer.answer
     return f"""
             <tr style="height:21px">
                 <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);text-align:right;border:1px solid rgb(204,204,204)">{question.number}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'A' else ''};border:1px solid rgb(204,204,204)">{'X' if question_answer.answer == 'A' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'B' else ''};border:1px solid rgb(204,204,204)">{'X' if question_answer.answer == 'B' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'C' else ''};border:1px solid rgb(204,204,204)">{'X' if question_answer.answer == 'C' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'D' else ''};border:1px solid rgb(204,204,204)">{'X' if question_answer.answer == 'D' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'E' else ''};border:1px solid rgb(204,204,204)">{'X' if question_answer.answer == 'E' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'A' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'A' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'B' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'B' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'C' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'C' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'D' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'D' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'E' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'E' else '<br>'}</td>
             </tr> 
             """
+
+def get_rank(tps_answer):
+    sorted_tps_answers = sorted(TPSAnswer.objects.filter(tps=tps_answer.tps), key=lambda answer: (-answer.grade, answer.submission_date))
+    return sorted_tps_answers.index(tps_answer) + 1
 
 def is_tbl(tps_answer):
     sorted_tps_answers = sorted(TPSAnswer.objects.filter(tps=tps_answer.tps), key=lambda answer: (-answer.grade, answer.submission_date))
@@ -53,7 +61,7 @@ def main():
 
             questions_rows = ''
             for question in questions:
-                questions_rows += get_question_html(question, QuestionAnswer.objects.get(tps_answer=tps_answer, question=question))
+                questions_rows += get_question_html(question, QuestionAnswer.objects.filter(tps_answer=tps_answer, question=question).first())
             
             table = f"""
                 <span>
@@ -80,6 +88,7 @@ def main():
                 """
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
             mail_body += f'<p>Nota: {tps_answer.grade}</p>'   
+            mail_body += f'<p>Ranking: {get_rank(tps_answer)}</p>'   
             if tps_answer.tps.tbl and is_tbl(tps_answer):
                 mail_body += f'<p>Grupo: TBL</p>'   
             if tps_answer.tps.score_z and is_score_z(tps_answer):
@@ -91,7 +100,7 @@ def main():
                 tps_answer.mailed = True
                 tps_answer.save()
         except Exception as e:
-            send_mail('gabriel.lins97@gmail.com', f'Error @tps_delivery::main', repr(e)):
+            send_mail('gabriel.lins97@gmail.com', 'Error @tps_delivery::main', traceback.format_exc().replace('\n', '<br>'))
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
