@@ -69,7 +69,7 @@ def student_dashboard_view(request):
 
 @has_permission('monitor')
 def monitor_dashboard_view(request):
-    corrections = Correction.objects.filter(user=request.user).order_by('-id').order_by('status')
+    corrections = list(Correction.objects.filter(user=request.user).order_by('-id').order_by('status'))
     essays = Essay.objects.filter().order_by('id')
     
     uncorrected_essays = []
@@ -85,7 +85,7 @@ def monitor_dashboard_view(request):
 
     data = {
         'title': 'Dashboard',
-        'corrections': corrections,
+        'corrections': corrections[:5],
         'done_corrections': list(done_corrections),
         'done_corrections_count': done_corrections_count,
         'uncorrected_essays': uncorrected_essays[:5],

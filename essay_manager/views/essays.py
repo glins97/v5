@@ -33,7 +33,7 @@ def _monitor_essays_view(request):
         active_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='ACTIVE').get().user
     active_corrections_essays_count = len(active_correction_essays)
 
-    done_correction_essays = [essay for essay in Essay.objects.filter().order_by('-id') if Correction.objects.filter(essay=essay, status='DONE')]
+    done_correction_essays = [essay for essay in Essay.objects.filter().order_by('-id') if Correction.objects.filter(essay=essay, status='DONE').order_by('-mailed').order_by('-id')]
     for index, essay in enumerate(done_correction_essays):
         done_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='DONE').get().user
     done_corrections_count = len(done_correction_essays)
