@@ -84,19 +84,19 @@ def _monitor_essay_view(request, id):
     if not corrections.count():
         return redirect(f'/corrections/new/{id}/')
 
-    error_classifications_c1 = [o.get_html() for o in ErrorClassification.objects.filter(competency='1') if o.parent is None]
-    error_classifications_c2 = [o.get_html() for o in ErrorClassification.objects.filter(competency='2') if o.parent is None]
-    error_classifications_c3 = [o.get_html() for o in ErrorClassification.objects.filter(competency='3') if o.parent is None]
-    error_classifications_c4 = [o.get_html() for o in ErrorClassification.objects.filter(competency='4') if o.parent is None]
-    error_classifications_c5 = [o.get_html() for o in ErrorClassification.objects.filter(competency='5') if o.parent is None]
+    error_classifications_c1 = [o.get_html() for o in ErrorClassification.objects.filter(competency='1').order_by('code') if o.parent is None]
+    error_classifications_c2 = [o.get_html() for o in ErrorClassification.objects.filter(competency='2').order_by('code') if o.parent is None]
+    error_classifications_c3 = [o.get_html() for o in ErrorClassification.objects.filter(competency='3').order_by('code') if o.parent is None]
+    error_classifications_c4 = [o.get_html() for o in ErrorClassification.objects.filter(competency='4').order_by('code') if o.parent is None]
+    error_classifications_c5 = [o.get_html() for o in ErrorClassification.objects.filter(competency='5').order_by('code') if o.parent is None]
 
-    generic_error_classifications_c1 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='1') if o.parent is None]
-    generic_error_classifications_c2 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='2') if o.parent is None]
-    generic_error_classifications_c3 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='3') if o.parent is None]
-    generic_error_classifications_c4 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='4') if o.parent is None]
-    generic_error_classifications_c5 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='5') if o.parent is None]
+    generic_error_classifications_c1 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='1').order_by('code') if o.parent is None]
+    generic_error_classifications_c2 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='2').order_by('code') if o.parent is None]
+    generic_error_classifications_c3 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='3').order_by('code') if o.parent is None]
+    generic_error_classifications_c4 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='4').order_by('code') if o.parent is None]
+    generic_error_classifications_c5 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='5').order_by('code') if o.parent is None]
 
-    error_classifications_g0 = sorted([o.get_html() for o in ErrorClassification.objects.filter(competency='0') if o.parent is None], key=lambda item: str(item))
+    error_classifications_g0 = sorted([o.get_html() for o in ErrorClassification.objects.filter(competency='0').order_by('code') if o.parent is None], key=lambda item: str(item))
     essay = Essay.objects.get(id=id)
     first_name = essay.user.first_name.split()[0]
     data = {
