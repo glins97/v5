@@ -40,6 +40,7 @@ var RECT_PEN_CORRECTION = 8;
 var savedImagePos = undefined;
 var nullified = false;
 var username = '';
+var modalVisible = false;
 
 function setUsername(val) {
     username = val;
@@ -308,32 +309,34 @@ function onKeyDown(e) {
     }
 
     // competencies 1-6 shortcuts
-    // switch(evtobj.keyCode){
-    //     case 49:
-    //     case 97:
-    //         document.getElementById('selectColorDanger').click();
-    //         break;
-    //     case 50:
-    //     case 98:
-    //         document.getElementById('selectColorPrimary').click();
-    //         break;
-    //     case 51:
-    //     case 99:
-    //         document.getElementById('selectColorGrey').click();
-    //         break;
-    //     case 52:
-    //     case 100:
-    //         document.getElementById('selectColorWarning').click();
-    //         break;
-    //     case 53:
-    //     case 101:
-    //         document.getElementById('selectColorSuccess').click();
-    //         break;
-    //     case 54:
-    //     case 102:
-    //         document.getElementById('selectColorInfo').click();
-    //         break;
-    // }
+    if (!modalVisible){
+        switch(evtobj.keyCode){
+            case 49:
+            case 97:
+                document.getElementById('selectColorDanger').click();
+                break;
+            case 50:
+            case 98:
+                document.getElementById('selectColorPrimary').click();
+                break;
+            case 51:
+            case 99:
+                document.getElementById('selectColorGrey').click();
+                break;
+            case 52:
+            case 100:
+                document.getElementById('selectColorWarning').click();
+                break;
+            case 53:
+            case 101:
+                document.getElementById('selectColorSuccess').click();
+                break;
+            case 54:
+            case 102:
+                document.getElementById('selectColorInfo').click();
+                break;
+        }
+    }
 }
 
 function loadModeSelectionButtons() {
@@ -466,6 +469,7 @@ function mouseUpEvent(e) {
             document.getElementById('comment-text').value = username + ', ';
             addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight);
             document.getElementById("openModal").click();
+            modalVisible = true;
             savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
         }
     }
@@ -475,6 +479,7 @@ function mouseUpEvent(e) {
         addImage(rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight);
         lastImage = undefined;
         document.getElementById("openModal").click();
+        modalVisible = true;
         savedImagePos = [rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight]
     }
     
@@ -550,7 +555,7 @@ function saveComment(){
 $(window).on('DOMContentLoaded load resize scroll', showBtnsOnEssayVisible);
 $(document).ready(function() {
     $('#myModal').on('hide.bs.modal', function () {
-        console.log('modalclose');
+        modalVisible = false;
         
         // whenever modal closes, remove last added comment
         // as a side effect, saved comments will also be removed.
