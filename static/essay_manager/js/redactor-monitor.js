@@ -291,6 +291,7 @@ function loadColorSelectionButtons() {
     $('#selectColorPrimary').click(function(){
         setColor(COLOR_PRIMARY);
         document.getElementById("selectModeLine").click();
+        document.getElementById("modalC2").click();
     });
     $('#selectColorInfo').click(function(){
         setColor(COLOR_INFO);
@@ -299,18 +300,22 @@ function loadColorSelectionButtons() {
     $('#selectColorSuccess').click(function(){
         setColor(COLOR_SUCCESS);
         document.getElementById("selectModeLine").click();
+        document.getElementById("modalC5").click();
     });
     $('#selectColorDanger').click(function(){
         setColor(COLOR_DANGER);
         document.getElementById("selectModeRectangle").click();
+        document.getElementById("modalC1").click();
     });
     $('#selectColorWarning').click(function(){
         setColor(COLOR_WARNING);
         document.getElementById("selectModeLine").click();
+        document.getElementById("modalC4").click();
     });
     $('#selectColorGrey').click(function(){
         setColor(COLOR_GREY);
         document.getElementById("selectModeLine").click();
+        document.getElementById("modalC3").click();
     });
 }
 
