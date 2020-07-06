@@ -210,8 +210,8 @@ function importCorrectionData(data) {
     document.getElementById('inlineRadioOptions4-' + grades['a4']).checked = true; 
     document.getElementById('inlineRadioOptions5-' + grades['a5']).checked = true; 
     for (var key in textfieldComments){
-        console.log(key, 'formTextarea-' + key);
-        document.getElementById('formTextarea-' + key).value = textfieldComments[key]; 
+        console.log(key, 'formTextarea' + key);
+        document.getElementById('formTextarea' + key).value = textfieldComments[key]; 
     }
 }
 
