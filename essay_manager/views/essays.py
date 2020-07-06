@@ -20,7 +20,6 @@ def _student_essays_view(request):
 @has_permission('monitor')
 @login_required
 def _monitor_essays_view(request):
-    corrections = Correction.objects.filter(user=request.user).order_by('-id').order_by('status')
     essays = Essay.objects.filter().order_by('id')
     uncorrected_essays = []
     for essay in essays:
@@ -33,7 +32,7 @@ def _monitor_essays_view(request):
         active_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='ACTIVE').get().user
     active_corrections_essays_count = len(active_correction_essays)
 
-    done_correction_essays = [essay for essay in Essay.objects.filter().order_by('-id') if Correction.objects.filter(essay=essay, status='DONE').order_by('-mailed').order_by('-id')]
+    done_correction_essays = [essay for essay in Essay.objects.filter().order_by('-id', 'mailed') if Correction.objects.filter(essay=essay, status='DONE')]
     for index, essay in enumerate(done_correction_essays):
         done_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='DONE').get().user
     done_corrections_count = len(done_correction_essays)
