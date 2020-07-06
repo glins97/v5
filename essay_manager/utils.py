@@ -7,8 +7,10 @@ import os.path
 import mimetypes
 
 @login_required
-def get_uploaded_file(request, url):
-    url = 'uploads/' + url
+def get_essay_file(request, url):
+    if 'uploads/' not in url:
+        url = 'uploads/' + url
+        
     mimetypes.init()
     try:
         matched = request.user.groups.filter(name='monitor').exists()

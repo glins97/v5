@@ -139,19 +139,19 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'simple',
-            'filename': 'logs/general_debug.log',
+            'filename': 'logs/debug.log',
         },
         'general_info': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'formatter': 'simple',
-            'filename': 'logs/general_info.log',
+            'filename': 'logs/info.log',
         },
         'general_error': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'formatter': 'verbose',
-            'filename': 'logs/general_error.log',
+            'filename': 'logs/error.log',
             'filters': ['send_mail'],
         },
         'console': {
@@ -161,7 +161,6 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['general_debug', 'general_info', 'general_error', 'console'],
-            'filters': ['send_mail'],
             'propagate': True,
         },
     }

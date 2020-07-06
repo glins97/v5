@@ -57,7 +57,7 @@ def is_score_z(tps_answer):
     return True 
 
 def main():
-    for tps_answer in TPSAnswer.objects.filter(mailed=False, tps__end_date__gte=now()):
+    for tps_answer in TPSAnswer.objects.filter(mailed=False, tps__end_date__lte=now()):
         logger.info(f'Mailing TPS Answer {tps_answer}')
         try:
             questions = sorted(Question.objects.filter(tps=tps_answer.tps), key=lambda question: question.number)
@@ -97,7 +97,9 @@ def main():
             if tps_answer.tps.score_z and is_score_z(tps_answer):
                 mail_body += f'<p>Grupo: Score Z</p>'   
 
-            mail_body += f'<p>Para conferir as soluções comentadas, clique <a href="https://ppa.digital/{tps_answer.tps.solutions}"> aqui</a>.</p>'    
+            if tps_answer.tps.solutions:
+                mail_body += f'<p>Para conferir as soluções comentadas, clique <a href="https://ppa.digital/{tps_answer.tps.solutions}"> aqui</a>.</p>'    
+
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
             if send_mail(tps_answer.email, f'Respostas {tps_answer.tps}', mail_body):
                 tps_answer.mailed = True

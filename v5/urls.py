@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 
 from essay_manager.views import *
 from essay_manager.apis import *
-from essay_manager.utils import get_uploaded_file
+from essay_manager.utils import get_essay_file
 
 from bauth.views import *
 from bauth.apis import *
@@ -27,10 +27,35 @@ from bauth.apis import *
 from tps.views import *
 from tps.apis import *
 
+import os.path
+import mimetypes
+
 def base_redirect(request):
     if request.user.groups.filter(name='tps').exists():
         return redirect('/admin/')
     return dashboard_view(request)
+
+def uploaded_file_redirect(request, url):
+    if 'uploads/' not in url:
+        url = 'uploads/' + url
+
+    # if file is from an essay, use essay manager's 
+    # file serving function 'get_essay_file'
+    if Essay.objects.filter(file=url):
+        return get_essay_file(request, url)
+    
+    # else, serve file as usual
+    mimetypes.init()
+    try:
+        fsock = open(url, "rb")
+        file_name = os.path.basename(url) 
+        mime_type_guess = mimetypes.guess_type(file_name)
+        if mime_type_guess is not None:
+            response = HttpResponse(fsock, content_type=mime_type_guess[0])
+        response['Content-Disposition'] = 'attachment; filename=' + file_name            
+    except IOError:
+        response = e500_view(request)
+    return response
 
 urlpatterns = [    
     path('admin/', admin.site.urls),
@@ -51,7 +76,7 @@ urlpatterns = [
     path('corrections/update/<int:id>/', update_correction_endpoint),
     path('api/profile/update/', update_profile_endpoint),
     path('api/essays/create/', create_essay_endpoint),
-    path('uploads/<str:url>/', get_uploaded_file),
+    path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
 
     # BAUTH RELATED
@@ -71,7 +96,6 @@ urlpatterns = [
     path('tps/answer/<int:id>/', save_tps_answer)
     # ---------------------
 ] 
-
 
 handler404 = 'bauth.views.e404_view'
 handler500 = 'bauth.views.e500_view'
