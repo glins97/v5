@@ -487,6 +487,10 @@ function saveComment(){
     // add latest comment & its rectangle AGAIN
     objects.push(objects[objects.length - 2]);
     objects.push(objects[objects.length - 2]);
+
+    // clear comments
+    objects[objects.length - 1]['attributes']['comment'] = document.getElementById('comment-text').value;
+    document.getElementById('comment-text').value = '';
 }
 
 $(window).on('DOMContentLoaded load resize scroll', showBtnsOnEssayVisible);
@@ -507,10 +511,6 @@ $(document).ready(function() {
         updateCanvas();
         drawMarkers();
         drawImages();
-
-        // clear comments
-        objects[objects.length - 1]['attributes']['comment'] = document.getElementById('comment-text').value;
-        document.getElementById('comment-text').value = '';
 
         // uncheck every checkbox
         var checkboxes = document.getElementsByName('competencyError');

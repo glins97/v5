@@ -287,6 +287,13 @@
                     </div>
                     <div class="card-footer">
                       <div class="container">
+                        {% for chunk in generic_error_classifications_c1|chunks:3 %}
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          {% for error_classification_html in chunk %}
+                          {{ error_classification_html }}
+                          {% endfor %}
+                        </div>
+                        {% endfor %}
                         <div class="row">
                           <div class="col-sm form-check">
                             <div class="form-group">
@@ -359,6 +366,13 @@
                     </div>
                     <div class="card-footer">
                       <div class="container">
+                        {% for chunk in generic_error_classifications_c2|chunks:3 %}
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          {% for error_classification_html in chunk %}
+                          {{ error_classification_html }}
+                          {% endfor %}
+                        </div>
+                        {% endfor %}
                         <div class="row">
                           <div class="col-sm form-check">
                             <div class="form-group">
@@ -425,6 +439,13 @@
                     </div>
                     <div class="card-footer">
                       <div class="container">
+                        {% for chunk in generic_error_classifications_c3|chunks:3 %}
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          {% for error_classification_html in chunk %}
+                          {{ error_classification_html }}
+                          {% endfor %}
+                        </div>
+                        {% endfor %}
                         <div class="row">
                           <div class="col-sm form-check">
                             <div class="form-group">
@@ -491,6 +512,13 @@
                     </div>
                     <div class="card-footer">
                       <div class="container">
+                        {% for chunk in generic_error_classifications_c4|chunks:3 %}
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          {% for error_classification_html in chunk %}
+                          {{ error_classification_html }}
+                          {% endfor %}
+                        </div>
+                        {% endfor %}
                         <div class="row">
                           <div class="col-sm form-check">
                             <div class="form-group">
@@ -565,7 +593,7 @@
                     </div>
                     <div class="card-footer">
                       <div class="container">
-                        {% for chunk in error_classifications_c5|chunks:3 %}
+                        {% for chunk in generic_error_classifications_c5|chunks:3 %}
                         <div class="row" style="margin-left: 20px; margin-top: 10px;">
                           {% for error_classification_html in chunk %}
                           {{ error_classification_html }}

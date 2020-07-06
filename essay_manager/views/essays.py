@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from essay_manager.decorators import login_required, has_permission
-from essay_manager.models import Essay, Correction, ErrorClassification
+from essay_manager.models import Essay, Correction, ErrorClassification, GenericErrorClassification 
 from essay_manager.utils import get_view_by_permission, get_user_details
 from bauth.views import e403_view
 from django.shortcuts import redirect
@@ -89,6 +89,13 @@ def _monitor_essay_view(request, id):
     error_classifications_c3 = [o.get_html() for o in ErrorClassification.objects.filter(competency='3') if o.parent is None]
     error_classifications_c4 = [o.get_html() for o in ErrorClassification.objects.filter(competency='4') if o.parent is None]
     error_classifications_c5 = [o.get_html() for o in ErrorClassification.objects.filter(competency='5') if o.parent is None]
+
+    generic_error_classifications_c1 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='1') if o.parent is None]
+    generic_error_classifications_c2 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='2') if o.parent is None]
+    generic_error_classifications_c3 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='3') if o.parent is None]
+    generic_error_classifications_c4 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='4') if o.parent is None]
+    generic_error_classifications_c5 = [o.get_html() for o in GenericErrorClassification.objects.filter(competency='5') if o.parent is None]
+
     error_classifications_g0 = sorted([o.get_html() for o in ErrorClassification.objects.filter(competency='0') if o.parent is None], key=lambda item: str(item))
     essay = Essay.objects.get(id=id)
     first_name = essay.user.first_name.split()[0]
@@ -104,6 +111,12 @@ def _monitor_essay_view(request, id):
         'error_classifications_c4': error_classifications_c4,
         'error_classifications_c5': error_classifications_c5,
         'error_classifications_g0': error_classifications_g0,
+
+        'generic_error_classifications_c1': generic_error_classifications_c1,
+        'generic_error_classifications_c2': generic_error_classifications_c2,
+        'generic_error_classifications_c3': generic_error_classifications_c3,
+        'generic_error_classifications_c4': generic_error_classifications_c4,
+        'generic_error_classifications_c5': generic_error_classifications_c5,
         'data': mark_safe(corrections[0].data),
     }
     return render(request, 'essay/monitor.html', data)
