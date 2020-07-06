@@ -4,3 +4,4 @@ from .dashboard import *
 from .essays import *
 from .profile import *
 from .themes import *
+from .management import *

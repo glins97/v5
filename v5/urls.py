@@ -69,6 +69,7 @@ urlpatterns = [
     path('corrections/', corrections_view),
     path('profile/', profile_view),
     path('themes/', themes_view),
+    path('management/', management_view),
 
     # - apis
     path('mail/<int:id>/', mail_essay_endpoint),

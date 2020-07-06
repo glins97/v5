@@ -44,6 +44,14 @@
 				</a>
 			</li>
 			{% endif %}
+			{% if user.obj|has_permission:'superuser' %}
+			<li class="nav-item {% if title == 'Gestão' %}active{%endif%}">
+				<a class="nav-link" href="/management/">
+					<i class="material-icons">history</i>
+					<p>Gestão</p>
+				</a>
+			</li>
+			{% endif %}
 			<!-- {% if user.obj|has_permission:'monitor' %}
 			<li class="nav-item {% if title == 'Correções' %}active{%endif%}">
 				<a class="nav-link" href="/corrections/">

@@ -58,7 +58,8 @@ class Correction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     essay = models.ForeignKey(Essay, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, choices=correction_statuses, default='ACTIVE')
-    upload_date = models.DateField(auto_now=True)
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(auto_now=True)
     data = models.TextField(default="{}")
     nullified = models.BooleanField(default=False, verbose_name='redação anulada')
 
