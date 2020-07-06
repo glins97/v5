@@ -6,12 +6,11 @@ const COLOR_WARNING = '#ffee0066';
 const COLOR_GREY = '#33333366';
 var color = "#00000000";
 
+var objects = [];
+
 var mode = "";
 var pushes = [];
 var pops = [];
-var poppedDrawables = [];
-var poppedComments = [];
-var poppedImages = [];
 var drawables = [];
 var comments = [];
 var images = [];
@@ -79,6 +78,7 @@ function updateCanvas() {
     var img = document.getElementById("src");
     canvas = document.getElementById("canvas");
     canvasPlaceholder = document.getElementById("canvasPlaceholder");
+    console.log(JSON.stringify(canvas.style));
     canvas.style.position = "absolute";
     canvas.style.left = img.offsetLeft + "px";
     canvas.style.top = img.offsetTop + "px";
@@ -102,21 +102,17 @@ function setMode(newMode) {
     mode = newMode;
 }
 
-function addDrawable(x0, y0, x1, y1, color, mode_) {
+function drawMarker(x0, y0, x1, y1, color, mode) {
     var ctx = canvas.getContext("2d");
-    drawables.push(
-        [x0, y0, x1, y1, color, mode_ ? mode_ : mode]
-        );
-    pushes.push(mode_ ? mode_ : mode);
     ctx.beginPath();
-    if (mode == "LINE" || mode_ == "LINE") {
+    if (mode == "LINE") {
         ctx.lineWidth = PEN_SIZE;
         ctx.strokeStyle = color;
         ctx.fillStyle = color;
         ctx.moveTo(x0 * canvasWidth, y0 * canvasHeight);
         ctx.lineTo(x1 * canvasWidth, y1 * canvasHeight);
     }
-    else if (mode == "RECT" || mode_ == "RECT"){
+    else if (mode == "RECT"){
         ctx.lineWidth = PEN_SIZE / RECT_PEN_CORRECTION;
         ctx.rect(x0 * canvasWidth, y0 * canvasHeight, x1 * canvasWidth - x0 * canvasWidth, y1 * canvasHeight - y0 * canvasHeight);
         ctx.fillStyle = "#00000000";
@@ -124,36 +120,18 @@ function addDrawable(x0, y0, x1, y1, color, mode_) {
         ctx.strokeStyle = color;
         ctx.stroke();
     }
-    console.log('@addDrawable', pushes, drawables);
     ctx.stroke();
 }
-       
-function drawRectangles() {
-    var ctx = canvas.getContext("2d");
-    for (var i = 0; i < drawables.length; i++) {
-        var obj = drawables[i];
-        ctx.beginPath();
-        ctx.lineWidth = PEN_SIZE;
-        ctx.strokeStyle = obj[4];
-        ctx.fillStyle = obj[4];
-        if (obj[5] == "LINE") {
-            ctx.moveTo(obj[0] * canvasWidth, obj[1] * canvasHeight);
-            ctx.lineTo(obj[2] * canvasWidth, obj[3] * canvasHeight);
-        } 
-        else if (obj[5] == "RECT") {
-            ctx.lineWidth = PEN_SIZE / RECT_PEN_CORRECTION;
-            ctx.rect(obj[0] * canvasWidth, obj[1] * canvasHeight, obj[2] * canvasWidth - obj[0] * canvasWidth, obj[3] * canvasHeight - obj[1] * canvasHeight);
-            ctx.fillStyle = "#00000000";
-            ctx.fill();
-            ctx.strokeStyle = obj[4];
-            ctx.stroke();
-        }
-        ctx.stroke();
+   
+function drawMarkers() {
+    for (var i = 0; i < objects.length; i++) {
+        var obj = objects[i];
+        if (obj['mode'] != 'LINE' && obj['mode'] != 'RECT') continue;
+        drawMarker(obj['attributes']['x0'], obj['attributes']['y0'], obj['attributes']['x1'], obj['attributes']['y1'], obj['attributes']['color'], obj['mode']);
     }
 }
 
-function addImage(x, y, src_) {
-    console.log('@addImage', x, y, src_);
+function getImageSrc(color) {
     var src = '/static/essay_manager/img/comments/';
     switch (color){
         case COLOR_PRIMARY: src += 'primary.png'; break;
@@ -163,47 +141,60 @@ function addImage(x, y, src_) {
         case COLOR_WARNING: src += 'warning.png'; break;
         case COLOR_GREY: src += 'light.png'; break;
     }
-    images.push([src_ ? src_ : src, x, y]);
-    pushes.push('COMM');
-    comments.push('temp-comment')
-    drawImage(src_ ? src_ : src, x, y);
+    return src;
 }
 
-function drawImage(src, x, y) {
+function addMarker(x0, y0, x1, y1, color, mode) {
+    objects.push({
+        'mode': mode,
+        'attributes': {
+            'x0': x0,
+            'y0': y0,
+            'x1': x1,
+            'y1': y1,
+            'color': color,
+        },
+    })
+    drawMarker(x0, y0, x1, y1, color, mode);
+}
+
+function drawImage(src, x0, y0) {
     var ctx = canvas.getContext("2d");
     var image = new Image();
     image.src = src;
     image.onload = function(){
-        ctx.drawImage(image, x * canvasWidth, y * canvasHeight);
+        ctx.drawImage(image, x0 * canvasWidth, y0 * canvasHeight);
     }
 }
 
 function drawImages() {
-    for (var i = 0; i < images.length; i++) {
-        drawImage(images[i][0], images[i][1], images[i][2])
+    for (var i = 0; i < objects.length; i++) {
+        var object = objects[i];
+        if (object['mode'] != 'COMM') continue;
+        drawImage(object['attributes']['src'], object['attributes']['x0'], object['attributes']['y0'])
     }
+}
+
+function addImage(x0, y0, src, comment) {
+    objects.push({
+        'mode': 'COMM',
+        'attributes': {
+            'comment': comment,
+            'x0': x0,
+            'y0': y0,
+            'src': src,
+        }
+    })
+    drawImage(src, x0, y0);
 }
 
 function importCorrectionData(data) {
     if (data['objects'] == undefined) return;
-    for (var i = 0; i < data['objects'].length; i++) {
-        var mode = data['objects'][i]['mode']
-        var attributes = data['objects'][i]['attributes'];
-        switch (mode){
-            case 'LINE':  
-            case 'RECT':  
-                addDrawable(attributes['x0'], attributes['y0'], attributes['x1'], attributes['y1'], attributes['color'], mode);
-                break; 
-            case 'COMM':  
-                addImage(attributes['x0'], attributes['y0'], attributes['src']);
-                comments.push(attributes['comment'])
-                break;
-        }
-    }
-
+    objects = data['objects']
     nullified = data['nullified'];
     grades = data['competencies']['grades'];
     textfieldComments = data['competencies']['comments'];
+    
     competencies['comments'] = textfieldComments;
     competencies['grades'] = grades;
     document.getElementById('inlineRadioOptions1-' + grades['a1']).checked = true; 
@@ -220,57 +211,12 @@ function importCorrectionData(data) {
 function updateExportCorrectionData(){
     console.log('@updateExportCorrectionData');
     var data = {};
-    var objects = [];
-    var imgCount = 0;
-    var rectanglesCount = 0;
+
     data['PEN_SIZE'] = PEN_SIZE;
     data['nullified'] = nullified;
-    console.log('dasdsa', drawables, imgCount, rectanglesCount);
-    for (var i = 0; i < pushes.length; i++) {
-            var object = {};
-            object['mode'] = pushes[i];
-            console.log('rectanglesCount, imgCount', rectanglesCount, imgCount, i, pushes[i]);
-            switch (pushes[i]){
-                case 'COMM': {
-                    object['attributes'] = {
-                        'comment': comments[imgCount],
-                        'src': images[imgCount][0],
-                        'x0': images[imgCount][1],
-                        'y0': images[imgCount][2],
-                    };
-                    imgCount += 1;
-                    break;
-                }
-                
-                case 'LINE':{
-                    object['attributes'] = {
-                        'x0': drawables[rectanglesCount][0],
-                        'y0': drawables[rectanglesCount][1],
-                        'x1': drawables[rectanglesCount][2],
-                        'y1': drawables[rectanglesCount][3],
-                        'color': drawables[rectanglesCount][4],
-                    };
-                    rectanglesCount += 1;
-                    break;
-                }  
-                
-                case 'RECT':  {
-                    object['attributes'] = {
-                        'x0': drawables[rectanglesCount][0],
-                        'y0': drawables[rectanglesCount][1],
-                        'x1': drawables[rectanglesCount][2],
-                        'y1': drawables[rectanglesCount][3],
-                        'color': drawables[rectanglesCount][4],
-                    };
-                    rectanglesCount += 1;
-                    break;
-                }
-            } 
-            objects.push(object);
-    }
     data['objects'] = objects;
     data['competencies'] = competencies;
-    console.log('@updateExportCorrectionData data', data);
+
     document.getElementById('formInput').value = JSON.stringify(data);
     document.getElementById('submitUpdateForm').submit(); 
 }
@@ -280,16 +226,11 @@ function onKeyDown(e) {
     console.log(evtobj.keyCode);
     // control z
     if (evtobj.keyCode == 90 && evtobj.ctrlKey){
-        var m = pushes.pop();
+        var m = objects.pop();
         pops.push(m);
-        if (m == "LINE" || m == "RECT") 
-        poppedDrawables.push(drawables.pop());
-        else if (m == "COMM"){
-            poppedImages.push(images.pop());
-            poppedComments.push(comments.pop());
-        }
+        
         updateCanvas();
-        drawRectangles();
+        drawMarkers();
         drawImages();
     }
     
@@ -297,14 +238,9 @@ function onKeyDown(e) {
     if (evtobj.keyCode == 89 && evtobj.ctrlKey){
         var m = pops.pop();
         pushes.push(m)
-        if (m == "LINE" || m == "RECT")
-        drawables.push(poppedDrawables.pop());
-        else if (m == "COMM") { 
-            images.push(poppedImages.pop());
-            comments.push(poppedComments.pop());
-        }
+        
         updateCanvas();
-        drawRectangles();
+        drawMarkers();
         drawImages();
     }
 
@@ -392,8 +328,8 @@ function mouseDownEvent(e) {
     if(rect_x0 && rect_y0 && mode == "LINE") {
         ctx.beginPath();
         ctx.strokeStyle = color;
-        ctx.moveTo(rect_x0 * canvasWidth - spos[0], rect_y0 * canvasHeight + spos[1])
-        ctx.lineTo(rect_x0 * canvasWidth - spos[0], rect_y0 * canvasHeight + spos[1]);
+        ctx.moveTo(rect_x0 * canvasWidth + spos[0], rect_y0 * canvasHeight + spos[1])
+        ctx.lineTo(rect_x0 * canvasWidth + spos[0], rect_y0 * canvasHeight + spos[1]);
         ctx.lineWidth = PEN_SIZE;
         ctx.stroke();
     }
@@ -411,7 +347,7 @@ function mouseDownEvent(e) {
         image.src = src;
         lastImage = image;
         image.onload = function(){
-            ctx.drawImage(image, rect_x0 * canvasWidth - spos[0] - 15, rect_y0 * canvasHeight + spos[1] - 25);
+            ctx.drawImage(image, rect_x0 * canvasWidth + spos[0] - 15, rect_y0 * canvasHeight + spos[1] - 25);
         }
     }
 }
@@ -431,20 +367,20 @@ function mouseMoveEvent(e) {
         ctx.strokeStyle = color;
         ctx.fillStyle = color;
         if (mode == "LINE") {
-            ctx.moveTo(rect_x0 * canvasWidth - spos[0], rect_y0 * canvasHeight + spos[1]);
-            ctx.lineTo(rect_x1 * canvasWidth - spos[0], rect_y1 * canvasHeight + spos[1]);
+            ctx.moveTo(rect_x0 * canvasWidth + spos[0], rect_y0 * canvasHeight + spos[1]);
+            ctx.lineTo(rect_x1 * canvasWidth + spos[0], rect_y1 * canvasHeight + spos[1]);
             ctx.stroke();
         }
         else if (mode == "RECT"){
             ctx.lineWidth = PEN_SIZE / RECT_PEN_CORRECTION;
-            ctx.rect(rect_x0 * canvasWidth - spos[0], rect_y0 * canvasHeight + spos[1], rect_x1 * canvasWidth - rect_x0 * canvasWidth, rect_y1 * canvasHeight - rect_y0 * canvasHeight);
+            ctx.rect(rect_x0 * canvasWidth + spos[0], rect_y0 * canvasHeight + spos[1], rect_x1 * canvasWidth - rect_x0 * canvasWidth, rect_y1 * canvasHeight - rect_y0 * canvasHeight);
             ctx.fillStyle = "#00000000";
             ctx.fill()
             ctx.strokeStyle = color;
             ctx.stroke();
         }
         else if (mode == 'COMM'){
-            ctx.drawImage(lastImage, rect_x1 * canvasWidth - 15 - spos[0], rect_y1 * canvasHeight - 25 + spos[1] );
+            ctx.drawImage(lastImage, rect_x1 * canvasWidth - 15 + spos[0], rect_y1 * canvasHeight - 25 + spos[1]);
         }
     }
 }
@@ -460,27 +396,27 @@ function mouseUpEvent(e) {
     if (mode == 'LINE' || mode == 'RECT'){
         // if minimal movement, add square instead
         if ((rect_x1 * canvasWidth - rect_x0 * canvasWidth) * (rect_x1 * canvasWidth - rect_x0 * canvasWidth) < 100 && (rect_y1 * canvasHeight - rect_y0 * canvasHeight) * (rect_y1 * canvasHeight - rect_y0 * canvasHeight) < 100){
-            addDrawable(rect_x0 - spos[0] / canvasWidth - PEN_SIZE / 2 / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x0 - spos[0] / canvasWidth + PEN_SIZE / 2 / canvasWidth, rect_y0 + spos[1] / canvasHeight, color);
+            addMarker(rect_x0 + spos[0] / canvasWidth - PEN_SIZE / 2 / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x0 + spos[0] / canvasWidth + PEN_SIZE / 2 / canvasWidth, rect_y0 + spos[1] / canvasHeight, color, mode);
         } 
         else {
-            addDrawable(rect_x0 - spos[0] / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x1 - spos[0] / canvasWidth, rect_y1 + spos[1] / canvasHeight, color);
+            addMarker(rect_x0 + spos[0] / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x1 + spos[0] / canvasWidth, rect_y1 + spos[1] / canvasHeight, color, mode);
         }
         if (mode == 'RECT' && color == COLOR_DANGER){
             document.getElementById('comment-text').value = username + ', ';
-            addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight);
+            addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight, getImageSrc(color));
             document.getElementById("openModal").click();
             modalVisible = true;
-            savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth - spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
+            savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
         }
     }
     if (mode=='COMM'){
         if (color == COLOR_DANGER)
             document.getElementById('comment-text').value = username + ', ';
-        addImage(rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight);
+        addImage(rect_x1 - 15 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight, getImageSrc(color));
         lastImage = undefined;
         document.getElementById("openModal").click();
         modalVisible = true;
-        savedImagePos = [rect_x1 - 15 / canvasWidth - spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight]
+        savedImagePos = [rect_x1 - 15 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight]
     }
     
     rect_x0 = 0;
@@ -510,7 +446,7 @@ function loadModule() {
     
     updateCanvas();
     drawImages();
-    drawRectangles();
+    drawMarkers();
     document.onkeydown = onKeyDown;
 }
 
@@ -548,8 +484,9 @@ function saveComment(){
     // so, if we wish to save a comment, we must add another one, since
     // only the last added will be saved.
     //
-    // add latest comment AGAIN
-    addImage(savedImagePos[0], savedImagePos[1]);
+    // add latest comment & its rectangle AGAIN
+    objects.push(objects[objects.length - 2]);
+    objects.push(objects[objects.length - 2]);
 }
 
 $(window).on('DOMContentLoaded load resize scroll', showBtnsOnEssayVisible);
@@ -562,18 +499,17 @@ $(document).ready(function() {
         // so, if we wish to save a comment, we must add another one, since
         // only the last added will be saved.
         //
-        // remove last added comment;
-        images.pop();
-        pushes.pop();
-        comments.pop();
+        // remove last added comment & its rectangle;
+        objects.pop();
+        objects.pop();
 
         // redraw;
         updateCanvas();
-        drawRectangles();
+        drawMarkers();
         drawImages();
 
         // clear comments
-        comments[comments.length - 1] = document.getElementById('comment-text').value;
+        objects[objects.length - 1]['attributes']['comment'] = document.getElementById('comment-text').value;
         document.getElementById('comment-text').value = '';
 
         // uncheck every checkbox
