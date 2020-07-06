@@ -48,7 +48,7 @@ def mail_essay_endpoint(request, id):
         doc.export(correction_destination, data['objects'])
         
         # join with graded model
-        subprocess.call(['/snap/bin/pdftk', correction_destination, 'essay_manager/apis/exports/model.PDF', 'cat',  'output', graded_destination], stdout=subprocess.PIPE)
+        subprocess.call(['/usr/bin/pdftk', correction_destination, 'essay_manager/apis/exports/model.PDF', 'cat',  'output', graded_destination], stdout=subprocess.PIPE)
         
         # fill joined pdf with data
         fill_pdf_fields(graded_destination, dict(grades, **data['competencies']['comments']) , final_destination)
