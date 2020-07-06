@@ -22,6 +22,7 @@ def management_view(request):
     total_grade = 0
     total_correction_time = 0
     total_corrections = 0
+    total_valid_corrections = 0 # this only counts corrections that have a valid timedelta
     for monitor in monitors:
 
         # calculations -----------
@@ -37,10 +38,11 @@ def management_view(request):
         for correction in monitor_done_corrections:
             total_corrections += 1
             total_grade += correction.essay.grade
-            td = (correction.end_date - correction.start_date)
-            total_correction_time += td.seconds / 60
-            if td.seconds > 60:
-                monitor_total_correction_time += td.seconds / 60
+            td = min((correction.end_date - correction.start_date).seconds, (correction.start_date - correction.end_date).seconds) / 60
+            total_correction_time += td 
+            if td > 1:
+                total_valid_corrections += 1
+                monitor_total_correction_time += td
                 monitor_done_corrections_count += 1
         
         if monitor_done_corrections_count > 0:
@@ -68,12 +70,14 @@ def management_view(request):
         monitor.monitor_done_corrections_count = monitor_done_corrections_count
         monitor.monitor_average_correction_time = minute_format(monitor_average_correction_time)
         monitor.monitor_total_correction_time = hour_format(monitor_total_correction_time)
+        
+        print(total_correction_time, total_corrections)
 
     data = {
         'title': 'Gestão',
         'user': get_user_details(request.user),
-        'monitors': monitors,
-        'average_grade': '{:.0f}'.format(total_grade / total_corrections),
-        'average_correction_time': minute_format(total_correction_time / total_corrections), 
+        'monitors': [monitor for monitor in monitors if monitor.monitor_average_grade != '-'],
+        'average_grade': '{:.0f}'.format(total_grade / total_corrections) if total_corrections else '-',
+        'average_correction_time': hour_format(total_correction_time / total_valid_corrections) if total_valid_corrections else '-', 
     }
     return render(request, 'management.html', data)

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.html import mark_safe
 from pdf2image import convert_from_path
+from django.utils.timezone import now
 import json 
 
 def  to_str(self, *args, **kwargs):
@@ -66,8 +67,8 @@ class Correction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     essay = models.ForeignKey(Essay, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, choices=correction_statuses, default='ACTIVE')
-    start_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(auto_now=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     data = models.TextField(default="{}")
     nullified = models.BooleanField(default=False, verbose_name='redação anulada')
 
@@ -77,6 +78,10 @@ class Correction(models.Model):
     def save(self, *args, **kwargs):
         if not self.data:
             self.data = '{}'
+
+        if not self.start_date:
+            self.start_date = now()
+        self.end_date = now()        
             
         j_data = json.loads(self.data) 
         if self.data and j_data:
