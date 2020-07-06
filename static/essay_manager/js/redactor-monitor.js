@@ -203,6 +203,7 @@ function importCorrectionData(data) {
     nullified = data['nullified'];
     grades = data['competencies']['grades'];
     textfieldComments = data['competencies']['comments'];
+    competencies['comments'] = textfieldComments;
     competencies['grades'] = grades;
     document.getElementById('inlineRadioOptions1-' + grades['a1']).checked = true; 
     document.getElementById('inlineRadioOptions2-' + grades['a2']).checked = true; 
