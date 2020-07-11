@@ -770,6 +770,7 @@ function updateTextfieldValue(checkbox, textfield, value, comp, weight, apply) {
         weight = -weight;
         document.getElementById(textfield).value = document.getElementById(textfield).value.replace(value, '');
     }
+    updateTextfield(textfield, comp);
 
     switch(comp){
         case 'c1': 

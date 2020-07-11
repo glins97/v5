@@ -23,7 +23,10 @@ def create_correction_endpoint(request, id):
 def update_correction_endpoint(request, id):
     try:
         essay = Essay.objects.get(id=id)
-        correction = Correction.objects.get(user=request.user, essay=essay)
+        correction = Correction.objects.filter(user=request.user, essay=essay).first()
+        if not correction and request.user.groups.filter(name='superuser').exists():
+            correction = Correction.objects.filter(essay=essay).first()
+            correction.user = request.user
         for attr in request.POST:
             setattr(correction, attr, request.POST[attr])
         correction.save()

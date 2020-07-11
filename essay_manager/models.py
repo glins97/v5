@@ -73,7 +73,7 @@ class Correction(models.Model):
     nullified = models.BooleanField(default=False, verbose_name='redação anulada')
 
     def __str__(self):
-        return '{} - {} {}, {}'.format(self.essay.id, self.essay.user.first_name, self.essay.user.last_name, self.essay.theme)
+        return '{}, {} - {} {}, {}'.format(self.user, self.essay.id, self.essay.user.first_name, self.essay.user.last_name, self.essay.theme)
 
     def save(self, *args, **kwargs):
         if not self.data:
