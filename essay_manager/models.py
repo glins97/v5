@@ -252,8 +252,8 @@ class GenericErrorClassification(models.Model):
         return mark_safe("""
         <div class="form-check col-sm">
             <label class="form-check-label">
-                <input class="form-check-input" name="competencyError" type="" value="" data-toggle="" data-target="#innerCheckboxes{code}"> {name}
-                <div id="innerCheckboxes{code}" class="container">
+                <input class="form-check-input" name="competencyError" type="" value="" data-toggle="collapse" data-target="#innerCheckboxes{code}"> {name}
+                <div id="innerCheckboxes{code}" class="container collapse">
                     {children}
                 </div>
             </label>
