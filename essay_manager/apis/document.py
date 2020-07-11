@@ -90,7 +90,7 @@ class Document():
         
         highlight = DictionaryObject()
         highlight.update({
-            NameObject("/F"): NumberObject(4),
+            NameObject("/F"): NumberObject(28),
             NameObject("/Type"): NameObject("/Annot"),
             NameObject("/Subtype"): NameObject("/Highlight"),
 
@@ -98,7 +98,7 @@ class Document():
             NameObject("/Contents"): createStringObject(comment),
 
             NameObject("/C"): ArrayObject([FloatObject(c) for c in (0, 0, 0)]),
-            NameObject("/CA"): FloatObject(0.005),
+            NameObject("/CA"): FloatObject(0),
             NameObject("/Rect"): ArrayObject([
                 FloatObject(x0),
                 FloatObject(y0),
