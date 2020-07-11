@@ -57,7 +57,10 @@ def is_score_z(tps_answer):
     return True 
 
 def main():
-    for tps_answer in TPSAnswer.objects.filter(mailed=False, tps__end_date__lte=now()):
+    answers = TPSAnswer.objects.filter(mailed=False, tps__end_date__lte=now())
+    if not answers.count(): return
+    logger.info('Starting general tps results delivery')
+    for tps_answer in answers:
         logger.info(f'Mailing TPS Answer {tps_answer}')
         try:
             questions = sorted(Question.objects.filter(tps=tps_answer.tps), key=lambda question: question.number)
@@ -105,8 +108,8 @@ def main():
                 tps_answer.mailed = True
                 tps_answer.save()
         except Exception as e:
-            logger.error(f'Error mailing TPS Answer {tps_answer}. Error {e}')
-            logger.error('Stack trace: {}'.format(traceback.format_exc()))
+            logger.error(f'Error mailing TPS Answer {tps_answer}. Error {e}', exc_info=e)
+    logger.info(f'General tps results delivery finished')
             
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -117,22 +120,18 @@ import codecs
 from threading import _start_new_thread
 
 def send_mail(email, subject, message):
-    try:
-        msg = MIMEMultipart()
-        password = 'campusppa'
-        msg['To'] = email
-        msg['From'] = 'adm.ppa.digital@gmail.com'
-        msg['Subject'] = 'PPA Digital: ' + subject
+    msg = MIMEMultipart()
+    password = 'campusppa'
+    msg['To'] = email
+    msg['From'] = 'adm.ppa.digital@gmail.com'
+    msg['Subject'] = 'PPA Digital: ' + subject
 
-        msg.attach(MIMEText(message, 'html'))
-        with smtplib.SMTP('smtp.gmail.com: 587') as server:
-            server.starttls()
-            server.login(msg['From'], password)
-            server.sendmail(msg['From'], msg['To'], msg.as_string())
-        return True
-    except Exception as e:
-        logger.error('exception @send_mail ->', e)
-        return False
+    msg.attach(MIMEText(message, 'html'))
+    with smtplib.SMTP('smtp.gmail.com: 587') as server:
+        server.starttls()
+        server.login(msg['From'], password)
+        server.sendmail(msg['From'], msg['To'], msg.as_string())
+    return True
 
 if __name__ == '__main__':
     main()
