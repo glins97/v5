@@ -77,6 +77,11 @@ def _student_essay_view(request, id):
     }
     return render(request, 'essay/student.html', data)
 
+def add_padding(l, chunk_size, padding):
+    while len(l) % chunk_size != 0:
+        l.append(padding)
+    return l
+
 @has_permission('monitor')
 @login_required
 def _monitor_essay_view(request, id):
@@ -105,18 +110,18 @@ def _monitor_essay_view(request, id):
         'user': get_user_details(request.user),
         'username': first_name[0].upper() + first_name[1:].lower(), 
         'created': request.GET.get('created', None),
-        'error_classifications_c1': error_classifications_c1,
-        'error_classifications_c2': error_classifications_c2,
-        'error_classifications_c3': error_classifications_c3,
-        'error_classifications_c4': error_classifications_c4,
-        'error_classifications_c5': error_classifications_c5,
-        'error_classifications_g0': error_classifications_g0,
+        'error_classifications_c1': add_padding(error_classifications_c1, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'error_classifications_c2': add_padding(error_classifications_c2, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'error_classifications_c3': add_padding(error_classifications_c3, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'error_classifications_c4': add_padding(error_classifications_c4, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'error_classifications_c5': add_padding(error_classifications_c5, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'error_classifications_g0': add_padding(error_classifications_g0, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
 
-        'generic_error_classifications_c1': generic_error_classifications_c1,
-        'generic_error_classifications_c2': generic_error_classifications_c2,
-        'generic_error_classifications_c3': generic_error_classifications_c3,
-        'generic_error_classifications_c4': generic_error_classifications_c4,
-        'generic_error_classifications_c5': generic_error_classifications_c5,
+        'generic_error_classifications_c1': add_padding(generic_error_classifications_c1, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'generic_error_classifications_c2': add_padding(generic_error_classifications_c2, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'generic_error_classifications_c3': add_padding(generic_error_classifications_c3, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'generic_error_classifications_c4': add_padding(generic_error_classifications_c4, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
+        'generic_error_classifications_c5': add_padding(generic_error_classifications_c5, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
         'data': mark_safe(corrections[0].data),
     }
     return render(request, 'essay/monitor.html', data)
