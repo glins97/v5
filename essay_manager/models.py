@@ -154,7 +154,14 @@ class ErrorClassification(models.Model):
                 </span>
             </label>
         </div>
-        """.format(code=self.get_verbose_code().replace('.', '-'), target=self.target, desc=self.description if self.description else '', name='{} {}'.format(self.get_verbose_code(), self.name), competency=self.competency, weight=self.weight, apply='false'))
+        """.format(
+            code=self.get_verbose_code().replace('.', '-'),
+            target=self.target,
+            desc=self.description if self.description else '',
+            name='{} {}'.format(self.get_verbose_code(), self.name),
+            competency=self.competency,
+            weight=self.weight,
+            apply='false'))
     
     def node_checkbox_html(self):
         return mark_safe("""
@@ -164,9 +171,16 @@ class ErrorClassification(models.Model):
                 <div id="innerCheckboxes{code}" class="container">
                     {children}
                 </div>
+                <span class="card-icon">
+                    <i class="material-icons">expand_more</i>
+                </span>
             </label>
         </div>
-        """.format(code=self.get_verbose_code().replace('.', '-'), desc=self.description if self.description else '', name='{} {}'.format(self.get_verbose_code(), self.name), children='\n'.join([self.encapsulate_row(child.get_html()) for child in ErrorClassification.objects.filter(parent=self)])))
+        """.format(
+            code=self.get_verbose_code().replace('.', '-'),
+            desc=self.description if self.description else '',
+            name='{} {}'.format(self.get_verbose_code(), self.name),
+            children='\n'.join([self.encapsulate_row(child.get_html()) for child in ErrorClassification.objects.filter(parent=self)])))
 
     def get_html(self):
         if not self.has_children:
@@ -246,7 +260,14 @@ class GenericErrorClassification(models.Model):
                 </span>
             </label>
         </div>
-        """.format(code=self.get_verbose_code().replace('.', '-'), target=self.target, desc=self.description if self.description else '', name='{} {}'.format(self.get_verbose_code(), self.name), competency=self.competency, weight=self.weight, apply='true'))
+        """.format(
+            code=self.get_verbose_code().replace('.', '-'),
+            target=self.target,
+            desc=self.description if self.description else '',
+            name='{} {}'.format(self.get_verbose_code(), self.name),
+            competency=self.competency,
+            weight=self.weight,
+            apply='true'))
     
     def node_checkbox_html(self):
         return mark_safe("""
@@ -256,9 +277,16 @@ class GenericErrorClassification(models.Model):
                 <div id="innerCheckboxes{code}" class="container collapse">
                     {children}
                 </div>
+                <span class="card-icon">
+                    <i class="material-icons">expand_more</i>
+                </span>
             </label>
         </div>
-        """.format(code=self.get_verbose_code().replace('.', '-'), desc=self.description if self.description else '', name='{} {}'.format(self.get_verbose_code(), self.name), children='\n'.join([self.encapsulate_row(child.get_html()) for child in GenericErrorClassification.objects.filter(parent=self)])))
+        """.format(
+            code=self.get_verbose_code().replace('.', '-'),
+            desc=self.description if self.description else '',
+            name='{} {}'.format(self.get_verbose_code(), self.name),
+            children='\n'.join([self.encapsulate_row(child.get_html()) for child in GenericErrorClassification.objects.filter(parent=self)])))
 
     def get_html(self):
         if not self.has_children:
