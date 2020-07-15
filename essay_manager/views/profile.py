@@ -5,7 +5,11 @@ from essay_manager.utils import get_user_details
 
 @login_required
 def profile_view(request):
-    profile = Profile.objects.get(user=request.user)
+    profile = Profile.objects.filter(user=request.user).first()
+    if not profile:
+        profile = Profile(user=request.user, email=request.user.username)
+        profile.save()
+
     data = {
         'title': 'Perfil',
         'updated': request.GET.get('updated', 'None'),
@@ -18,6 +22,7 @@ def profile_view(request):
             'faculty': profile.faculty,
             'school': profile.school,
             'email': profile.email,
+            'not_specified': '-',
         },
         'user': get_user_details(request.user),
     }

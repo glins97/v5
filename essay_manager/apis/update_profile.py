@@ -1,5 +1,8 @@
+from essay_manager.models import Profile
 from essay_manager.decorators import login_required
 from django.shortcuts import redirect
+import logging
+logger = logging.getLogger()
 
 @login_required
 def update_profile_endpoint(request):
@@ -13,5 +16,6 @@ def update_profile_endpoint(request):
         request.user.last_name = request.POST['user__last_name']
         request.user.save()
         return redirect('/profile/?updated=True')
-    except:
+    except Exception as e:
+        logger.error(f'Error updating profile. Error {e}', exc_info=e)
         return redirect('/profile/?updated=False')
