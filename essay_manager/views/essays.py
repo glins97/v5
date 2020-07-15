@@ -52,9 +52,9 @@ def _monitor_essays_view(request):
         'active_corrections_essays_count': active_corrections_essays_count,
         'uncorrected_essays_count': uncorrected_essays_count,
         
-        'active_corrections_essays_card_type': 'check' if active_corrections_essays_count == 0 else 'warning',
+        'active_corrections_essays_card_type': 'success' if active_corrections_essays_count == 0 else 'warning',
         'active_corrections_essays_icon': 'check' if active_corrections_essays_count == 0 else 'warning',
-        'uncorrected_essays_card_type': 'check' if uncorrected_essays_count == 0 else 'warning',
+        'uncorrected_essays_card_type': 'success' if uncorrected_essays_count == 0 else 'warning',
         'uncorrected_essays_icon': 'check' if uncorrected_essays_count == 0 else 'warning',
 
         'user': get_user_details(request.user),

@@ -244,9 +244,10 @@ function onKeyDown(e) {
         drawImages();
     }
 
-    // competencies 1-6 shortcuts
+    // shortcuts
     if (!modalVisible){
         switch(evtobj.keyCode){
+            // colors of c1 c2 c3 c4 c5 thesis
             case 49:
             case 97:
                 document.getElementById('selectColorDanger').click();
@@ -257,7 +258,7 @@ function onKeyDown(e) {
                 break;
             case 51:
             case 99:
-                document.getElementById('selectColorGrey').click();
+                document.getElementById('selectColorInfo').click();
                 break;
             case 52:
             case 100:
@@ -268,8 +269,20 @@ function onKeyDown(e) {
                 document.getElementById('selectColorSuccess').click();
                 break;
             case 54:
+            case 84:
             case 102:
-                document.getElementById('selectColorInfo').click();
+                document.getElementById('selectColorGrey').click();
+                break;
+                
+            // line, rect, comment
+            case 81:
+                document.getElementById('selectModeLine').click();
+                break;
+            case 87:
+                document.getElementById('selectModeRectangle').click();
+                break;
+            case 69:
+                document.getElementById('selectModeComment').click();
                 break;
         }
     }
