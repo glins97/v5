@@ -9,7 +9,7 @@ def register_endpoint(request):
     if request.POST['password'] != request.POST['password-confirmation']:
         return redirect(f'/register/?registered=False')
     try:
-        user = User(
+        user = User.objects.create_user(
             username=request.POST['username'],
             password=request.POST['password'],
             first_name=request.POST['first_name'],
@@ -20,7 +20,7 @@ def register_endpoint(request):
         user.groups.add(group)
         user.save()
         login(request, user)
-        return redirect(f'/registered?True')
+        return redirect(f'/?registered=True')
     except Exception as e:
         logger.error('Error registering user {}. Error {}'.format(request.POST['username'], e), exc_info=e)
         return redirect(f'/register/?registered=False')
