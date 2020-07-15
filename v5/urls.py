@@ -85,10 +85,13 @@ urlpatterns = [
     # BAUTH RELATED
     # - views
     path('login/', login_view),
+    path('register/', register_view),
+    path('register/confirmation/', register_confirmation_view),
 
     # - apis
     path('api/logout/', logout_endpoint),
     path('api/login/', login_endpoint),
+    path('api/register/', register_endpoint),
     # ---------------------
 
     # TPS RELATED

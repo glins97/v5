@@ -99,11 +99,12 @@
                     <div class="card-footer">
                       <div class="stats">
                         {% if essays|length ==   0 %}
-                          Sem redações cadastradas. Cadastre sua primeira na página de redações, acessível pelo menu lateral!
+                        Sem redações cadastradas. Cadastre sua primeira na página de redações, acessível pelo menu à esquerda! (ou no botão ao lado!)
                         {% else %}
-                          Aqui serão mostradas suas últimas 5 redações
+                        Aqui serão mostradas apenas suas últimas 5 redações!
                         {% endif %}
                       </div>
+                      <a class="btn btn-info pull-right" href="/essays/new/">Adicionar</a>
                     </div>
                   </div>
                 </div>
@@ -161,6 +162,12 @@
     <script>
       $(document).ready(function() {
         $().ready(function() {
+          
+          {% if registered == 'True' %}
+              md.showNotification('top', 'center', 'Usuário registrado com sucesso!', 'success');
+          {% endif %}
+
+
           $sidebar = $('.sidebar');
           
           $sidebar_img_container = $sidebar.find('.sidebar-background');
