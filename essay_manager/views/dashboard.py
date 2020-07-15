@@ -40,7 +40,8 @@ def student_dashboard_view(request):
         'essays_count': essays_count,
         'corrections_count': corrections_count,
         'user': get_user_details(request.user), 
-        'registered': request.GET.get('registered', False)       
+        'registered': request.GET.get('registered', False),   
+        'authed': request.GET.get('authed', False),   
     }
 
     if themes_count == completed_themes:
