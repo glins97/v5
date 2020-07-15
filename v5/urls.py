@@ -70,6 +70,7 @@ urlpatterns = [
     path('profile/', profile_view),
     path('themes/', themes_view),
     path('management/', management_view),
+    path('password/change/', change_password_view),
 
     # - apis
     path('mail/<int:id>/', mail_essay_endpoint),
@@ -77,6 +78,7 @@ urlpatterns = [
     path('corrections/update/<int:id>/', update_correction_endpoint),
     path('api/profile/update/', update_profile_endpoint),
     path('api/essays/create/', create_essay_endpoint),
+    path('api/password/change/', change_password_endpoint),
     path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
 

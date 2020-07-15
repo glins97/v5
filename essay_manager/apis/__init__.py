@@ -4,3 +4,4 @@ from .update_profile import *
 from .loaderio import *
 from .document import *
 from .pdf_filler import *
+from .password import *
