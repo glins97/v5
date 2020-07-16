@@ -66,14 +66,18 @@ def _monitor_essays_view(request):
 @has_permission('student')
 @login_required
 def _student_essay_view(request, id):
+    corrections = Correction.objects.filter(essay=id)
     essay = Essay.objects.get(id=id)
     if essay.user != request.user:
         return e403_view(request)
         
+    first_name = essay.user.first_name.split()[0]
     data = {
         'title': 'Redações',
         'essay': essay,
         'user': get_user_details(request.user),
+        'username': first_name[0].upper() + first_name[1:].lower(), 
+        'data': mark_safe(corrections[0].data),
     }
     return render(request, 'essay/student.html', data)
 

@@ -2,49 +2,398 @@
 <html lang="en">
 {% include "head.html" %}
 <body class="">
-  <div class="wrapper ">
-	{% include "sidebar.html" %}
-	<div class="main-panel">
-	  <!-- Navbar -->
-	  {% include "navbar.html" %}
-	  <!-- End Navbar -->
+	<button id="openModal" data-toggle="modal" data-target="#myModal" hidden="true"></button>
+	<div class="wrapper ">
+		{% include "sidebar.html" %}
+		<div class="main-panel">
+			<!-- Navbar -->
+			{% include "navbar.html" %}
+			<!-- End Navbar -->
 			<div class="content">
 				<div class="content">
 					<div class="container-fluid">
 						<div class="row">
-							<div class="col-md-9">
+							<div class="col-md-12">
 								<div class="card card-chart">
 									<div class="card-body">
 										<h3 class="card-title">Redação #{{id}}</h3>
 										<h5 class="card-title">Aluno: {{essay.user}}</h5>
 										<h4 class="card-title">Data de submissão: {{essay.upload_date}}</h4>
-									</div>
-									<div class="card-footer"><i><img src="../../{{essay.file}}" width="100%"/></i> </div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="card card-chart">
-									<div class="card-body">
-										<h3 class="card-title">Correções</h3>
+										<h4 class="card-title">Nota final: {{essay.grade}}</h4>
 									</div>
 									<div class="card-footer">
-										<div class="container-fluid">
+										<i><img id="src" src="../../{{essay.file}}" width="100%"/></i>
+									</div>
+									<canvas id="canvas" class="src" style="cursor: default;"></canvas>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="card has-info card-chart">
+									<div class="card-body">
+										<h3 class="card-title text-center">Competência 1</h3>
+										<br>
+										<div class="container">
 											<div class="row">
-												<h5 class="card-title"><i>#1</i>&nbsp;Ortografia</h5>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions" id="inlineRadioOptions1-200"  checked="true"> 200
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions" id="inlineRadioOptions1-160"> 160
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions" id="inlineRadioOptions1-120"> 120
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions" id="inlineRadioOptions1-80"> 80
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option5" type="radio" name="inlineRadioOptions" id="inlineRadioOptions1-40"> 40
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
 											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<div class="container">
 											<div class="row">
-												<h5 class="card-title"><i>#2</i>&nbsp;Coesão</h5>
+												<div class="col-sm form-check">
+													<div class="form-group">
+														<label for="formTextareac1"></label>
+														<textarea class="form-control" id="formTextareac1" rows="5" disabled style="cursor: default !important;"></textarea>
+													</div>
+												</div>
 											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="card has-info card-chart">
+									<div class="card-body">
+										<h3 class="card-title text-center">Competência 2</h3>
+										<br>
+										<div class="container">
 											<div class="row">
-												<h5 class="card-title"><i>#3</i>&nbsp;Repetição excessiva</h5>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option1" type="radio" id="inlineRadioOptions2-200" name="inlineRadioOptions2" checked="true"> 200
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option2" type="radio" id="inlineRadioOptions2-160" name="inlineRadioOptions2"> 160
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option3" type="radio" id="inlineRadioOptions2-120" name="inlineRadioOptions2"> 120
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option4" type="radio" id="inlineRadioOptions2-80" name="inlineRadioOptions2"> 80
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option5" type="radio" id="inlineRadioOptions2-40" name="inlineRadioOptions2"> 40
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option6" type="radio" id="inlineRadioOptions2-0" name="inlineRadioOptions2"> 0
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<div class="container">
+											<div class="row">
+												<div class="col-sm form-check">
+													<div class="form-group">
+														<label for="formTextareac2"></label>
+														<textarea class="form-control" id="formTextareac2" rows="5" disabled style="cursor: default !important;"></textarea>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="row"> </div>
-						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="card has-info card-chart">
+									<div class="card-body">
+										<h3 class="card-title text-center">Competência 3</h3>
+										<br>
+										<div class="container">
+											<div class="row">
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option1" type="radio" id="inlineRadioOptions3-200" name="inlineRadioOptions3" checked="true"> 200
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option2" type="radio" id="inlineRadioOptions3-160" name="inlineRadioOptions3"> 160
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option3" type="radio" id="inlineRadioOptions3-120" name="inlineRadioOptions3"> 120
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option4" type="radio" id="inlineRadioOptions3-80" name="inlineRadioOptions3"> 80
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option5" type="radio" id="inlineRadioOptions3-40" name="inlineRadioOptions3"> 40
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<div class="container">
+											<div class="row">
+												<div class="col-sm form-check">
+													<div class="form-group">
+														<label for="formTextareac3"></label>
+														<textarea class="form-control" id="formTextareac3" rows="5" disabled style="cursor: default !important;"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="card has-info card-chart">
+									<div class="card-body">
+										<h3 class="card-title text-center">Competência 4</h3>
+										<br>
+										<div class="container">
+											<div class="row">
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option1" type="radio" id="inlineRadioOptions4-200" name="inlineRadioOptions4" checked="true"> 200
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option2" type="radio" id="inlineRadioOptions4-160" name="inlineRadioOptions4"> 160
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option3" type="radio" id="inlineRadioOptions4-120" name="inlineRadioOptions4"> 120
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option4" type="radio" id="inlineRadioOptions4-80" name="inlineRadioOptions4"> 80
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option5" type="radio" id="inlineRadioOptions4-40" name="inlineRadioOptions4"> 40
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<div class="container">
+											<div class="row">
+												<div class="col-sm form-check">
+													<div class="form-group">
+														<label for="formTextareac4"></label>
+														<textarea class="form-control" id="formTextareac4" rows="5" disabled style="cursor: default !important;"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card has-info card-chart">
+									<div class="card-body">
+										<h3 class="card-title text-center">Competência 5</h3>
+										<br>
+										<div class="container">
+											<div class="row">
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option1" type="radio" id="inlineRadioOptions5-200" name="inlineRadioOptions5" checked="true"> 200
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option2" type="radio" id="inlineRadioOptions5-160" name="inlineRadioOptions5"> 160
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option3" type="radio" id="inlineRadioOptions5-120" name="inlineRadioOptions5"> 120
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option4" type="radio" id="inlineRadioOptions5-80" name="inlineRadioOptions5"> 80
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option5" type="radio" id="inlineRadioOptions5-40" name="inlineRadioOptions5"> 40
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+												<div class="col-sm form-check">
+													<label class="form-check-label">
+														<input class="form-check-input" value="option6" type="radio" id="inlineRadioOptions5-0" name="inlineRadioOptions5"> 0
+														<span class="circle">
+															<span class="check"></span>
+														</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<div class="container">
+											<div class="row">
+												<div class="col-sm form-check">
+													<div class="form-group">
+														<label for="formTextareac5"></label>
+														<textarea class="form-control" id="formTextareac5" rows="5" disabled style="cursor: default !important;"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal has-info show" id="myModal" role="dialog" aria-labelledby="myModal" style="display: none;" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">Comentários</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+									<div class="col-sm form-check">
+										<div class="form-group">
+											<textarea class="form-control" id="comment-text" rows="5" disabled style="cursor: default !important; text-align: center;"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -65,6 +414,7 @@
 	<script src="/static/essay_manager/js/core/popper.min.js"></script>
 	<script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
 	<script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+	<script src="/static/essay_manager/js/redactor-student.js?{% now 'U' %}"></script>
 	<!-- Plugin for the momentJs  -->
 	<script src="/static/essay_manager/js/plugins/moment.min.js"></script>
 	<!--  Plugin for Sweet Alert -->
@@ -106,6 +456,9 @@
 	<script>
 		$(document).ready(function() {
 			$().ready(function() {
+				setUsername('{{username}}');
+				importCorrectionData({{data}});
+				
 				$sidebar = $('.sidebar');
 				
 				$sidebar_img_container = $sidebar.find('.sidebar-background');
