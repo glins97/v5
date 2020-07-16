@@ -17,3 +17,13 @@ def themes_view(request):
     }
     return render(request, 'themes.html', data)
 
+
+@login_required
+def theme_view(request, id):
+    theme = Theme.objects.filter(id=id).first()
+    data = {
+        'title': 'Temas',
+        'theme': theme,
+        'user': get_user_details(request.user),
+    }
+    return render(request, 'theme.html', data)

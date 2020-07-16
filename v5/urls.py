@@ -69,6 +69,7 @@ urlpatterns = [
     path('corrections/', corrections_view),
     path('profile/', profile_view),
     path('themes/', themes_view),
+    path('themes/<int:id>/', theme_view),
     path('management/', management_view),
     path('password/change/', change_password_view),
 

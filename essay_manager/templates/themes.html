@@ -19,7 +19,7 @@
 										<div class="card-icon">
 											<i class="material-icons">{% if theme.completed %}check{% else %}assignment{% endif %}</i>
 										</div>
-										<h3 class="card-title">Tema #{{ theme.id }}</h3>
+										<a href="/themes/{{theme.id}}/"><h3 class="card-title">Tema #{{ theme.id }}</h3></a>
 										<p class="card-category">{{ theme.description }}</p>
 									</div>
 									<div class="card-footer">

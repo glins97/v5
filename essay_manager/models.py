@@ -30,10 +30,19 @@ class Theme(models.Model):
     jury = models.CharField(max_length=255, choices=juries)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    auxilliary_text = models.TextField()
+    file = models.FileField(upload_to='uploads/')
     type = models.CharField(default='PAID', choices=theme_types, max_length=255)
     def __str__(self):
         return self.description
+
+    def save(self, *args, **kwargs):
+        if self.file:
+            super(Theme, self).save(*args, **kwargs)
+            if self.file.name[-4:].lower() == '.pdf':
+                destination = self.file.name.split(self.file.name[-4:])[0] + '.PNG'
+                convert_from_path(self.file.name, 300)[0].save(destination, 'PNG')
+                self.file = destination
+        super(Theme, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'tema'
