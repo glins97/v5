@@ -40,13 +40,15 @@ var savedImagePos = undefined;
 var nullified = false;
 var username = '';
 var modalVisible = false;
+var editModeActive = false;
+var hoveringObjectIndex = -1;
 
 function setUsername(val) {
     username = val;
 }
 
 function isDrawEnabled() {
-    return color != "#00000000" && mode != "";
+    return color != "#00000000" && mode != "" && editModeActive != true;
 }
 
 function openNav() {
@@ -78,7 +80,6 @@ function updateCanvas() {
     var img = document.getElementById("src");
     canvas = document.getElementById("canvas");
     canvasPlaceholder = document.getElementById("canvasPlaceholder");
-    console.log(JSON.stringify(canvas.style));
     canvas.style.position = "absolute";
     canvas.style.left = img.offsetLeft + "px";
     canvas.style.top = img.offsetTop + "px";
@@ -203,13 +204,12 @@ function importCorrectionData(data) {
     document.getElementById('inlineRadioOptions4-' + grades['a4']).checked = true; 
     document.getElementById('inlineRadioOptions5-' + grades['a5']).checked = true; 
     for (var key in textfieldComments){
-        console.log(key, 'formTextarea' + key);
         document.getElementById('formTextarea' + key).value = textfieldComments[key]; 
     }
 }
 
 function updateExportCorrectionData(){
-    console.log('@updateExportCorrectionData');
+    // console.log('@updateExportCorrectionData');
     var data = {};
 
     data['PEN_SIZE'] = PEN_SIZE;
@@ -223,7 +223,7 @@ function updateExportCorrectionData(){
 
 function onKeyDown(e) {
     var evtobj = window.event? event : e
-    console.log(evtobj.keyCode);
+    editModeActive = evtobj.ctrlKey; 
     // control z
     if (evtobj.keyCode == 90 && evtobj.ctrlKey){
         var m = objects.pop();
@@ -288,6 +288,11 @@ function onKeyDown(e) {
     }
 }
 
+function onKeyUp(e) {
+    var evtobj = window.event? event : e
+    editModeActive = evtobj.ctrlKey;
+}
+
 function loadModeSelectionButtons() {
     $('#selectModeLine').click(function(){
         setMode('LINE');
@@ -309,6 +314,7 @@ function loadColorSelectionButtons() {
     $('#selectColorInfo').click(function(){
         setColor(COLOR_INFO);
         document.getElementById("selectModeLine").click();
+        document.getElementById("modalC3").click();
     });
     $('#selectColorSuccess').click(function(){
         setColor(COLOR_SUCCESS);
@@ -328,12 +334,16 @@ function loadColorSelectionButtons() {
     $('#selectColorGrey').click(function(){
         setColor(COLOR_GREY);
         document.getElementById("selectModeLine").click();
-        document.getElementById("modalC3").click();
     });
 }
 
 function mouseDownEvent(e) {
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
+    if (editModeActive && hoveringObjectIndex >= 0) {
+        document.getElementById("openModal").click();
+        modalVisible = true;
+        document.getElementById('comment-text').value = objects[hoveringObjectIndex]['attributes']['comment'];
+    }
     if (!isDrawEnabled()) return;
     
     rect_x0 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
@@ -372,11 +382,39 @@ function mouseDownEvent(e) {
 
 function mouseMoveEvent(e) {
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
-    if (!isDrawEnabled()) return;
-    var ctx = canvasPlaceholder.getContext("2d");
-    spos = getScroll()
+    var spos = getScroll()
     rect_x1 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
     rect_y1 = (e.y - $(canvasPlaceholder).offset().top) / canvasHeight;
+
+    document.getElementById('canvasPlaceholder').style.cursor = 'default';
+    // if modal is visible, do not reset hover index
+    if (!modalVisible) 
+        hoveringObjectIndex = -1;
+
+    if (editModeActive) {
+        var minDistance = 1000;
+        var minDistanceObj = null;
+        for (var i = 0; i < objects.length; i++){
+            var object = objects[i];
+            if (object['mode'] == 'COMM'){
+                var _x0 = rect_x1 * canvasWidth;
+                var _y0 = rect_y1 * canvasHeight;
+                var _x1 = object['attributes']['x0'] * canvasWidth + 30 + spos[0];
+                var _y1 = object['attributes']['y0'] * canvasHeight + 20 - spos[1];
+                var distance = (_x0 - _x1) * (_x0 - _x1) + (_y0 - _y1) * (_y0 - _y1);
+                if (distance < minDistance){
+                    minDistance = distance;
+                    minDistanceObj = objects[i];
+                    hoveringObjectIndex = i;
+                    document.getElementById('canvasPlaceholder').style.cursor = 'pointer';
+                }
+            }
+        }
+        // if (minDistanceObj) console.log(minDistance, minDistanceObj['attributes']['comment']);
+    }
+    
+    if (!isDrawEnabled()) return;
+    var ctx = canvasPlaceholder.getContext("2d");
     
     if(rect_x0 && rect_y0){
         ctx.clearRect(0, 0, canvasPlaceholder.width, canvasPlaceholder.height);
@@ -466,6 +504,7 @@ function loadModule() {
     drawImages();
     drawMarkers();
     document.onkeydown = onKeyDown;
+    document.onkeyup = onKeyUp;
 }
 
 function showBtnsOnEssayVisible() {
@@ -503,12 +542,20 @@ function saveComment(){
     // only the last added will be saved.
     //
     // add latest comment & its rectangle AGAIN
-    objects.push(objects[objects.length - 2]);
-    objects.push(objects[objects.length - 2]);
-
-    // clear comments
-    objects[objects.length - 1]['attributes']['comment'] = document.getElementById('comment-text').value;
-    document.getElementById('comment-text').value = '';
+    if (hoveringObjectIndex == -1) {
+        if (color == COLOR_DANGER){
+            objects.push(objects[objects.length - 2]);
+            objects.push(objects[objects.length - 2]);
+        }
+        else {
+            objects.push(objects[objects.length - 1]);
+        }
+        // clear comments
+        objects[objects.length - 1]['attributes']['comment'] = document.getElementById('comment-text').value;
+    }
+    else {
+        objects[hoveringObjectIndex]['attributes']['comment'] = document.getElementById('comment-text').value;
+    }
 }
 
 $(window).on('DOMContentLoaded load resize scroll', showBtnsOnEssayVisible);
@@ -516,14 +563,20 @@ $(document).ready(function() {
     $('#myModal').on('hide.bs.modal', function () {
         modalVisible = false;
         
-        // whenever modal closes, remove last added comment
-        // as a side effect, saved comments will also be removed.
-        // so, if we wish to save a comment, we must add another one, since
-        // only the last added will be saved.
-        //
-        // remove last added comment & its rectangle;
-        objects.pop();
-        objects.pop();
+        if (hoveringObjectIndex == -1) {
+            // whenever modal closes, remove last added comment
+            // as a side effect, saved comments will also be removed.
+            // so, if we wish to save a comment, we must add another one, since
+            // only the last added will be saved.
+            //
+            // remove last added comment & its rectangle;
+            objects.pop();
+            if (color == COLOR_DANGER)
+                objects.pop();
+        }
+        else {
+            hoveringObjectIndex = -1;
+        }
 
         // redraw;
         updateCanvas();
@@ -535,6 +588,7 @@ $(document).ready(function() {
         for (var i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = false;
         }
+        document.getElementById('comment-text').value = '';
     });
 
     competencies['grades'] = {};
@@ -545,7 +599,7 @@ $(document).ready(function() {
     competencies['grades']['a5'] = '200';
 
     $('input[type=radio][name=inlineRadioOptions]').on('change', function() {
-        console.log('inlineRadioOptions', $(this).val());
+        // console.log('inlineRadioOptions', $(this).val());
         switch ($(this).val()) {
           case 'option1':
             competencies['grades']['a1'] = '200';
@@ -663,7 +717,7 @@ function updateTextfield(textfield, comp) {
 }
 
 function assignGrades() {
-    console.log('assignGrades', countErrorsC1, countErrorsC2, countErrorsC3, countErrorsC4, countErrorsC5);
+    // console.log('assignGrades', countErrorsC1, countErrorsC2, countErrorsC3, countErrorsC4, countErrorsC5);
     var event = new Event('change');
     if (countErrorsC1 >= 5) {
         document.getElementById('inlineRadioOptions1-40').checked = true;
