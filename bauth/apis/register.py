@@ -6,14 +6,15 @@ import logging
 logger = logging.getLogger()
 
 def register_endpoint(request):
-    if request.POST['password'] != request.POST['password-confirmation']:
+    if request.POST.get('password', '') != request.POST.get('password-confirmation', ''):
         return redirect(f'/register/?registered=False')
     try:
+        print(request.POST)
         user = User.objects.create_user(
-            username=request.POST['username'],
-            password=request.POST['password'],
-            first_name=request.POST['first_name'],
-            last_name=request.POST['last_name'])
+            username=request.POST.get('username', ''),
+            password=request.POST.get('password', ''),
+            first_name=request.POST.get('first_name', ''),
+            last_name=request.POST.get('last_name', ''))
         user.save()
 
         group = Group.objects.get(name='student')
@@ -22,5 +23,5 @@ def register_endpoint(request):
         login(request, user)
         return redirect(f'/?registered=True')
     except Exception as e:
-        logger.error('Error registering user {}. Error {}'.format(request.POST['username'], e), exc_info=e)
+        logger.error('Error registering user {}. Error {}'.format(request.POST.get('username', ''), e), exc_info=e)
         return redirect(f'/register/?registered=False')

@@ -32,79 +32,215 @@
   <div class="wrapper wrapper-full-page">
     <div class="page-header login-page header-filter" filter-color="black" style="background-image: url('/static/essay_manager/img/register.jpg'); background-size: cover; background-position: top center;">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-            <form id="register-form" class="form" method="post" action="/api/register/">
-              {% csrf_token %}
-              <div class="card card-login card-hidden">
-                <div class="card-header card-header-info text-center">
-                  <h4 class="card-title">Registrar</h4>
-                  <div class="social-line">
-                    <a class="btn btn-just-icon btn-link btn-white">
-                      <i class="fa fa-facebook-square"></i>
-                    </a>
-                    <a class="btn btn-just-icon btn-link btn-white">
-                      <i class="fa fa-google-plus"></i>
-                    </a>
+        <div class="container-fluid">
+          <div class="col-md-8 col-12 mr-auto ml-auto">
+            <div class="wizard-container">
+              <div class="card card-wizard" data-color="blue" id="wizardProfile">
+                <form method="post" action="/api/register/" onkeydown="return event.key != 'Enter';">
+                  {% csrf_token %}
+                  <div class="card-header text-center">
+                    <h3 class="card-title">
+                      Registre-se
+                    </h3>
+                    <h5 class="card-description">Queremos saber um pouco sobre você!</h5>
                   </div>
-                </div>
-                <div class="card-body ">
-                  <span class="bmd-form-group">
-                    <div class="input-group has-info">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="material-icons"></i>
-                        </span>
+                  <div class="wizard-navigation">
+                    <ul class="nav nav-pills">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#about" data-toggle="tab" role="tab">
+                          Sobre
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#interests" data-toggle="tab" role="tab">
+                          Interesses
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#profile" data-toggle="tab" role="tab">
+                          Perfil
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="card-body has-info">
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="about">
+                        <h5 class="info-text"> Preencha algumas informações básicas, por favor!</h5>
+                        <div class="row justify-content-center">
+                          <div class="col-lg-10 mt-3">
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <i class="material-icons">face</i>
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="i1" class="bmd-label-floating">Nome</label>
+                                <input type="text" class="form-control" id="i1" name="first_name" required>
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <i class="material-icons">record_voice_over</i>
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="i2" class="bmd-label-floating">Sobrenome</label>
+                                <input type="text" class="form-control" id="i2" name="last_name">
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <i class="material-icons">email</i>
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="i3" class="bmd-label-floating">Email</label>
+                                <input type="email" class="form-control" id="i3" name="username" required>
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <i class="material-icons">lock</i>
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="i4" class="bmd-label-floating">Senha</label>
+                                <input type="password" class="form-control" id="i4" name="password" required>
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <i class="material-icons">lock</i>
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="i5" class="bmd-label-floating">Confirmação de senha</label>
+                                <input type="password" class="form-control" id="i5" name="password-confirmation" equalTo="#i4" required>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <input type="text" class="form-control" placeholder="Nome" name="first_name" maxlength="150" required="" id="id_first_name">
-                    </div>
-                  </span>
-                  <span class="bmd-form-group">
-                    <div class="input-group has-info">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="material-icons"></i>
-                        </span>
+                      <div class="tab-pane" id="interests">
+                        <h5 class="info-text"> Quais provas tem interesse? </h5>
+                        <div class="row justify-content-center">
+                          <div class="col-lg-10">
+                            <div class="row">
+                              <div class="col-sm-4">
+                                <div class="choice" data-toggle="wizard-checkbox">
+                                  <input type="checkbox" name="jury-enem" value="ENEM">
+                                  <div class="icon">
+                                    <i class="material-icons">content_paste</i>
+                                  </div>
+                                  <h6>ENEM</h6>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="choice" data-toggle="wizard-checkbox">
+                                  <input type="checkbox" name="jury-cespe" value="CESPE">
+                                  <div class="icon">
+                                    <i class="material-icons">content_paste</i>
+                                  </div>
+                                  <h6>CESPE</h6>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="choice" data-toggle="wizard-checkbox">
+                                  <input type="checkbox" name="jury-vunesp" value="VUNESP">
+                                  <div class="icon">
+                                    <i class="material-icons">content_paste</i>
+                                  </div>
+                                  <h6>VUNESP</h6>
+                                </div>
+                                <select class="selectpicker" data-style="btn btn-primary btn-round" title="Single Select" data-size="7">
+                                  <option disabled selected>Choose city</option>
+                                  <option value="2">Foobar</option>
+                                  <option value="3">Is great</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <input type="text" class="form-control" placeholder="Sobrenome" name="last_name" maxlength="150" required="" id="id_last_name">
-                    </div>
-                  </span>
-                  <span class="bmd-form-group">
-                    <div class="input-group has-info">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="material-icons">email</i>
-                        </span>
+                      <div class="tab-pane" id="profile">
+                        <h5 class="info-text"> Só um pouco mais...</h5>
+                        <div class="row justify-content-center">
+                          <div class="col-lg-10 mt-3">
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="o1" class="bmd-label-floating">Curso (desejado)</label>
+                                <input type="text" class="form-control" id="o1" name="course" required>
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="o2" class="bmd-label-floating">Faculdade (desejada)</label>
+                                <input type="text" class="form-control" id="o2" name="faculty" required>
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="o3" class="bmd-label-floating">Cidade</label>
+                                <input type="text" class="form-control" id="o3" name="city" required>
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="o4" class="bmd-label-floating">Estado</label>
+                                <input type="text" class="form-control" id="o4" name="state" required>
+                              </div>
+                            </div>
+                            <div class="input-group form-control-lg">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                </span>
+                              </div>
+                              <div class="form-group">
+                                <label for="o5" class="bmd-label-floating">Endereço (para certificados!) </label>
+                                <input type="text" class="form-control" id="o5" name="addess" required>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <input type="text" class="form-control" placeholder="Email" name="username" maxlength="150" required="" id="id_username">
                     </div>
-                  </span>
-                  <span class="bmd-form-group">
-                    <div class="input-group has-info">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="material-icons">lock_outline</i>
-                        </span>
-                      </div>
-                      <input type="password" class="form-control" placeholder="Senha" name="password" maxlength="150" required="" id="id_password">
+                  </div>
+                  <div class="card-footer">
+                    <div class="mr-auto">
+                      <input type="button" class="btn btn-previous btn-fill btn-default btn-wd disabled" name="previous" value="Anterior">
                     </div>
-                  </span>
-                  <span class="bmd-form-group">
-                    <div class="input-group has-info">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="material-icons">lock_outline</i>
-                        </span>
-                      </div>
-                      <input type="password" class="form-control" placeholder="Confirmação de senha" name="password-confirmation" maxlength="150" required="" id="id_password_confirm">
+                    <div class="ml-auto">
+                      <input type="button" class="btn btn-next btn-fill btn-info btn-wd" name="next" value="Próximo">
+                      <input type="submit" class="btn btn-finish btn-fill btn-success btn-wd" name="finish" value="Finalizar" style="display: none;">
                     </div>
-                  </span>
-                </div>
-                <div class="card-footer justify-content-center">
-                  <input type="submit" class="btn btn-info btn-link btn-lg" value=Registrar>
-                </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
+            <!-- wizard container -->
           </div>
         </div>
       </div>
@@ -125,6 +261,12 @@
   <script src="/static/essay_manager/js/core/popper.min.js"></script>
   <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
   <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!-- Forms Validations Plugin -->
+  <script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
+  <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+  <script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
+  <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+  <script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
   <!--  Google Maps Plugin    -->
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   <!-- Chartist JS -->
@@ -138,10 +280,6 @@
   <script>
     $(document).ready(function() {
       $().ready(function() {
-
-        {% if registered == 'False' %}
-          md.showNotification('top', 'center', 'Algo deu errado. Confira os dados apresentados!', 'danger');
-        {% endif %}
         $sidebar = $('.sidebar');
 
         $sidebar_img_container = $sidebar.find('.sidebar-background');
@@ -312,11 +450,11 @@
   </script>
   <script>
     $(document).ready(function() {
-      md.checkFullPageBackgroundImage();
+      // Initialise the wizard
+      demo.initMaterialWizard();
       setTimeout(function() {
-        // after 1000 ms we add the class animated to the login/register card
-        $('.card').removeClass('card-hidden');
-      }, 700);
+        $('.card.card-wizard').addClass('active');
+      }, 600);
     });
   </script>
 </body>

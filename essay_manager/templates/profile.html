@@ -12,7 +12,7 @@
 				<div class="content">
 					<div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-xl-10 col-lg-12 col-md-12 col-sm-12">
                                 <div class="card">
                                     <div class="card-header card-header-icon card-header-info">
                                         <div class="card-icon">
@@ -24,13 +24,13 @@
                                         <form method="post" action="/api/profile/update/">
                                             {% csrf_token %}
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group">
                                                         <label class="bmd-label-floating">Colégio</label>
                                                         <input type="text" class="form-control" value="{% firstof profile.school not_specified %}" >
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group">
                                                         <label class="bmd-label-floating">Email</label>
                                                         <input type="email" name="email" class="form-control" value="{% firstof profile.email not_specified %}">
@@ -38,16 +38,44 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group">
                                                         <label class="bmd-label-floating">Nome</label>
                                                         <input type="text" name="user__first_name" class="form-control" value="{% firstof user.first_name not_specified %}">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group">
                                                         <label class="bmd-label-floating">Sobrenome</label>
                                                         <input type="text" name="user__last_name" class="form-control" value="{% firstof user.last_name not_specified %}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label class="bmd-label-floating">Curso (desejado)</label>
+                                                        <input type="text" name="course" class="form-control" value="{% firstof profile.course not_specified %}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label class="bmd-label-floating">Faculdade (desejada)</label>
+                                                        <input type="text" name="faculty" class="form-control" value="{% firstof profile.faculty not_specified %}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label class="bmd-label-floating">Cidade</label>
+                                                        <input type="text" name="city" class="form-control" value="{% firstof profile.city not_specified %}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label class="bmd-label-floating">Estado</label>
+                                                        <input type="text" name="state" class="form-control" value="{% firstof profile.state not_specified %}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -56,40 +84,6 @@
                                                     <div class="form-group">
                                                         <label class="bmd-label-floating">Endereço</label>
                                                         <input type="text" name="address" class="form-control" value="{% firstof profile.address not_specified %}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Cidade</label>
-                                                        <input type="text" name="city" class="form-control" value="{% firstof profile.city not_specified %}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Estado</label>
-                                                        <input type="text" name="state" class="form-control" value="{% firstof profile.state not_specified %}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">CEP</label>
-                                                        <input type="text" name="zipcode" class="form-control" value="{% firstof profile.zipcode not_specified %}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Curso (desejado)</label>
-                                                        <input type="text" name="course" class="form-control" value="{% firstof profile.course not_specified %}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Faculdade (desejada)</label>
-                                                        <input type="text" name="faculty" class="form-control" value="{% firstof profile.faculty not_specified %}">
                                                     </div>
                                                 </div>
                                             </div>
