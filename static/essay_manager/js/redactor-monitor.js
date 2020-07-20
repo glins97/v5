@@ -842,54 +842,23 @@ function updateTextfieldValue(checkbox, textfield, value, comp, weight, apply) {
     switch(comp){
         case 'c1': 
             countErrorsC1 += weight;
-            if (!apply) break;
-            if (countErrorsC1 >= 6) document.getElementById('inlineRadioOptions1-0').checked = true; 
-            if (countErrorsC1 <= 5) document.getElementById('inlineRadioOptions1-40').checked = true; 
-            if (countErrorsC1 <= 4) document.getElementById('inlineRadioOptions1-80').checked = true; 
-            if (countErrorsC1 <= 3) document.getElementById('inlineRadioOptions1-120').checked = true; 
-            if (countErrorsC1 <= 2) document.getElementById('inlineRadioOptions1-160').checked = true; 
-            if (countErrorsC1 <= 1) document.getElementById('inlineRadioOptions1-200').checked = true; 
             break;
         case 'c2': 
             countErrorsC2 += weight;
-            if (!apply) break;
-            if (countErrorsC2 >= 4) document.getElementById('inlineRadioOptions2-40').checked = true; 
-            if (countErrorsC2 <= 3) document.getElementById('inlineRadioOptions2-80').checked = true; 
-            if (countErrorsC2 <= 2) document.getElementById('inlineRadioOptions2-120').checked = true; 
-            if (countErrorsC2 <= 1) document.getElementById('inlineRadioOptions2-160').checked = true; 
-            if (countErrorsC2 == 0) document.getElementById('inlineRadioOptions2-200').checked = true; 
             break;
         case 'c3': 
             countErrorsC3 += weight;
-            if (!apply) break;
-            if (countErrorsC3 >= 5) document.getElementById('inlineRadioOptions3-0').checked = true; 
-            if (countErrorsC3 <= 4) document.getElementById('inlineRadioOptions3-40').checked = true; 
-            if (countErrorsC3 <= 3) document.getElementById('inlineRadioOptions3-80').checked = true; 
-            if (countErrorsC3 <= 2) document.getElementById('inlineRadioOptions3-120').checked = true; 
-            if (countErrorsC3 <= 1) document.getElementById('inlineRadioOptions3-160').checked = true; 
-            if (countErrorsC3 == 0) document.getElementById('inlineRadioOptions3-200').checked = true; 
             break;
         case 'c4': 
             countErrorsC4 += weight;
-            if (!apply) break;
-            if (countErrorsC4 >= 4) document.getElementById('inlineRadioOptions4-40').checked = true; 
-            if (countErrorsC4 <= 3) document.getElementById('inlineRadioOptions4-80').checked = true; 
-            if (countErrorsC4 <= 2) document.getElementById('inlineRadioOptions4-120').checked = true; 
-            if (countErrorsC4 <= 1) document.getElementById('inlineRadioOptions4-160').checked = true; 
-            if (countErrorsC4 == 0) document.getElementById('inlineRadioOptions4-200').checked = true; 
             break;
         case 'c5': 
             countErrorsC5 += weight;
-            if (!apply) break;
-            if (countErrorsC5 >= 5) document.getElementById('inlineRadioOptions5-0').checked = true; 
-            if (countErrorsC5 <= 4) document.getElementById('inlineRadioOptions5-40').checked = true; 
-            if (countErrorsC5 <= 3) document.getElementById('inlineRadioOptions5-80').checked = true; 
-            if (countErrorsC5 <= 2) document.getElementById('inlineRadioOptions5-120').checked = true; 
-            if (countErrorsC5 <= 1) document.getElementById('inlineRadioOptions5-160').checked = true; 
-            if (countErrorsC5 == 0) document.getElementById('inlineRadioOptions5-200').checked = true;
-            break;
-        default: break;
+            default: break;
     }
+    
+    if (apply)
+        assignGrades()
 }
 
 loadModeSelectionButtons();
