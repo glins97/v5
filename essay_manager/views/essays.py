@@ -15,7 +15,7 @@ def _student_essays_view(request):
         'essays': Essay.objects.filter(user=request.user).order_by('-id'),
         'user': get_user_details(request.user),
     }
-    return render(request, 'essays/student.html', dict(data, **{key:request.GET[0] for key in request.GET}))
+    return render(request, 'essays/student.html', dict(data, **{key:request.GET[key] for key in request.GET}))
 
 @has_permission('monitor')
 @login_required

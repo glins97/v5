@@ -6,7 +6,6 @@ import logging
 import logging
 logger = logging.getLogger('django')
 
-@has_permission('monitor')
 @login_required
 def create_essay_endpoint(request):
     try:
