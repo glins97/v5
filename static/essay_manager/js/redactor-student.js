@@ -189,10 +189,15 @@ function importCorrectionData(data) {
     competencies['comments'] = textfieldComments;
     competencies['grades'] = grades;
     document.getElementById('inlineRadioOptions1-' + grades['a1']).checked = true; 
+    document.getElementById('inlineRadioOptions1-' + grades['a1']).disabled = false; 
     document.getElementById('inlineRadioOptions2-' + grades['a2']).checked = true; 
+    document.getElementById('inlineRadioOptions2-' + grades['a2']).disabled = false; 
     document.getElementById('inlineRadioOptions3-' + grades['a3']).checked = true; 
+    document.getElementById('inlineRadioOptions3-' + grades['a3']).disabled = false; 
     document.getElementById('inlineRadioOptions4-' + grades['a4']).checked = true; 
+    document.getElementById('inlineRadioOptions4-' + grades['a4']).disabled = false; 
     document.getElementById('inlineRadioOptions5-' + grades['a5']).checked = true; 
+    document.getElementById('inlineRadioOptions5-' + grades['a5']).disabled = false; 
     for (var key in textfieldComments){
         document.getElementById('formTextarea' + key).value = textfieldComments[key]; 
     }
