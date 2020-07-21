@@ -1,7 +1,7 @@
 from essay_manager.decorators import login_required, has_permission
 from django.shortcuts import redirect
 from essay_manager.models import Theme, Essay, Correction
-import logging
+import time
 
 import logging
 logger = logging.getLogger('django')
@@ -10,7 +10,7 @@ logger = logging.getLogger('django')
 def create_essay_endpoint(request):
     try:
         obj = request.FILES['file'] 
-        fn = 'uploads/' + str(obj).split('/')[-1].replace(' ', '_')
+        fn = 'uploads/{}_{}'.format(time.time(), str(obj).split('/')[-1].replace(' ', '_'))
         with open(fn, 'wb') as f:
             f.write(obj.file.read())
         theme = Theme.objects.get(description=request.POST['theme'])
