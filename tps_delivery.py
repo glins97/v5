@@ -101,10 +101,10 @@ def main():
                 mail_body += f'<p>Grupo: Score Z</p>'   
 
             if tps_answer.tps.solutions:
-                mail_body += f'<p>Para conferir as soluções comentadas, clique <a href="https://ppa.digital/{tps_answer.tps.solutions}"> aqui</a>.</p>'    
+                mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
 
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
-            if send_mail(tps_answer.email, f'Respostas {tps_answer.tps}', mail_body):
+            if send_mail(tps_answer.email, f'Respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file)):
                 tps_answer.mailed = True
                 tps_answer.save()
         except Exception as e:
@@ -119,13 +119,19 @@ from email.encoders import encode_base64
 import codecs
 from threading import _start_new_thread
 
-def send_mail(email, subject, message):
+def send_mail(email, subject, message, attachment=''):
     msg = MIMEMultipart()
     password = 'campusppa'
     msg['To'] = email
     msg['From'] = 'adm.ppa.digital@gmail.com'
     msg['Subject'] = 'PPA Digital: ' + subject
-
+    if attachment:
+        openedfile = None
+        with open(attachment, 'rb') as opened:
+            openedfile = opened.read()
+        attachedfile = MIMEApplication(openedfile, _subtype = "pdf", _encoder=encode_base64)
+        attachedfile.add_header('content-disposition', 'attachment', filename=attachment.split('/')[-1])
+        msg.attach(attachedfile)
     msg.attach(MIMEText(message, 'html'))
     with smtplib.SMTP('smtp.gmail.com: 587') as server:
         server.starttls()
