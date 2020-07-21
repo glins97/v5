@@ -77,7 +77,7 @@ def _student_essay_view(request, id):
         'essay': essay,
         'user': get_user_details(request.user),
         'username': first_name[0].upper() + first_name[1:].lower(), 
-        'data': mark_safe(corrections[0].data),
+        'data': mark_safe(corrections[0].data) if corrections else {},
     }
     return render(request, 'essay/student.html', data)
 

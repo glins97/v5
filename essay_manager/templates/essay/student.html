@@ -457,8 +457,11 @@
 		$(document).ready(function() {
 			$().ready(function() {
 				setUsername('{{username}}');
-				importCorrectionData({{data}});
-				
+				{% if data %}
+					importCorrectionData({{data}});
+				{% else %}
+					md.showNotification('top', 'center', 'Essa redação ainda não foi corrigida!', 'warning');
+				{% endif %}
 				$sidebar = $('.sidebar');
 				
 				$sidebar_img_container = $sidebar.find('.sidebar-background');
