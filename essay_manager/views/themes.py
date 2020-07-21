@@ -6,10 +6,13 @@ from essay_manager.utils import get_user_details
 
 @login_required
 def themes_view(request):
-    themes = list(Theme.objects.filter(start_date__lt=now(), end_date__gt=now()))
-    for theme in themes:
+    themes = []
+    for theme in Theme.objects.all():
         theme.completed = len(list(Essay.objects.filter(theme=theme, user=request.user).all())) > 0
-    
+        if theme.completed:
+            themes.append(theme)
+        elif theme.start_date < now() and theme.end_date > now():
+            themes.append(theme)
     data = {
         'title': 'Temas',
         'themes': themes,
