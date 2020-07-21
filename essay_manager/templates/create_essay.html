@@ -21,7 +21,7 @@
 										<h4 class="card-title">Nova redação</h4>
 									</div>
 									<div class="card-body has-info">
-										<form method="post" action="/api/essays/create/">
+										<form enctype="multipart/form-data" method="post" action="/api/essays/create/">
 											{% csrf_token %}
 											<div class="row">
 												<div class="col-md-12">
@@ -54,7 +54,7 @@
 																	<span class="fileinput-exists">Mudar arquivo</span>
 																	<input type="file" name="file" accept="image/x-png,image/jpeg,application/pdf">
 																</span>
-																<a href="#pablo" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Cancelar</a>
+																<a class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Cancelar</a>
 															</div>
 														</div>
 													</div>

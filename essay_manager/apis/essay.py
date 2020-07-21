@@ -9,9 +9,10 @@ logger = logging.getLogger('django')
 @login_required
 def create_essay_endpoint(request):
     try:
-        if not request.POST['file']:
-            raise Exception
-        fn = 'uploads/' + request.POST['file'].split('/')[-1]
+        obj = request.FILES['file'] 
+        fn = 'uploads/' + str(obj).split('/')[-1].replace(' ', '_')
+        with open(fn, 'wb') as f:
+            f.write(obj.file.read())
         theme = Theme.objects.get(description=request.POST['theme'])
         Essay(user=request.user, theme=theme, file=fn).save()
         return redirect('/essays/?added=True')
