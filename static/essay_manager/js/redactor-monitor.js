@@ -482,10 +482,10 @@ function mouseUpEvent(e) {
         }
         if (mode == 'RECT' && color == COLOR_DANGER){
             document.getElementById('comment-text').value = username + ', ';
-            addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight, getImageSrc(color));
+            addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 15 / canvasHeight + spos[1] / canvasHeight, getImageSrc(color));
             document.getElementById("openModal").click();
             modalVisible = true;
-            savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
+            savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 15 / canvasHeight + spos[1] / canvasHeight]
         }
     }
     if (mode=='COMM'){
