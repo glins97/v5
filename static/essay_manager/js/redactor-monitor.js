@@ -20,6 +20,7 @@ var competencies = {
 };
 
 var lastImage = undefined;
+var lastTouch = undefined;
 var canvas = undefined;
 var canvasPlaceholder = undefined;
 
@@ -338,7 +339,9 @@ function loadColorSelectionButtons() {
 }
 
 function mouseDownEvent(e) {
+    console.log('mousedown', e, e.touchType);
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
+    
     if (editModeActive && hoveringObjectIndex >= 0) {
         document.getElementById("openModal").click();
         modalVisible = true;
@@ -346,10 +349,17 @@ function mouseDownEvent(e) {
     }
     if (!isDrawEnabled()) return;
     
-    rect_x0 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
-    rect_y0 = (e.y - $(canvasPlaceholder).offset().top) / canvasHeight;
+    if (e.touchType && e.touchType == 'stylus'){
+        rect_x0 = (e.clientX - $(canvasPlaceholder).offset().left) / canvasWidth;
+        rect_y0 = (e.clientY - $(canvasPlaceholder).offset().top) / canvasHeight;
+    }
+    else {
+        rect_x0 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
+        rect_y0 = (e.y - $(canvasPlaceholder).offset().top) / canvasHeight;    
+    }
     rect_x1 = 0;
     rect_y1 = 0;
+    console.log('mousedown', rect_x0, rect_x1, rect_y0, rect_y1);
     spos = getScroll()
     var ctx = canvasPlaceholder.getContext("2d");
     ctx.clearRect(0, 0, canvasPlaceholder.width, canvasPlaceholder.height);
@@ -383,8 +393,14 @@ function mouseDownEvent(e) {
 function mouseMoveEvent(e) {
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
     var spos = getScroll()
-    rect_x1 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
-    rect_y1 = (e.y - $(canvasPlaceholder).offset().top) / canvasHeight;
+    if (e.touchType && e.touchType == 'stylus'){
+        rect_x1 = (e.clientX - $(canvasPlaceholder).offset().left) / canvasWidth;
+        rect_y1 = (e.clientY - $(canvasPlaceholder).offset().top) / canvasHeight;
+    }
+    else {
+        rect_x1 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
+        rect_y1 = (e.y - $(canvasPlaceholder).offset().top) / canvasHeight;    
+    }
 
     document.getElementById('canvasPlaceholder').style.cursor = 'default';
     // if modal is visible, do not reset hover index
@@ -442,11 +458,18 @@ function mouseMoveEvent(e) {
 }
 
 function mouseUpEvent(e) {
+    console.log('mouseup', e, e.touchType);
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
-    if (!isDrawEnabled()) return;
+    if (!isDrawEnabled() && rect_x0 > 0 && rect_y0 > 0) return;
     spos = getScroll()
-    rect_x1 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
-    rect_y1 = (e.y - $(canvasPlaceholder).offset().top) / canvasHeight;
+    if (e.touchType && e.touchType == 'stylus'){
+        rect_x1 = (e.clientX - $(canvasPlaceholder).offset().left) / canvasWidth;
+        rect_y1 = (e.clientY - $(canvasPlaceholder).offset().top) / canvasHeight;
+    }
+    else {
+        rect_x1 = (e.x - $(canvasPlaceholder).offset().left) / canvasWidth;
+        rect_y1 = (e.y - $(canvasPlaceholder).offset().top) / canvasHeight;    
+    }
     canvasPlaceholder.getContext("2d").clearRect(0, 0, canvasPlaceholder.width, canvasPlaceholder.height);
     
     if (mode == 'LINE' || mode == 'RECT'){
@@ -479,6 +502,7 @@ function mouseUpEvent(e) {
     rect_x1 = 0;
     rect_y0 = 0;
     rect_y1 = 0;
+    lastTouch = undefined;
 }
 
 var loadCount = 0;
@@ -494,11 +518,38 @@ function loadModule() {
         canvasPlaceholder.removeEventListener('mousedown', {});
         canvasPlaceholder.removeEventListener('mousemove', {});
         canvasPlaceholder.removeEventListener('mouseup', {});
+
+        canvasPlaceholder.removeEventListener('touchstart', {});
+        canvasPlaceholder.removeEventListener('touchmove', {});
+        canvasPlaceholder.removeEventListener('touchend', {});
+        canvasPlaceholder.removeEventListener('touchcancel', {});
     }
     
     canvasPlaceholder.addEventListener('mousedown', mouseDownEvent);
     canvasPlaceholder.addEventListener('mousemove', mouseMoveEvent);
     canvasPlaceholder.addEventListener('mouseup', mouseUpEvent);
+        
+    canvasPlaceholder.addEventListener("touchstart", function(event) {
+        mouseDownEvent(event);
+        if(event.touches[event.touches.length - 1].touchType === "stylus"){
+            lastTouch = event.touches[event.touches.length - 1];
+            mouseDownEvent(lastTouch);
+        }
+        event.preventDefault()})
+
+    canvasPlaceholder.addEventListener("touchmove", function(event) {
+        if(event.touches[event.touches.length - 1].touchType === "stylus"){
+            lastTouch = event.touches[event.touches.length - 1];
+            mouseMoveEvent(lastTouch);
+        }
+        event.preventDefault()})
+    
+    canvasPlaceholder.addEventListener("touchend", function(event) {
+        mouseUpEvent(lastTouch);
+        event.preventDefault()})
+    
+    canvasPlaceholder.addEventListener("touchcancel", function(event) {
+        event.preventDefault()})
     
     updateCanvas();
     drawImages();
@@ -865,4 +916,9 @@ loadModeSelectionButtons();
 loadColorSelectionButtons();
 window.addEventListener("resize", loadModule);
 window.addEventListener("DOMContentLoaded", loadModule);
-    
+console.log('DSADSADS')
+var body = document.getElementByTagName('body');
+body.addEventListener('touchstart', function(evt){
+    console.log(evt.touches[0])
+    console.log(evt.touches[0].touchType);
+});
