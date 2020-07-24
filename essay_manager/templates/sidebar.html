@@ -8,12 +8,22 @@
 	</a></div>
 	<div class="sidebar-wrapper">
 		<ul class="nav">
-			<li class="nav-item {% if title == 'Dashboard' %}active{%endif%}">
+			{% if user.obj|has_permission:'student' %}
+			<li class="nav-item {% if title == 'Preparação' %}active{%endif%}">
 				<a class="nav-link" href="/">
 					<i class="material-icons">dashboard</i>
-					<p>Dashboard</p>
+					<p>Preparação</p>
 				</a>
 			</li>
+			{% endif %}
+			{% if user.obj|has_permission:'monitor' %}
+			<li class="nav-item {% if title == 'Inicial' %}active{%endif%}">
+				<a class="nav-link" href="/">
+					<i class="material-icons">dashboard</i>
+					<p>Inicial</p>
+				</a>
+			</li>
+			{% endif %}
 			{% if user.obj|has_permission:'student' %}
 			<li class="nav-item {% if title == 'Perfil' %}active{%endif%}">
 				<a class="nav-link" href="/profile/">
