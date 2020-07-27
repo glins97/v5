@@ -130,7 +130,7 @@
                   <h4 class="card-title text-center">{{essay.upload_date}}</h4>
                 </div>
                 <div class="card-footer">
-                  <i> <img id="src" class="src" src="../../{{essay.file}}" width="100%"/> </i> 
+                  <i> <img id="src" class="src" src="/{{essay.file}}" width="100%"/> </i> 
                 </div>
                 <canvas id="canvas" class="src" style="cursor: default;"></canvas>
                 <canvas id="canvasPlaceholder" class="src" style="cursor: default;"></canvas>
@@ -298,6 +298,7 @@
                           <div class="col-sm form-check">
                             <div class="form-group">
                               <label for="formTextareac1">Comentários gerais</label>
+                              <textarea class="form-control" id="formTextareac0" hidden="true"></textarea>
                               <textarea class="form-control" id="formTextareac1" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac1', 'c1')"></textarea>
                             </div>
                           </div>

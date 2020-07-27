@@ -34,7 +34,7 @@ def student_dashboard_view(request):
             unique_corrections += 1
 
     data = {
-        'title': 'Dashboard',
+        'title': 'Planejamento',
         'essays': list(essays)[-5:],
         'themes_count': themes_count,
         'essays_count': essays_count,
@@ -86,7 +86,7 @@ def monitor_dashboard_view(request):
     done_corrections_count = done_corrections.count()
 
     data = {
-        'title': 'Dashboard',
+        'title': 'Inicial',
         'corrections': corrections[:5],
         'done_corrections': list(done_corrections),
         'done_corrections_count': done_corrections_count,

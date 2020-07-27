@@ -104,7 +104,7 @@ def main():
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
 
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
-            if send_mail(tps_answer.email, f'Respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file)):
+            if send_mail(tps_answer.email, f'Respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else ''):
                 tps_answer.mailed = True
                 tps_answer.save()
         except Exception as e:
