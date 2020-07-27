@@ -9,14 +9,14 @@ def save_tps_answer(request, id):
         answers = TPSAnswer.objects.all().filter(tps=tps)
         if answers.count() >= tps.max_answers:
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Número limite de respostas já atingido.'})
-        if TPSAnswer.objects.all().filter(tps=tps, name=request.POST.get('name', '')).count():
-            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Apenas uma resposta por aluno.'})
-        if not request.POST.get('name', False) or not request.POST.get('email', False):
-            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Favor preencher nome e email!'})
         if tps.start_date > now():
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Respostas serão liberadas apenas em {}.'.format(tps.start_date)})
         if tps.end_date < now():
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Tempo limite de resposta excedido.'})
+        if not request.POST.get('name', False) or not request.POST.get('email', False):
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Favor preencher nome e email!'})
+        if TPSAnswer.objects.all().filter(tps=tps, name=request.POST.get('name', '')).count() or TPSAnswer.objects.all().filter(tps=tps, email=request.POST.get('email', '')).count():
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Apenas uma resposta por aluno.'})
 
         tps_answer = TPSAnswer(
             tps=tps,

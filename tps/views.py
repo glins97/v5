@@ -16,15 +16,13 @@ def tps_view(request, id, campus, subject, week):
 
         data = {
             'id': id,
-            'subject': subject,
             'subject_desc': {
                 'QUI': 'Química',
                 'BIO': 'Biologia',
                 'MAT': 'Matemática',
                 'FIS': 'Física',
             }.get(subject.upper(), subject.capitalize()),
-            'campus': campus,
-            'week': week,
+            'tps': tps,
             'questions': Question.objects.filter(tps=tps),
         }
         return render(request, 'tps.html', data)

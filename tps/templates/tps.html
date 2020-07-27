@@ -13,7 +13,7 @@
     <link href="/static/bauth/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
   <style>
     html { 
-      background: url(/static/bauth/img/login-filter-45.png) no-repeat center center fixed; 
+      background: url(/static/essay_manager/img/login.jpg) no-repeat center center fixed; 
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -26,7 +26,8 @@
 
   </style>
 </head>
-<body>
+
+<body class="sidebar-mini">
   <div class="container">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top text-white">
@@ -36,109 +37,166 @@
         </div>
       </div>
     </nav>
-    <div class="row">
-      <div class="col-lg-6 col-md-8 col-sm-10 ml-auto mr-auto">
-        <form id="login-form" class="form" method="post" action="/tps/answer/{{id}}/">
-          {% csrf_token %}
-          <div class="card" style="margin-top: 150px;">
-            <div class="card-header card-header-info text-center">
-              <h4 class="card-title"><b>{{subject_desc}}, Semana {{week}}</b></h4>
-              <div class="social-line">
-                Preencha os campos abaixo!
+  </div>
+  <div class="">
+    <div class="main-panel">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div id="col-size" class="col-lg-10 col-md-12 ml-auto mr-auto">
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-info">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#questions" id='questions-btn' data-toggle="tab">
+                            <i class="material-icons">content_paste</i> Caderno de Questões
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#answers" id='answers-btn' data-toggle="tab">
+                            <i class="material-icons">code</i> Minhas Respostas
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="questions">
+                      <button id="download" class="btn btn-outline-info pull-right" style='margin-right: 4%;'> baixar questões </button>
+									  	<i><img id="src" src="/{{tps.questions}}" width="100%"/></i>
+                    </div>
+                    <div class="tab-pane" id="answers">
+                      <form id="login-form" class="form" method="post" action="/tps/answer/{{id}}/">
+                        {% csrf_token %}
+                        <span class="bmd-form-group" style="margin-left: 1px;">
+                          <div class="input-group has-info">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                <i class="material-icons">face</i>
+                              </span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Nome" name="name" maxlength="150" required="">
+                          </div>
+                        </span>
+                        <span class="bmd-form-group" style="margin-left: 1px;">
+                          <div class="input-group has-info">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                <i class="material-icons">mail</i>
+                              </span>
+                            </div>
+                            <input type="email" class="form-control" placeholder="E-mail" name="email" maxlength="150" required="">
+                          </div>
+                        </span>
+                        <div class='card-body'>
+                        {% for question in questions %}
+                          <span class="bmd-form-group" >
+                            <div class="input-group has-info" style="margin-top: 30px;">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  Questão {{question.number}}
+                                </span>
+                              </div>
+                              <div class="row" style="margin-left: 31px;">
+                                <div class="col-sm form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" value="A" type="radio" name="q{{question.number}}"> A
+                                    <span class="circle">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                                <div class="col-sm form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" value="B" type="radio" name="q{{question.number}}"> B
+                                    <span class="circle">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                                <div class="col-sm form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" value="C" type="radio" name="q{{question.number}}"> C
+                                    <span class="circle">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                                <div class="col-sm form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" value="D" type="radio" name="q{{question.number}}"> D
+                                    <span class="circle">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                                <div class="col-sm form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" value="E" type="radio" name="q{{question.number}}"> E
+                                    <span class="circle">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </span>
+                        {% endfor %}
+                        </div>
+                        <div class="card-footer justify-content-center">
+                          <input type="submit" class="btn btn-info btn-link btn-lg" value="ENVIAR">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="card-body">
-              <span class="bmd-form-group" style="margin-left: 1px;">
-                <div class="input-group has-info">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="material-icons">face</i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Nome" name="name" maxlength="150" required="">
-                </div>
-              </span>
-              <span class="bmd-form-group" style="margin-left: 1px;">
-                <div class="input-group has-info">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="material-icons">mail</i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="E-mail" name="email" maxlength="150" required="">
-                </div>
-              </span>
-              {% for question in questions %}
-                <span class="bmd-form-group">
-                  <div class="input-group has-info" style="margin-top: 30px;">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        Questão {{question.number}}
-                      </span>
-                    </div>
-                    <div class="row" style="margin-left: 31px;">
-                      <div class="col-sm form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" value="A" type="radio" name="q{{question.number}}"> A
-                          <span class="circle">
-                            <span class="check"></span>
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-sm form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" value="B" type="radio" name="q{{question.number}}"> B
-                          <span class="circle">
-                            <span class="check"></span>
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-sm form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" value="C" type="radio" name="q{{question.number}}"> C
-                          <span class="circle">
-                            <span class="check"></span>
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-sm form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" value="D" type="radio" name="q{{question.number}}"> D
-                          <span class="circle">
-                            <span class="check"></span>
-                          </span>
-                        </label>
-                      </div>
-                      <div class="col-sm form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" value="E" type="radio" name="q{{question.number}}"> E
-                          <span class="circle">
-                            <span class="check"></span>
-                          </span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </span>
-              {% endfor %}
-            </div>
-            <div class="card-footer justify-content-center">
-              <input type="submit" class="btn btn-info btn-link btn-lg" value="ENVIAR">
-            </div>
           </div>
-        </form>
-      </div>
-    </div>
-    <footer class="footer">
-      <div class="container">
-        <div class="copyright float-right" style="color: white">
-          Copyright &copy; PPA Digital
-          <script>
-            document.write(new Date().getFullYear())
-          </script>
         </div>
       </div>
-    </footer>
+    </div>
   </div>
+  <!--   Core JS Files   -->
+  <script src="/static/essay_manager/js/core/jquery.min.js"></script>
+  <script src="/static/essay_manager/js/core/popper.min.js"></script>
+  <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      function addClass(element, className) {
+        var arr = element.className.split(" ");
+        if (arr.indexOf(name) == -1) {
+          element.className += " " + name;
+        }
+      } 
+
+      function removeClass(element, className) {
+        element.classList.remove(className);
+      } 
+
+      var colSize = document.getElementById('col-size');
+      document.getElementById('questions-btn').onclick = function() {
+        removeClass(colSize, 'col-lg-6');
+        removeClass(colSize, 'col-md-10');
+        
+        addClass(colSize, 'col-lg-10')
+        addClass(colSize, 'col-md-12')
+      }
+      document.getElementById('answers-btn').onclick = function() {
+        removeClass(colSize, 'col-lg-10')
+        removeClass(colSize, 'col-md-12')
+        
+        addClass(colSize, 'col-lg-6');
+        addClass(colSize, 'col-md-10');
+      }
+    });
+  </script>
 </body>
+
 </html>

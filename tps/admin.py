@@ -4,15 +4,20 @@ from django.utils.html import format_html
 from django.http import FileResponse
 from django import forms
 
-from tps.auxiliary import generate_score_z, generate_tbl, generate_distrator
-from .models import TPS, TPSAnswer, Question
-
+from datetime import date
 import subprocess
+
+from tps.auxiliary import generate_score_z, generate_tbl, generate_cbt, generate_distrator
+from .models import TPS, TPSAnswer, TPSScore, Question
+
+class TPSScoreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'email', 'campus', 'group', 'month', 'score')
+    list_filter = ('month', 'campus', 'group')
+    list_per_page = 40
 
 class TPSAnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'email', 'tps', 'grade', )
     list_filter = ('tps', 'grade', )
-    # search_fields = (,)
     list_per_page = 100
 
 from django.contrib.admin.utils import flatten_fieldsets
@@ -68,10 +73,10 @@ class TPSAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Conteúdo', {
-            'fields': ('subject', 'week', 'campus', 'solutions'),
+            'fields': ('subject', 'week', 'campus', 'questions', 'solutions',),
         }),
         ('Informações', {
-            'fields': ('max_answers', 'max_questions', 'tbl', 'score_z',),
+            'fields': ('max_answers', 'max_questions', 'notify',),
         }),
         ('Data', {
             'fields': ('start_date', 'end_date',),
@@ -95,7 +100,7 @@ class TPSAdmin(admin.ModelAdmin):
             '/static/tps/js/fields.js',
         )
     list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'emails', 'url', 'relatórios',)
-    list_filter = ('campus', 'subject', 'week',)
+    list_filter = ('campus', 'week',)
     search_fields = ('campus', 'subject', 'week', )
     list_per_page = 20
 
@@ -112,6 +117,7 @@ class TPSAdmin(admin.ModelAdmin):
         return format_html(
             '<a class="button" href="download/score_z/{}">Score Z</a>&nbsp'.format(obj.id) +
             '<a class="button" href="download/tbl/{}">TBL</a>&nbsp'.format(obj.id) +
+            ('<a class="button" href="download/cbt/{}">CBT</a>&nbsp'.format(obj.id) if obj.campus == 'BSB' or obj.campus == 'JUA' else '') +
             '<a class="button" href="download/distrator/{}">Distrator</a>&nbsp'.format(obj.id))
 
     def get_urls(self):
@@ -119,19 +125,22 @@ class TPSAdmin(admin.ModelAdmin):
         my_urls = [
             re_path(r'^download/score_z/(?P<id>[\w-]+)/$', self.download_pdf_score_z),
             re_path(r'^download/tbl/(?P<id>[\w-]+)/$', self.download_pdf_tbl),
+            re_path(r'^download/cbt/(?P<id>[\w-]+)/$', self.download_pdf_cbt),
             re_path(r'^download/distrator/(?P<id>[\w-]+)/$', self.download_pdf_distrator),
         ]
         return my_urls + urls
 
     def _gen_pdf(self, id, func):
         output = None
-        fn = ''
+        tps = TPS.objects.get(id=id)
         if func == 'score_z':
-            output = generate_score_z(id)
+            output = generate_score_z(tps)
         if func == 'tbl':
-            output = generate_tbl(id)
+            output = generate_tbl(tps)
+        if func == 'cbt':
+            output = generate_cbt(tps)
         if func == 'distrator':
-            output = generate_distrator(id)
+            output = generate_distrator(tps)
         
         print(['libreoffice', '--headless', '--convert-to',  'pdf', output, '--outdir', 'tps/outputs/pdfs'])
         subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', output, '--outdir', 'tps/outputs/pdfs'])
@@ -142,6 +151,9 @@ class TPSAdmin(admin.ModelAdmin):
 
     def download_pdf_tbl(self, request, id):
         return self._gen_pdf(id, 'tbl')
+
+    def download_pdf_cbt(self, request, id):
+        return self._gen_pdf(id, 'cbt')
 
     def download_pdf_distrator(self, request, id):
         return self._gen_pdf(id, 'distrator')
@@ -171,3 +183,4 @@ class QuestionAdmin(admin.ModelAdmin):
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(TPS, TPSAdmin)
 admin.site.register(TPSAnswer, TPSAnswerAdmin)
+admin.site.register(TPSScore, TPSScoreAdmin)

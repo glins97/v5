@@ -41,18 +41,40 @@ answers = (
     ('E', 'E'),
 )
 
+months = (
+    ('1', 'Janeiro'),
+    ('2', 'Fevereiro'),
+    ('3', 'Março'),
+    ('4', 'Maio'),
+    ('5', 'Abril'),
+    ('6', 'Junho'),
+    ('7', 'Julho'),
+    ('8', 'Agosto'),
+    ('9', 'Setembro'),
+    ('10', 'Outubro'),
+    ('11', 'Novembro'),
+    ('12', 'Dezembro'),
+)
+
+groups = (
+    ('ENEM_ANUAL', 'ENEM ANUAL'),
+    ('ENEM_SEMESTRAL', 'ENEM SEMESTRAL'),
+    ('PARTICULARES', 'PARTICULARES'),
+)
+
 class TPS(models.Model):
     subject = models.CharField(max_length=255, verbose_name='Matéria')
     week = models.CharField(max_length=255, choices=weeks, verbose_name='Semana')
     campus = models.CharField(max_length=255, choices=campi, verbose_name='Campus')
+    group = models.CharField(max_length=255, choices=groups, null=True, blank=True)
     start_date = models.DateTimeField(verbose_name='Início')
     end_date = models.DateTimeField(verbose_name='Término')
     max_questions = models.IntegerField(default=10, verbose_name='Número de questões')
     max_answers = models.IntegerField(default=40, verbose_name='Número de respostas')
 
+    questions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Caderno de questões')
     solutions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Gabarito comentado')
-    tbl = models.BooleanField(default=True, verbose_name="Notificar TBL")
-    score_z = models.BooleanField(default=True, verbose_name="Notificar Score Z")
+    notify = models.BooleanField(default=True, verbose_name="Enviar ranking")
 
     def __str__(self):
         return '{} {} {}'.format(self.campus, self.subject, self.week)
@@ -88,6 +110,20 @@ class TPSAnswer(models.Model):
     class Meta:
         verbose_name = 'Resposta'
         verbose_name_plural = 'Respostas'
+
+class TPSScore(models.Model):
+    email = models.CharField(max_length=255, null=True, blank=True)
+    group = models.CharField(max_length=255, choices=groups, null=True, blank=True)
+    month = models.CharField(max_length=255, choices=months, null=True, blank=True)
+    campus = models.CharField(max_length=255, choices=campi, null=True, blank=True)
+    score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return '{} {}: {}, {}'.format(self.email, self.campus, self.month, self.score)
+
+    class Meta:
+        verbose_name = 'Pontuação'
+        verbose_name_plural = 'Pontuações'
 
 class QuestionAnswer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
