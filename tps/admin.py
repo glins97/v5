@@ -40,7 +40,6 @@ class TPSAdminForm(forms.ModelForm):
         questions = {i: 'NA' for i in range(1, 121)}
         saved_questions = Question.objects.filter(tps__id=self.instance.id)
         for question in saved_questions:
-            print(question)
             questions[question.number] = question.correct_answer
 
         for question_number in range(1, 121):
@@ -62,7 +61,6 @@ class TPSAdminForm(forms.ModelForm):
                     q.save()
 
                 # delete questions no longer used
-                print(q.number, self.cleaned_data['max_questions'], q.number > self.cleaned_data['max_questions'])
                 if q.number > self.cleaned_data['max_questions']:
                     q.delete() 
         if commit:
@@ -142,7 +140,6 @@ class TPSAdmin(admin.ModelAdmin):
         if func == 'distrator':
             output = generate_distrator(tps)
         
-        print(['libreoffice', '--headless', '--convert-to',  'pdf', output, '--outdir', 'tps/outputs/pdfs'])
         subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', output, '--outdir', 'tps/outputs/pdfs'])
         return FileResponse(open(output.replace('xlsx', 'pdf'), 'rb'), as_attachment=True, filename=(func.upper() + '.pdf'))
 

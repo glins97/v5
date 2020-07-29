@@ -41,11 +41,13 @@ def separate_students(tps):
     }
     if tps.campus == 'GOI':
         threshold = df.shape[0] * 0.8
-        for index, row in df.iterrows():
-            if index < threshold:
+        count = 0
+        for _, row in df.iterrows():
+            if count < threshold:
                 result['SCORE_Z'] = result['SCORE_Z'].append(row, ignore_index=True)
             else:
                 result['TBL'] = result['TBL'].append(row, ignore_index=True)
+            count += 1
     elif tps.campus == 'BSB':
         count_score_z = 0
         count_tbl = 0
@@ -97,7 +99,6 @@ def duplicate(ws, origin, destination):
     
 def generate_score_z(tps):
     students = separate_students(tps)['SCORE_Z']
-    print(students)
     stats = calculate_statistics(students)
 
     wb = openpyxl.load_workbook(filename='tps/inputs/TEMPLATE_SCORE_Z.xlsx')
