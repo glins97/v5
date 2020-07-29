@@ -47,10 +47,10 @@
 			</li>
 			{% endif %}
 			{% if user.obj|has_permission:'student' %}
-			<li class="nav-item {% if title == 'Gráficos' %}active{%endif%}">
-				<a class="nav-link">
+			<li class="nav-item {% if title == 'Performance' %}active{%endif%}">
+				<a class="nav-link" href="/graphs/">
 					<i class="material-icons">equalizer</i>
-					<p style="color:#aaaaaa !important;">Gráficos</p>
+					<p>Performance</p>
 				</a>
 			</li>
 			{% endif %}

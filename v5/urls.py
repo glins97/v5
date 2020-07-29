@@ -71,6 +71,7 @@ urlpatterns = [
     path('themes/', themes_view),
     path('themes/<int:id>/', theme_view),
     path('management/', management_view),
+    path('graphs/', graphs_view),
     path('password/change/', change_password_view),
 
     # - apis
