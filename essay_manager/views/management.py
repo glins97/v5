@@ -52,8 +52,8 @@ def management_view(request):
             monitor_done_corrections_count += 1
             total_grade += correction.essay.grade
             td = min(abs((correction.end_date - correction.start_date).seconds), abs((correction.start_date - correction.end_date).seconds)) / 60
-            total_correction_time += td 
-            if td >= 5 and td < 120: # min is 5 minutes, max is 2 hours, else something mustve went wrong
+            if td >= 2 and td < 120: # min is 2 minutes, max is 2 hours, else something mustve went wrong
+                total_correction_time += td 
                 monitor_valid_corrections_count += 1
                 total_valid_corrections += 1
                 monitor_total_correction_time += td
@@ -91,6 +91,6 @@ def management_view(request):
         'user': get_user_details(request.user),
         'monitors': [monitor for monitor in monitors if monitor.monitor_done_corrections_count > 0],
         'average_grade': '{:.0f}'.format(total_grade / total_corrections) if total_corrections else '-',
-        'average_correction_time': hour_format(total_correction_time / total_valid_corrections) if total_valid_corrections else '-', 
+        'average_correction_time': minute_format(total_correction_time / total_valid_corrections) if total_valid_corrections else '-', 
     }
     return render(request, 'management.html', data)
