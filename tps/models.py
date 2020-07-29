@@ -124,7 +124,7 @@ class TPSAnswer(models.Model):
         verbose_name_plural = 'Respostas'
 
     def save(self, *args, **kwargs):
-        if self.grade_group and self.rank:
+        if not self.accounted and self.grade_group and self.rank:
             self.accounted = True
             
             if self.grade_group == 'SCORE_Z':

@@ -76,7 +76,7 @@ def get_rank(tpses, id):
     return ''
 
 def main():
-    answers = TPSAnswer.objects.filter( tps__end_date__lte=now())
+    answers = TPSAnswer.objects.filter(mailed=False, tps__end_date__lte=now())
     tpses = {
         tps: separate_students(tps) for tps in list(set([answer.tps for answer in answers]))
     } 
@@ -150,7 +150,7 @@ from threading import _start_new_thread
 def send_mail(email, subject, message, attachment=''):
     msg = MIMEMultipart()
     password = 'campusppa'
-    msg['To'] = 'nombregag@gmail.com'
+    msg['To'] = email
     msg['From'] = 'adm.ppa.digital@gmail.com'
     msg['Subject'] = 'PPA Digital: ' + subject
     if attachment:
