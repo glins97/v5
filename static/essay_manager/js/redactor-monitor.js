@@ -612,7 +612,7 @@ function saveComment(){
 function nullify(){
     nullified = true;
     var event = new Event('change');
-    
+
     document.getElementById('inlineRadioOptions1-40').checked = true; 
     document.getElementById('inlineRadioOptions1-40').dispatchEvent(event);
     document.getElementById('inlineRadioOptions2-0').checked = true; 
@@ -705,6 +705,9 @@ $(document).ready(function() {
             break;
           case 'option5':
             competencies['grades']['a2'] = '40';
+            break;
+          case 'option6':
+            competencies['grades']['a2'] = '0';
             break;
         }
       });

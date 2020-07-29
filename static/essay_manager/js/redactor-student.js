@@ -179,10 +179,15 @@ function addImage(x0, y0, src, comment) {
 }
 
 function importCorrectionData(data) {
-    console.log('@importCorrectionData', data, canvas)
     if (data['objects'] == undefined) return;
     objects = data['objects']
     nullified = data['nullified'];
+    if (nullified) {
+        document.getElementById('nullified').hidden = false;
+        document.getElementById('nullified-reason').hidden = false;
+        document.getElementById('nullified-reason').innerHTML = data['competencies']['comments']['c0'];
+    }
+
     grades = data['competencies']['grades'];
     textfieldComments = data['competencies']['comments'];
     
