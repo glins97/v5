@@ -63,6 +63,23 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
+                    <div class="card card-chart">
+                    <div class="card-header card-header-success">
+                      <div class="ct-chart" id="gradesChart"></div>
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">Últimas notas</h4>
+                    </div>
+                    <div class="card-footer">
+                      <div class="stats">
+                        O trabalho duro vence talento
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
                   <div class="card">
                     <div class="card-header card-header-icon card-header-info">
                       <div class="card-icon">
@@ -157,8 +174,62 @@
     <script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
-    <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-    <script src="/static/essay_manager/demo/demo.js"></script>
+    <script>
+      startAnimationForLineChart = function(chart) {
+        chart.on('draw', function(data) {
+          if (data.type === 'line' || data.type === 'area') {
+            data.element.animate({
+              d: {
+                begin: 600,
+                dur: 700,
+                from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+                to: data.path.clone().stringify(),
+                easing: Chartist.Svg.Easing.easeOutQuint
+              }
+            });
+          } else if (data.type === 'point') {
+            seq++;
+            data.element.animate({
+              opacity: {
+                begin: seq * delays,
+                dur: durations,
+                from: 0,
+                to: 1,
+                easing: 'ease'
+              }
+            });
+          }
+        });
+
+        seq = 0;
+      };
+
+      $(document).ready(function() {
+        datagradesChart = {
+          series: [
+            {{grades}}
+          ]
+        };
+
+        optionsgradesChart = {
+          lineSmooth: Chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 500,
+          high: 1020,
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+        }
+        
+        var gradesChart = new Chartist.Line('#gradesChart', datagradesChart, optionsgradesChart);
+        startAnimationForLineChart(gradesChart);
+      });
+
+    </script>
     <script>
       $(document).ready(function() {
         $().ready(function() {

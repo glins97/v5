@@ -22,6 +22,7 @@ def student_dashboard_view(request):
         if len(Essay.objects.filter(theme=theme, user=request.user).all()) > 0:
             completed_themes += 1
 
+    grades = []
     for essay in essays:
         has_correction = False
         for correction in Correction.objects.filter(essay=essay):
@@ -30,11 +31,13 @@ def student_dashboard_view(request):
                 active_corrections += 1
             elif correction.status == 'DONE':
                 done_corrections += 1
+                grades.append(essay.grade)
         if has_correction:
             unique_corrections += 1
 
     data = {
         'title': 'Preparação',
+        'grades': str(grades[::-1]),
         'essays': list(essays)[-5:],
         'themes_count': themes_count,
         'essays_count': essays_count,
