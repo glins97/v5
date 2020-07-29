@@ -27,9 +27,9 @@ def get_row(cell):
     return int(re.search(r'(\d+?)$', cell).group(1))
 
 def get_tps_answers_dataframe(tps):
-    columns = ["xA", "xC", "xD",]
+    columns = ["xA", "xC", "xD", "xE"]
     tps_answers = TPSAnswer.objects.filter(tps=tps,)
-    data = [ (answer.submission_date, answer.grade, answer.name) for answer in tps_answers ]
+    data = [ (answer.submission_date, answer.grade, answer.name, answer.id) for answer in tps_answers ]
     return pandas.DataFrame(data, columns=columns)
 
 def separate_students(tps):

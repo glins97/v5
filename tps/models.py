@@ -62,11 +62,18 @@ groups = (
     ('PARTICULARES', 'PARTICULARES'),
 )
 
+grade_groups = (
+    ('SCORE_Z', 'SCORE_Z'),
+    ('TBL', 'TBL'),
+    ('CBT', 'CBT'),
+)
+
 class TPS(models.Model):
     subject = models.CharField(max_length=255, verbose_name='Matéria')
     week = models.CharField(max_length=255, choices=weeks, verbose_name='Semana')
     campus = models.CharField(max_length=255, choices=campi, verbose_name='Campus')
-    group = models.CharField(max_length=255, choices=groups, null=True, blank=True)
+    group = models.CharField(max_length=255, choices=groups, null=True, blank=True, verbose_name='Grupo')
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Professor')
     start_date = models.DateTimeField(verbose_name='Início')
     end_date = models.DateTimeField(verbose_name='Término')
     max_questions = models.IntegerField(default=10, verbose_name='Número de questões')
@@ -104,6 +111,11 @@ class TPSAnswer(models.Model):
     grade = models.IntegerField(default=0)
     mailed = models.BooleanField(default=False)
 
+    grade_group = models.CharField(max_length=255, choices=grade_groups, null=True, blank=True)
+    grade_points = models.IntegerField(default=0)
+    rank = models.IntegerField(default=0)
+    accounted = models.BooleanField(default=False)
+    
     def __str__(self):
         return '{}: {} {} {}'.format(self.name, self.tps.campus, self.tps.subject, self.tps.week)
 
@@ -111,11 +123,33 @@ class TPSAnswer(models.Model):
         verbose_name = 'Resposta'
         verbose_name_plural = 'Respostas'
 
+    def save(self, *args, **kwargs):
+        if self.grade_group and self.rank:
+            self.accounted = True
+            
+            if self.grade_group == 'SCORE_Z':
+                self.grade_points = 3
+            if self.grade_group == 'TBL':
+                self.grade_points = 2
+                if self.rank == 1:
+                    self.grade_points = 3
+            if self.grade_group == 'CBT':
+                self.grade_points = 1
+            
+            score = TPSScore.objects.filter(group=self.tps.group, email=self.email, month=self.submission_date.month, campus=self.tps.campus).first()
+            if score:
+                score.score += self.grade_points
+                score.save()
+            else:
+                TPSScore(group=self.tps.group, email=self.email, month=self.submission_date.month, campus=self.tps.campus, score=self.grade_points).save()
+
+        super(TPSAnswer, self).save(*args, **kwargs)
+
 class TPSScore(models.Model):
     email = models.CharField(max_length=255, null=True, blank=True)
-    group = models.CharField(max_length=255, choices=groups, null=True, blank=True)
     month = models.CharField(max_length=255, choices=months, null=True, blank=True)
     campus = models.CharField(max_length=255, choices=campi, null=True, blank=True)
+    group = models.CharField(max_length=255, choices=groups, null=True, blank=True)
     score = models.IntegerField(default=0)
 
     def __str__(self):

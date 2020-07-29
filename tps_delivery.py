@@ -8,6 +8,7 @@ logger = logging.getLogger('django')
 
 from django.utils.timezone import now
 from tps.models import TPS, TPSAnswer, Question, QuestionAnswer
+from tps.auxiliary import separate_students
 
 def get_question_html(question, question_answer):
     answer = ''
@@ -56,8 +57,33 @@ def is_score_z(tps_answer):
             return False
     return True 
 
+def get_group(tpses, id):
+    for tps in tpses:
+        for grade_group in tpses[tps]:
+            if id in tpses[tps][grade_group]:
+                return grade_group
+    return ''
+
+def get_rank(tpses, id):
+    rank = 0
+    for tps in tpses:
+        for grade_group in ['SCORE_Z', 'TBL', 'CBT']:
+            if grade_group not in tpses[tps]: continue
+            for aid in tpses[tps][grade_group]:
+                rank += 1
+                if aid == id:
+                    return rank
+    return ''
+
 def main():
-    answers = TPSAnswer.objects.filter(mailed=False, tps__end_date__lte=now())
+    answers = TPSAnswer.objects.filter( tps__end_date__lte=now())
+    tpses = {
+        tps: separate_students(tps) for tps in list(set([answer.tps for answer in answers]))
+    } 
+    for tps in tpses:
+        for grade_group in tpses[tps]:
+            tpses[tps][grade_group] = tpses[tps][grade_group]['xE'].tolist() # get only ids 
+
     if not answers.count(): return
     logger.info('Starting general tps results delivery')
     for tps_answer in answers:
@@ -93,12 +119,14 @@ def main():
                 </span>
                 """
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
-            mail_body += f'<p>Nota: {tps_answer.grade}</p>'   
-            mail_body += f'<p>Ranking: {get_rank(tps_answer)}</p>'   
-            if tps_answer.tps.tbl and is_tbl(tps_answer):
-                mail_body += f'<p>Grupo: TBL</p>'   
-            if tps_answer.tps.score_z and is_score_z(tps_answer):
-                mail_body += f'<p>Grupo: Score Z</p>'   
+            mail_body += f'<p>Nota: {tps_answer.grade}</p>' 
+            tps_answer.rank = get_rank(tpses, tps_answer.id)
+            tps_answer.grade_group = get_group(tpses, tps_answer.id)
+            tps_answer.save()
+
+            if tps_answer.tps.notify:
+                mail_body += f'<p>Ranking: {tps_answer.rank}</p>'   
+                mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'   
 
             if tps_answer.tps.solutions:
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
@@ -122,7 +150,7 @@ from threading import _start_new_thread
 def send_mail(email, subject, message, attachment=''):
     msg = MIMEMultipart()
     password = 'campusppa'
-    msg['To'] = email
+    msg['To'] = 'nombregag@gmail.com'
     msg['From'] = 'adm.ppa.digital@gmail.com'
     msg['Subject'] = 'PPA Digital: ' + subject
     if attachment:

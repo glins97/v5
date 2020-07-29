@@ -11,13 +11,13 @@ from tps.auxiliary import generate_score_z, generate_tbl, generate_cbt, generate
 from .models import TPS, TPSAnswer, TPSScore, Question
 
 class TPSScoreAdmin(admin.ModelAdmin):
-    list_display = ('id', 'email', 'campus', 'group', 'month', 'score')
-    list_filter = ('month', 'campus', 'group')
+    list_display = ('id', 'email', 'campus', 'group', 'month', 'score',)
+    list_filter = ('month', 'campus', 'group',)
     list_per_page = 40
 
 class TPSAnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'tps', 'grade', )
-    list_filter = ('tps', 'grade', )
+    list_display = ('id', 'name', 'email', 'tps', 'grade',)
+    list_filter = ('tps', 'grade',)
     list_per_page = 100
 
 from django.contrib.admin.utils import flatten_fieldsets
@@ -37,26 +37,27 @@ class TPSAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TPSAdminForm, self).__init__(*args, **kwargs)
-        questions = {i: 'NA' for i in range(1, 1000)}
+        questions = {i: 'NA' for i in range(1, 121)}
         saved_questions = Question.objects.filter(tps__id=self.instance.id)
         for question in saved_questions:
+            print(question)
             questions[question.number] = question.correct_answer
 
-        for question_number in sorted(questions.keys()):
+        for question_number in range(1, 121):
             self.fields[f'q{question_number}'] = forms.ChoiceField(choices=[('NA', 'NA'), ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E')], initial=questions[question_number])
 
     def save(self, commit=True):
         instance = super(TPSAdminForm, self).save(commit=False)
         instance.save()
 
-        for index, field in enumerate([attr for attr in self.cleaned_data if attr[0] == 'q']):
+        for index in range(1, 121):
+            field = f'q{index}'
             if self.cleaned_data[field] != 'NA':
                 # gets matching model or creates object if no matches exist 
                 q = create_or_update(Question, tps=TPS.objects.get(id=instance.id), number=(index + 1))
                 
                 # updates only necessary questions, avoiding creation of duplicates
                 if q.correct_answer != self.cleaned_data[field]: 
-                    print(f'UPDATING FIELD {field}') 
                     q.correct_answer = self.cleaned_data[field]
                     q.save()
 
@@ -73,10 +74,10 @@ class TPSAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Conteúdo', {
-            'fields': ('subject', 'week', 'campus', 'questions', 'solutions',),
+            'fields': ('subject', 'week', 'questions', 'solutions',),
         }),
         ('Informações', {
-            'fields': ('max_answers', 'max_questions', 'notify',),
+            'fields': ('campus', 'group', 'teacher', 'max_answers', 'max_questions', 'notify',),
         }),
         ('Data', {
             'fields': ('start_date', 'end_date',),
@@ -89,8 +90,7 @@ class TPSAdmin(admin.ModelAdmin):
     def get_fieldsets(self, request, obj=None):
         fieldsets = super(TPSAdmin, self).get_fieldsets(request, obj)
         newfieldsets = list(fieldsets)
-        print(fieldsets)
-        fields = [f'q{item}' for item in range(1, 1000)]
+        fields = [f'q{item}' for item in range(1, 121)]
         newfieldsets.append(['Questões', { 'fields': fields }])
         return newfieldsets
 
@@ -180,7 +180,7 @@ class QuestionAdmin(admin.ModelAdmin):
     def questão(self, obj):
         return 'Questão {}'.format(obj.number)
 
-admin.site.register(Question, QuestionAdmin)
+# admin.site.register(Question, QuestionAdmin)
 admin.site.register(TPS, TPSAdmin)
 admin.site.register(TPSAnswer, TPSAnswerAdmin)
 admin.site.register(TPSScore, TPSScoreAdmin)

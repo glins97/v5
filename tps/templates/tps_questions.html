@@ -43,7 +43,7 @@
       <div class="content">
         <div class="container-fluid">
           <div class="row">
-            <div id="col-size" class="col-lg-4 col-md-6 ml-auto mr-auto">
+            <div id="col-size" class="col-lg-8 col-md-10 ml-auto mr-auto">
               <div class="card">
                 <div class="card-header card-header-tabs card-header-info">
                   <div class="container">
@@ -60,9 +60,21 @@
                   <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
                       <ul class="nav nav-tabs" data-tabs="tabs">
-                        <li id="nav-2" class="nav-item active">
+                        <li id="nav-1" class="nav-item" style="width: 20%;">
+                          <a class="nav-link active" href="#questions" id='questions-btn' data-toggle="tab">
+                            <i class="material-icons">content_paste</i> Caderno de Questões
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        <li id="nav-2" class="nav-item" style="width: 20%;">
                           <a class="nav-link" href="#answers" id='answers-btn' data-toggle="tab">
                             <i class="material-icons">code</i> Minhas Respostas
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        <li id="nav-3" class="nav-item float-right pull-right" style="width: 60%;">
+                          <a class="nav-link" href="/{{tps.questions}}" style=" border-color: white !important; border-width: 1px !important;">
+                            <p style="text-align: right; "><i class="material-icons">vertical_align_bottom</i> Baixar questões</p>
                             <div class="ripple-container"></div>
                           </a>
                         </li>
@@ -72,7 +84,10 @@
                 </div>
                 <div class="card-body">
                   <div class="tab-content">
-                    <div class="tab-pane active" id="answers">
+                    <div class="tab-pane active" id="questions">
+									  	<i><img id="src" src="/{{tps.questions}}" width="100%"/></i>
+                    </div>
+                    <div class="tab-pane" id="answers">
                       <form id="login-form" class="form" method="post" action="/tps/answer/{{id}}/">
                         {% csrf_token %}
                         <span class="bmd-form-group" style="margin-left: 1px;">
@@ -168,6 +183,36 @@
   <script src="/static/essay_manager/js/core/jquery.min.js"></script>
   <script src="/static/essay_manager/js/core/popper.min.js"></script>
   <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var colSize = document.getElementById('col-size');
+      var nav1 = document.getElementById('nav-1');
+      var nav2 = document.getElementById('nav-2');
+      var nav3 = document.getElementById('nav-3');
+      document.getElementById('questions-btn').onclick = function() {
+        colSize.classList.remove('col-lg-4');
+        colSize.classList.remove('col-md-6');
+        
+        colSize.classList.add('col-lg-8');
+        colSize.classList.add('col-md-10');
+
+        nav1.style.width = '20%';
+        nav2.style.width = '20%';
+        nav3.hidden = false;
+      }
+      document.getElementById('answers-btn').onclick = function() {
+        colSize.classList.add('col-lg-4');
+        colSize.classList.add('col-md-6');
+        
+        colSize.classList.remove('col-lg-8');
+        colSize.classList.remove('col-md-10');
+
+        nav1.style.width = '';
+        nav2.style.width = '';
+        nav3.hidden = true;
+      }
+    });
+  </script>
 </body>
 
 </html>

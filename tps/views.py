@@ -25,5 +25,5 @@ def tps_view(request, id, campus, subject, week):
             'tps': tps,
             'questions': Question.objects.filter(tps=tps),
         }
-        return render(request, 'tps.html', data)
+        return render(request, 'tps_questions.html' if tps.questions else 'tps.html', data)
     return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Nenhum tps foi encontrado. Entre em contato com o responsável.'})
