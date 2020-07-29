@@ -198,7 +198,7 @@
                                 {% if essay.mailed %}
                                   <td><a style="color: black;"> ENVIADO </a></td>
                                 {% else %}
-                                  <td><a class='btn-danger' style="color: white; border-radius: 4px; text-align: center;" href='/mail/{{essay.id}}/'> ENVIAR </a></td>
+                                  <td><a class='btn-danger' style="color: white; border-radius: 4px; text-align: center;" href='/api/essays/mail/{{essay.id}}/'> ENVIAR </a></td>
                                 {% endif %}
                               {% endif %}
                             </tr>

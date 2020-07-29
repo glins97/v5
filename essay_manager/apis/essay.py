@@ -1,8 +1,14 @@
-from essay_manager.decorators import login_required, has_permission
 from django.shortcuts import redirect
-from essay_manager.models import Theme, Essay, Correction
-import time
+from django.http import FileResponse
 
+from essay_manager.decorators import login_required, has_permission
+from essay_manager.models import Theme, Essay, Correction
+from essay_manager.apis.document import Document
+from essay_manager.apis.pdf_filler import fill_pdf_fields
+
+import time
+import subprocess
+import json
 import logging
 logger = logging.getLogger('django')
 
@@ -20,15 +26,8 @@ def create_essay_endpoint(request):
         logger.error(f'create_essay_endpoint@essay::Exception thrown | {request.user} {request} {repr(e)}')
         return redirect('/essays/?added=False')
         
-
-from essay_manager.apis.document import Document
-from essay_manager.apis.pdf_filler import fill_pdf_fields
-import subprocess
-import json
-
-@has_permission('monitor')
-@login_required
-def mail_essay_endpoint(request, id):
+def create_correction_pdf(request, id):
+    final_destination = ''
     try:
         essay = Essay.objects.get(id=id)
         correction = Correction.objects.get(essay__id=id)
@@ -53,7 +52,25 @@ def mail_essay_endpoint(request, id):
         # fill joined pdf with data
         fill_pdf_fields(graded_destination, dict(grades, **data['competencies']['comments']) , final_destination)
 
-        # mail to final user
+    except Exception as e:
+        print('exception', e)
+        logger.error(f'create_correction_pdf@essay::Exception thrown | {request.user} {request} {repr(e)}')
+
+    return final_destination
+
+@has_permission('monitor')
+@login_required
+def download_essay_endpoint(request, id):
+    essay = Essay.objects.get(id=id)
+    final_destination = create_correction_pdf(request, id)
+    return FileResponse(open(final_destination, 'rb'), as_attachment=True, filename=('CORRECAO-{}.pdf'.format(essay.user.first_name.upper())))
+
+@has_permission('monitor')
+@login_required
+def mail_essay_endpoint(request, id):
+    try:
+        essay = Essay.objects.get(id=id)
+        final_destination = create_correction_pdf(request, id)
         mail_body = '<p>Sua redação corrigida se encontra em anexo! (ou, caso não, clique <a href="{}"> aqui</a>)<br>Para uma boa visualização, recomendamos abrir o arquivo com o Adobe Reader em um computador.</p>'.format('http://dev.ppa.digital/{}'.format(final_destination))
         if send_mail(str(essay.user.username), 'Redação corrigida!', mail_body, final_destination):
             essay.mailed = True
@@ -62,7 +79,6 @@ def mail_essay_endpoint(request, id):
         else:
             return redirect('/essays/?mailed=False')
     except Exception as e:
-        print('exception', e)
         logger.error(f'mail_essay_endpoint@essay::Exception thrown | {request.user} {request} {repr(e)}')
         return redirect('/essays/?mailed=False')
 
