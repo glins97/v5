@@ -34,7 +34,7 @@ def student_dashboard_view(request):
             unique_corrections += 1
 
     data = {
-        'title': 'Planejamento',
+        'title': 'Preparação',
         'essays': list(essays)[-5:],
         'themes_count': themes_count,
         'essays_count': essays_count,

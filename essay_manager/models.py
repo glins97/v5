@@ -25,11 +25,25 @@ theme_types = (
     ('PAID', 'PAGO'),
 )
 
+axes = (
+    ('Saúde', 'Saúde'),
+    ('Educação', 'Educação'),
+    ('Política', 'Política'),
+    ('Economia', 'Economia'),
+    ('Social', 'Social'),
+    ('Meio Ambiente', 'Meio Ambiente'),
+    ('Tecnologia', 'Tecnologia'),
+    ('Outros eixos', 'Outros eixos'),
+    ('De outros alunos', 'De outros alunos'),
+)
+
 class Theme(models.Model):
+    active = models.BooleanField(default=False)
     description = models.CharField(max_length=255)
     jury = models.CharField(max_length=255, choices=juries)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    axis = models.CharField(max_length=255, choices=axes, default='OTHER')
     file = models.FileField(upload_to='uploads/')
     type = models.CharField(default='PAID', choices=theme_types, max_length=255)
     def __str__(self):
