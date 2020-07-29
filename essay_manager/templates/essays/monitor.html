@@ -189,8 +189,11 @@
                               <td><a href='{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
                               <td><a href='{{essay.id}}/'> {{ essay.theme }}</a></td>
                               <td><a href='{{essay.id}}/'> {{ essay.upload_date }} </a></td>
-                              <td><a href='{{essay.id}}/'> {{ essay.grade }}</a></td>
-                                
+                              {% if essay.nullified %}
+                                <td><a href='{{essay.id}}/' style="color: #aa1100;"> {{ essay.grade }} (ANULADA)</a></td>
+                              {% else %}
+                                <td><a href='{{essay.id}}/'> {{ essay.grade }}</a></td>
+                              {% endif %}
                               {% if user.obj|has_permission:'superuser' %}
                                 {% if essay.mailed %}
                                   <td><a style="color: black;"> ENVIADO </a></td>

@@ -609,6 +609,22 @@ function saveComment(){
     }
 }
 
+function nullify(){
+    nullified = true;
+    var event = new Event('change');
+    
+    document.getElementById('inlineRadioOptions1-40').checked = true; 
+    document.getElementById('inlineRadioOptions1-40').dispatchEvent(event);
+    document.getElementById('inlineRadioOptions2-0').checked = true; 
+    document.getElementById('inlineRadioOptions2-0').dispatchEvent(event);
+    document.getElementById('inlineRadioOptions3-40').checked = true; 
+    document.getElementById('inlineRadioOptions3-40').dispatchEvent(event);
+    document.getElementById('inlineRadioOptions4-40').checked = true; 
+    document.getElementById('inlineRadioOptions4-40').dispatchEvent(event);
+    document.getElementById('inlineRadioOptions5-0').checked = true; 
+    document.getElementById('inlineRadioOptions5-0').dispatchEvent(event);
+}
+
 $(window).on('DOMContentLoaded load resize scroll', showBtnsOnEssayVisible);
 $(document).ready(function() {
     $('#myModal').on('hide.bs.modal', function () {
@@ -791,6 +807,10 @@ function assignGrades() {
         document.getElementById('inlineRadioOptions1-200').dispatchEvent(event);
     } 
 
+    if (countErrorsC2 >= 5) {
+        document.getElementById('inlineRadioOptions2-0').checked = true;
+        document.getElementById('inlineRadioOptions2-0').dispatchEvent(event);
+    } 
     if (countErrorsC2 >= 4) {
         document.getElementById('inlineRadioOptions2-40').checked = true;
         document.getElementById('inlineRadioOptions2-40').dispatchEvent(event);

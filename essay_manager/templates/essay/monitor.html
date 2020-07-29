@@ -13,7 +13,7 @@
         <div class="content">
           <div class="container-fluid">
             <div class="row sticky-top" id="btns">
-              <div class="col-md-auto ml-auto mr-auto">
+              <div class="col-md-auto ml-auto mr-auto" style="max-width: 80vw; min-width: 650px;">
                 <div class="card card-chart text-center">
                   <div class="card-body text-center">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -52,15 +52,11 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-1">
-              <button class="btn btn-info btn-round" data-toggle="modal" data-target="#manualModal"> Consultar manual </button>
+            <button class="btn btn-info" data-toggle="modal" data-target="#manualModal"> Consultar manual </button>
+            <button class="btn btn-info"> Baixar correção </button>
+            <div class="float-right">
+              <button class="btn btn-danger" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false"> Anular redação </button>
             </div>
-            <div class="col-md-10"></div>
-            <div class="col-md-1">
-              <button class="btn btn-danger btn-round" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false"> Nota 0 </button>
-            </div>
-          </div>
           <div class="modal has-info show" id="manualModal" role="dialog" aria-labelledby="manualModal" style="display: none;" aria-hidden="true">
             <div class="modal-dialog" style="width:900px !important; max-width:900px !important;">
               <div class="modal-content" style="width:900px !important; max-width:900px !important;">
@@ -114,7 +110,7 @@
                   <br>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger btn-link" data-dismiss="modal" onclick="nullified=true;">ANULAR REDAÇÃO
+                  <button type="button" class="btn btn-danger btn-link" data-dismiss="modal" onclick="nullify();">ANULAR REDAÇÃO
                     <div class="ripple-container"><div class="ripple-decorator ripple-on ripple-out" style="left: 36.0833px; top: 14px; background-color: rgb(244, 67, 54); transform: scale(8.51041);"></div></div></button>
                   
                 </div>

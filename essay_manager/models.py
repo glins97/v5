@@ -55,6 +55,7 @@ class Essay(models.Model):
     upload_date = models.DateField(auto_now_add=True)
     grade = models.IntegerField(default=0)
     mailed = models.BooleanField(default=False)
+    nullified = models.BooleanField(default=False)
 
     def __str__(self):
         return '#{} - {} {}, {} => {}'.format(self.id, self.user.first_name, self.user.last_name, self.theme, self.file)
