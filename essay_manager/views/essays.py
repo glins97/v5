@@ -46,7 +46,7 @@ def _monitor_essays_view(request):
         'mailed': request.GET.get('mailed', 'None'),
         'essays': [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay).count() == 0],
         'active_correction_essays': active_correction_essays,
-        'done_correction_essays': done_correction_essays[:10],
+        'done_correction_essays': done_correction_essays,
 
         'done_corrections_count': done_corrections_count,
         'active_corrections_essays_count': active_corrections_essays_count,
