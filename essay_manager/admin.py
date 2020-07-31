@@ -4,10 +4,13 @@ from .models import Theme, Essay, Profile, Correction, ErrorClassification, Gene
 
 class EssayAdmin(admin.ModelAdmin):
     autocomplete_fields = ('user', )
-    list_display = ('id', 'aluno', 'tema', 'nota', )
+    list_display = ('id', 'aluno', 'fn', 'tema', 'nota', )
     list_filter = ('theme', )
     search_fields = ('user__first_name', 'user__last_name', 'theme__description')
     list_per_page = 100
+
+    def fn(self, o):
+        return format_html('<a href="/{fn}">{fn}</a>'.format(fn=o.file))
 
     def aluno(self, o):
         return format_html(

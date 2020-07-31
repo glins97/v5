@@ -48,7 +48,7 @@ def get_attachments(service, msg_id, student):
                     data=att['data']
 
         file_data = base64.urlsafe_b64decode(data.encode('UTF-8'))
-        path = 'uploads/{}-{}'.format(time(), part['filename'])
+        path = 'uploads/{}_{}'.format(time(), part['filename'])
         with open(path, 'wb') as f:
             f.write(file_data)
         return path
