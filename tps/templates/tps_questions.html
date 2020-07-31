@@ -84,6 +84,10 @@
                     </div>
                     <div class="tab-pane" id="answers">
                       <form id="login-form" class="form" method="post" action="/tps/answer/{{id}}/">
+                        {% if tps.start_date > now %}
+                        <h4 style="text-align: center; margin-top: 10px; width: 480px;"> Respostas ainda não liberadas! </h4>
+                        <p style="text-align: center; margin-top: 10px; width: 480px;"> Serão liberadas dia {{ tps.start_date }} </p>
+                        {% else %}
                         {% csrf_token %}
                         <span class="bmd-form-group" style="margin-left: 1px;">
                           <div class="input-group has-info">
@@ -163,6 +167,7 @@
                         <div class="card-footer justify-content-center">
                           <input type="submit" class="btn btn-info btn-link btn-lg" value="ENVIAR">
                         </div>
+                        {% endif %}
                       </form>
                     </div>
                   </div>
