@@ -52,14 +52,16 @@
               </div>
             </div>
           </div>
-            <button class="btn btn-info" data-toggle="modal" data-target="#manualModal"> Consultar manual </button>
-            <a class="btn btn-info" style="color: white;" href="/api/essays/download/{{essay.id}}/"> Baixar correção </a>
-            <div class="float-right">
-              <button class="btn btn-danger" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false"> Anular redação </button>
-            </div>
+          <button class="btn btn-info" data-toggle="modal" data-target="#manualModal"> Consultar manual </button>
+          <button class="btn btn-info" data-toggle="modal" data-target="#themeModal"> Visualizar tema </button>
+          <a class="btn btn-info" style="color: white;" href="/api/essays/download/{{essay.id}}/"> Baixar correção </a>
+          <div class="float-right">
+            <button class="btn btn-danger" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false"> Anular redação </button>
+          </div>
+          
           <div class="modal has-info show" id="manualModal" role="dialog" aria-labelledby="manualModal" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog" style="width:900px !important; max-width:900px !important;">
-              <div class="modal-content" style="width:900px !important; max-width:900px !important;">
+            <div class="modal-dialog ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
+              <div class="modal-content ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
                 <div class="modal-header">
                   <h4 class="modal-title">Manual do avaliador</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -76,6 +78,22 @@
                   <img src="/uploads/MANUAL_AVALIADOR-08.jpg" width="100%"/>
                   <img src="/uploads/MANUAL_AVALIADOR-09.jpg" width="100%"/>
                   <img src="/uploads/MANUAL_AVALIADOR-10.jpg" width="100%"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal has-info show" id="themeModal" role="dialog" aria-labelledby="themeModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog ml-auto mr-auto" style="width: 90% !important; max-width: 90% !important;">
+              <div class="modal-content ml-auto mr-auto" style="width: 90% !important; max-width: 90% !important;">
+                <div class="modal-header">
+                  <h4 class="modal-title">Tema do Aluno</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img src=/{{essay.theme.file}} width="100%"/>
                 </div>
               </div>
             </div>
@@ -135,7 +153,7 @@
           </div>
           <div class="row">
             <div class="col-md-auto ml-auto mr-auto">
-              <button hidden="true" id="openModal" class="btn btn-primary btn-round" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
+              <button hidden="true" id="openModal" class="btn btn-primary btn-round" data-toggle="modal" data-target="#myModal">
                 <div class="ripple-container"></div></button>
                 <div class="modal has-info show" id="myModal" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
                   <div class="modal-dialog" style="width:900px !important; max-width:900px !important;">
