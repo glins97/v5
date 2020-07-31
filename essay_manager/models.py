@@ -25,6 +25,12 @@ theme_types = (
     ('PAID', 'PAGO'),
 )
 
+target_grades = (
+    (800, 800),
+    (900, 900),
+    (1000, 1000),
+)
+
 axes = (
     ('Saúde', 'Saúde'),
     ('Educação', 'Educação'),
@@ -342,6 +348,7 @@ class GenericErrorClassification(models.Model):
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     school = models.CharField(max_length=255, default='PPA')
+    target_grade = models.IntegerField(choices=target_grades, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)

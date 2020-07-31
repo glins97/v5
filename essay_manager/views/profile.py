@@ -22,6 +22,7 @@ def profile_view(request):
             'faculty': profile.faculty,
             'school': profile.school,
             'email': profile.email,
+            'target_grade': profile.target_grade,
             'not_specified': '-',
         },
         'user': get_user_details(request.user),
