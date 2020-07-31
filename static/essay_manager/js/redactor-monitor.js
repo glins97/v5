@@ -280,9 +280,6 @@ function onKeyDown(e) {
                 document.getElementById('selectModeLine').click();
                 break;
             case 87:
-                document.getElementById('selectModeRectangle').click();
-                break;
-            case 69:
                 document.getElementById('selectModeComment').click();
                 break;
         }
@@ -298,11 +295,8 @@ function loadModeSelectionButtons() {
     $('#selectModeLine').click(function(){
         setMode('LINE');
     });
-    $('#selectModeRectangle').click(function(){
-        setMode('RECT');
-    });
     $('#selectModeComment').click(function(){
-        setMode('COMM');
+        setMode('RECT');
     });
 }
 
@@ -324,7 +318,7 @@ function loadColorSelectionButtons() {
     });
     $('#selectColorDanger').click(function(){
         setColor(COLOR_DANGER);
-        document.getElementById("selectModeRectangle").click();
+        document.getElementById("selectModeComment").click();
         document.getElementById("modalC1").click();
     });
     $('#selectColorWarning').click(function(){
@@ -339,7 +333,6 @@ function loadColorSelectionButtons() {
 }
 
 function mouseDownEvent(e) {
-    console.log('mousedown', e, e.touchType);
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
     
     if (editModeActive && hoveringObjectIndex >= 0) {
@@ -359,7 +352,6 @@ function mouseDownEvent(e) {
     }
     rect_x1 = 0;
     rect_y1 = 0;
-    console.log('mousedown', rect_x0, rect_x1, rect_y0, rect_y1);
     spos = getScroll()
     var ctx = canvasPlaceholder.getContext("2d");
     ctx.clearRect(0, 0, canvasPlaceholder.width, canvasPlaceholder.height);
@@ -458,7 +450,6 @@ function mouseMoveEvent(e) {
 }
 
 function mouseUpEvent(e) {
-    console.log('mouseup', e, e.touchType);
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
     if (!isDrawEnabled() && rect_x0 > 0 && rect_y0 > 0) return;
     spos = getScroll()
@@ -473,29 +464,15 @@ function mouseUpEvent(e) {
     canvasPlaceholder.getContext("2d").clearRect(0, 0, canvasPlaceholder.width, canvasPlaceholder.height);
     
     if (mode == 'LINE' || mode == 'RECT'){
-        // if minimal movement, add square instead
-        if ((rect_x1 * canvasWidth - rect_x0 * canvasWidth) * (rect_x1 * canvasWidth - rect_x0 * canvasWidth) < 100 && (rect_y1 * canvasHeight - rect_y0 * canvasHeight) * (rect_y1 * canvasHeight - rect_y0 * canvasHeight) < 100){
-            addMarker(rect_x0 + spos[0] / canvasWidth - PEN_SIZE / 2 / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x0 + spos[0] / canvasWidth + PEN_SIZE / 2 / canvasWidth, rect_y0 + spos[1] / canvasHeight, color, mode);
-        } 
-        else {
-            addMarker(rect_x0 + spos[0] / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x1 + spos[0] / canvasWidth, rect_y1 + spos[1] / canvasHeight, color, mode);
-        }
-        if (mode == 'RECT' && color == COLOR_DANGER){
-            document.getElementById('comment-text').value = username + ', ';
-            addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 15 / canvasHeight + spos[1] / canvasHeight, getImageSrc(color));
-            document.getElementById("openModal").click();
-            modalVisible = true;
-            savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 15 / canvasHeight + spos[1] / canvasHeight]
-        }
+        addMarker(rect_x0 + spos[0] / canvasWidth, rect_y0 + spos[1] / canvasHeight, rect_x1 + spos[0] / canvasWidth, rect_y1 + spos[1] / canvasHeight, color, mode);
     }
-    if (mode=='COMM'){
+    if (mode == 'RECT'){
         if (color == COLOR_DANGER)
             document.getElementById('comment-text').value = username + ', ';
-        addImage(rect_x1 - 15 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight, getImageSrc(color));
-        lastImage = undefined;
+        addImage(Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight, getImageSrc(color));
         document.getElementById("openModal").click();
         modalVisible = true;
-        savedImagePos = [rect_x1 - 15 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 25 / canvasHeight + spos[1] / canvasHeight]
+        savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
     }
     
     rect_x0 = 0;
@@ -594,13 +571,8 @@ function saveComment(){
     //
     // add latest comment & its rectangle AGAIN
     if (hoveringObjectIndex == -1) {
-        if (color == COLOR_DANGER){
-            objects.push(objects[objects.length - 2]);
-            objects.push(objects[objects.length - 2]);
-        }
-        else {
-            objects.push(objects[objects.length - 1]);
-        }
+        objects.push(objects[objects.length - 2]);
+        objects.push(objects[objects.length - 2]);
         // clear comments
         objects[objects.length - 1]['attributes']['comment'] = document.getElementById('comment-text').value;
     }
@@ -638,8 +610,7 @@ $(document).ready(function() {
             //
             // remove last added comment & its rectangle;
             objects.pop();
-            if (color == COLOR_DANGER)
-                objects.pop();
+            objects.pop();
         }
         else {
             hoveringObjectIndex = -1;
