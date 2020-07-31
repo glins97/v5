@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from pdf2image import pdfinfo_from_path, convert_from_path
+import numpy as np
+import PIL
+from PIL import Image
+
+import os
 weeks = (
     ('1', '1'),
     ('2', '2'),
@@ -18,6 +24,22 @@ weeks = (
     ('14', '14'),
     ('15', '15'),
     ('16', '16'),
+    ('17', '17'),
+    ('18', '18'),
+    ('19', '19'),
+    ('20', '20'),
+    ('21', '21'),
+    ('22', '22'),
+    ('23', '23'),
+    ('24', '24'),
+    ('25', '25'),
+    ('26', '26'),
+    ('27', '27'),
+    ('28', '28'),
+    ('29', '29'),
+    ('30', '30'),
+    ('31', '31'),
+    ('32', '32'),
 )
 
 subjects = (
@@ -89,6 +111,32 @@ class TPS(models.Model):
     class Meta:
         verbose_name = 'Formulário'
         verbose_name_plural = 'Formulários'
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            super(TPS, self).save(*args, **kwargs)
+
+        directory = f'uploads/tps/{self.id}'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        
+        if self.questions and '.pdf' in str(self.questions.file).lower()[-4:]:
+            super(TPS, self).save(*args, **kwargs)
+            info = pdfinfo_from_path(str(self.questions.file), userpw=None, poppler_path=None)
+            maxPages = info["Pages"]
+            images = []
+            for page in range(1, min(maxPages + 1, 10)) : 
+                images.extend(convert_from_path(str(self.questions.file), dpi=200, first_page=page, last_page=page))
+
+            min_shape = sorted( [(np.sum(i.size), i.size ) for i in images])[0][1]
+            imgs_comb = np.vstack( (np.asarray( i.resize(min_shape) ) for i in images ) )
+            imgs_comb = PIL.Image.fromarray( imgs_comb)
+            
+            destination = str(self.questions.file).lower().replace('.pdf', '.png')
+            imgs_comb.save(str(self.questions.file).lower().replace('.pdf', '.png'))
+            self.questions = destination.replace('/root/v5/', '')
+
+        super(TPS, self).save(*args, **kwargs)
 
 class Question(models.Model):
     tps = models.ForeignKey(TPS, on_delete=models.CASCADE)

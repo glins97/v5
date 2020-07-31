@@ -112,11 +112,13 @@ class TPSAdmin(admin.ModelAdmin):
         return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj, mailed=True).count(), obj.max_answers)
 
     def relatórios(self, obj):
-        return format_html(
-            '<a class="button" href="download/score_z/{}">Score Z</a>&nbsp'.format(obj.id) +
-            '<a class="button" href="download/tbl/{}">TBL</a>&nbsp'.format(obj.id) +
-            ('<a class="button" href="download/cbt/{}">CBT</a>&nbsp'.format(obj.id) if obj.campus == 'BSB' or obj.campus == 'JUA' else '') +
-            '<a class="button" href="download/distrator/{}">Distrator</a>&nbsp'.format(obj.id))
+        if TPSAnswer.objects.filter(tps=obj).count():
+            return format_html(
+                '<a class="button" href="download/score_z/{}">Score Z</a>&nbsp'.format(obj.id) +
+                '<a class="button" href="download/tbl/{}">TBL</a>&nbsp'.format(obj.id) +
+                ('<a class="button" href="download/cbt/{}">CBT</a>&nbsp'.format(obj.id) if obj.campus == 'BSB' or obj.campus == 'JUA' else '') +
+                '<a class="button" href="download/distrator/{}">Distrator</a>&nbsp'.format(obj.id))
+        return 'Aguarde a primeira resposta'
 
     def get_urls(self):
         urls = super().get_urls()
