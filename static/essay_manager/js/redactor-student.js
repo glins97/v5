@@ -160,7 +160,7 @@ function drawImage(src, x0, y0) {
 function drawImages() {
     for (var i = 0; i < objects.length; i++) {
         var object = objects[i];
-        if (object['mode'] != 'COMM') continue;
+        if (object['mode'] != 'COMM' && object['mode'] != 'AUDIO') continue;
         drawImage(object['attributes']['src'], object['attributes']['x0'], object['attributes']['y0'])
     }
 }
@@ -226,10 +226,40 @@ function loadModule() {
     drawMarkers();
 }
 
+const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+  
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+    }
+  
+    const blob = new Blob(byteArrays, {type: contentType});
+    return blob;
+}
+
 function mouseDownEvent(e) {
     if (hoveringObjectIndex >= 0) {
-        document.getElementById("openModal").click();
-        document.getElementById('comment-text').value = objects[hoveringObjectIndex]['attributes']['comment'];
+        var object = objects[hoveringObjectIndex];
+        if (object['mode'] == 'COMM'){
+            document.getElementById('comment-text').value = object['attributes']['comment'];
+            document.getElementById("openModal").click();
+        }
+        else if (object['mode'] == 'AUDIO')
+        {
+            document.getElementById("openAudioModal").click();
+            document.getElementById("recordedAudio").src = URL.createObjectURL(b64toBlob(object['attributes']['b64']))
+            document.getElementById("recordedAudio").controls=true; 
+            document.getElementById("recordedAudio").autplay=true; 
+        }
     }
 }
 
@@ -242,10 +272,10 @@ function mouseMoveEvent(e) {
     document.getElementById('canvas').style.cursor = 'default';
     hoveringObjectIndex = -1;
 
-    var minDistance = 5000;
+    var minDistance = 1000;
     for (var i = 0; i < objects.length; i++){
         var object = objects[i];
-        if (object['mode'] == 'COMM'){
+        if (object['mode'] == 'COMM' || object['mode'] == 'AUDIO'){
             var _x0 = rect_x1 * canvasWidth;
             var _y0 = rect_y1 * canvasHeight;
             var _x1 = object['attributes']['x0'] * canvasWidth + 30 + spos[0];
