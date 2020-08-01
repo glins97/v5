@@ -1,7 +1,7 @@
 
 import os, django
-django.setup()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "v5.settings")
+django.setup()
 
 import pickle
 import os.path
