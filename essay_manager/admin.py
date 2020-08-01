@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Theme, Essay, Profile, Correction, ErrorClassification, GenericErrorClassification
+from .models import Theme, Essay, Profile, Correction, ErrorClassification, GenericErrorClassification, Event
 
 class EssayAdmin(admin.ModelAdmin):
     autocomplete_fields = ('user', )
@@ -80,3 +80,4 @@ admin.site.register(Profile)
 admin.site.register(Correction, CorrectionAdmin)
 admin.site.register(ErrorClassification, ErrorClassificationAdmin)
 admin.site.register(GenericErrorClassification, GenericErrorClassificationAdmin)
+admin.site.register(Event)

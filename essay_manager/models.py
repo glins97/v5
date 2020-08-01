@@ -364,3 +364,24 @@ class Profile(models.Model):
     zipcode = models.CharField(max_length=255, blank=True, null=True)
     course = models.CharField(max_length=255, blank=True, null=True)
     faculty = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.user.first_name, self.user.last_name) 
+
+    class Meta:
+        verbose_name = 'perfil'
+        verbose_name_plural = 'perfis'
+
+class Event(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    year = models.IntegerField(default=-1)
+    month = models.IntegerField(default=-1)
+    day = models.IntegerField(default=-1)
+
+    def __str__(self):
+        return '{} {}, {}'.format(self.user.first_name, self.user.last_name, self.title) 
+
+    class Meta:
+        verbose_name = 'evento'
+        verbose_name_plural = 'eventos'

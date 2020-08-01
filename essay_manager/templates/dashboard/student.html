@@ -10,6 +10,18 @@
         <!-- End Navbar -->
         <div class="content">
           <div class="content">
+            <button data-toggle="modal" id="openAddEventModal" data-target="#addEventModal" hidden="true"></button>
+            <div class="modal has-info show" id="addEventModal" role="dialog" aria-labelledby="addEventModal" style="display: none;" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <label for="addEventTextArea">Tema:</label>
+                    <textarea class="form-control" id="addEventTextArea"></textarea>
+                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveNewEvent();">Salvar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="container-fluid">
               <div class="row">
                 <div class="col-lg-4 col-md-6 col-sm-12">
@@ -126,6 +138,21 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-12 ml-auto mr-auto">
+                  <div class="card card-calendar">
+                    <div class="card-header card-header-info card-header-icon">
+                      <div class="card-icon">
+                        <i class="material-icons">history</i>
+                      </div>
+                      <h4 class="card-title">Agendamento</h4>
+                    </div>
+                    <div class="card-body ">
+                      <div id="fullCalendar"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <br>
             </div>
           </div>
@@ -174,6 +201,25 @@
     <script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        md.initFullCalendar();
+        var events = [
+          {% for event in events %}
+          {
+            'title': '{{event.title}}',
+            'start': new Date({{event.year}}, {{event.month}}, {{event.day}}),
+            'end': new Date({{event.year}}, {{event.month}}, {{event.day}}),
+            'className': 'event-azure',
+          },
+          {% endfor %}
+        ]
+        
+        $('#fullCalendar').fullCalendar('addEventSource', events);
+
+      });
+    </script>
     <script>
       startAnimationForLineChart = function(chart) {
         chart.on('draw', function(data) {
@@ -215,7 +261,6 @@
           lineSmooth: Chartist.Interpolation.cardinal({
             tension: 0
           }),
-          low: 500,
           high: 1020,
           chartPadding: {
             top: 0,
