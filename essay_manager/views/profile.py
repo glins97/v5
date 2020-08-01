@@ -23,6 +23,7 @@ def profile_view(request):
             'school': profile.school,
             'email': profile.email,
             'target_grade': profile.target_grade,
+            'production': profile.production,
             'not_specified': '-',
         },
         'user': get_user_details(request.user),

@@ -31,6 +31,13 @@ target_grades = (
     (1000, 1000),
 )
 
+productions = (
+    ('2 por mês', '2 por mês'),
+    ('1 por semana', '1 por semana'),
+    ('2 por semana', '2 por semana'),
+    ('3 por semana', '3 por semana'),
+)
+
 axes = (
     ('Saúde', 'Saúde'),
     ('Educação', 'Educação'),
@@ -349,6 +356,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     school = models.CharField(max_length=255, default='PPA')
     target_grade = models.IntegerField(choices=target_grades, blank=True, null=True)
+    production = models.CharField(max_length=255, choices=productions, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
