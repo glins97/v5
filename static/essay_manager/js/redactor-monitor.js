@@ -472,7 +472,7 @@ function mouseMoveEvent(e) {
             ctx.stroke();
         }
         else if (mode == 'AUDIO'){
-            ctx.drawImage(lastImage, rect_x1 * canvasWidth - 15 + spos[0], rect_y1 * canvasHeight - 25 + spos[1]);
+            ctx.drawImage(lastImage, rect_x1 * canvasWidth - 45 + spos[0], rect_y1 * canvasHeight - 55 + spos[1]);
         }
     }
 }
@@ -503,10 +503,10 @@ function mouseUpEvent(e) {
         savedImagePos = [Math.max(rect_x1, rect_x0) - 15 / canvasWidth + spos[0] / canvasWidth, Math.min(rect_y1, rect_y0) - 35 / canvasHeight + spos[1] / canvasHeight]
     }
     if (mode == 'AUDIO'){
-        addAudio(rect_x1 - 15 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 35 / canvasHeight + spos[1] / canvasHeight, getColorSource());
+        addAudio(rect_x1 - 45 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 55 / canvasHeight + spos[1] / canvasHeight, getColorSource());
         document.getElementById("openAudioModal").click();
         modalVisible = true;
-        savedImagePos = [rect_x1 - 15 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 35 / canvasHeight + spos[1] / canvasHeight]
+        savedImagePos = [rect_x1 - 45 / canvasWidth + spos[0] / canvasWidth, rect_y1 - 55 / canvasHeight + spos[1] / canvasHeight]
     }
     
     rect_x0 = 0;
