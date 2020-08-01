@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+	<link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
 {% include "head.html" %}
 <body class="">
 	<button id="openModal" data-toggle="modal" data-target="#myModal" hidden="true"></button>
+	<button data-toggle="modal" id="openAudioModal" data-target="#audioModal" hidden="true"></button>
 	<div class="wrapper ">
 		{% include "sidebar.html" %}
 		<div class="main-panel">
@@ -400,6 +402,24 @@
 					</div>
 				</div>
 			</div>
+
+          <div class="modal has-info show" id="audioModal" role="dialog" aria-labelledby="audioModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="container cc-center">
+                    <div class="video-container">
+                      <div class="w-embed">
+                        <audio id="recordedAudio" class="js-player" hidden="true">
+                          <source/>
+                        </audio>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 			<footer class="footer">
 				<div class="container-fluid">
 					<div class="copyright float-right">
@@ -456,6 +476,26 @@
 	<script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
 	<!-- Material Dashboard DEMO methods, don't include it in your project! -->
 	<script src="/static/essay_manager/demo/demo.js"></script>
+	<script type="text/javascript">
+		$('.w-dropdown').hover(function(evt)
+		{
+		evt.preventDefault();
+		
+		var openClass = 'w--open';
+		var $view = $(this);
+		if (evt.type == 'mouseenter')
+		
+		{ $view.find('.w-dropdown-toggle').addClass(openClass); $view.find('.w-dropdown-list').addClass(openClass); }
+		else if (evt.type == 'mouseleave')
+		
+		{ $view.find('.w-dropdown-toggle').removeClass(openClass); $view.find('.w-dropdown-list').removeClass(openClass); }
+		});
+	 </script><script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+	 <script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const player = Plyr.setup('.js-player');
+		});
+	 </script>
 	<script>
 		$(document).ready(function() {
 			$().ready(function() {

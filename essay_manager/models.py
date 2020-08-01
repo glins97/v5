@@ -25,6 +25,19 @@ theme_types = (
     ('PAID', 'PAGO'),
 )
 
+target_grades = (
+    (800, 800),
+    (900, 900),
+    (1000, 1000),
+)
+
+productions = (
+    ('2 por mês', '2 por mês'),
+    ('1 por semana', '1 por semana'),
+    ('2 por semana', '2 por semana'),
+    ('3 por semana', '3 por semana'),
+)
+
 axes = (
     ('Saúde', 'Saúde'),
     ('Educação', 'Educação'),
@@ -342,6 +355,8 @@ class GenericErrorClassification(models.Model):
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     school = models.CharField(max_length=255, default='PPA')
+    target_grade = models.IntegerField(choices=target_grades, blank=True, null=True)
+    production = models.CharField(max_length=255, choices=productions, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
@@ -349,3 +364,24 @@ class Profile(models.Model):
     zipcode = models.CharField(max_length=255, blank=True, null=True)
     course = models.CharField(max_length=255, blank=True, null=True)
     faculty = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.user.first_name, self.user.last_name) 
+
+    class Meta:
+        verbose_name = 'perfil'
+        verbose_name_plural = 'perfis'
+
+class Event(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    year = models.IntegerField(default=-1)
+    month = models.IntegerField(default=-1)
+    day = models.IntegerField(default=-1)
+
+    def __str__(self):
+        return '{} {}, {}'.format(self.user.first_name, self.user.last_name, self.title) 
+
+    class Meta:
+        verbose_name = 'evento'
+        verbose_name_plural = 'eventos'

@@ -54,17 +54,40 @@
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group">
-                                                        <label class="bmd-label-floating">Curso (desejado)</label>
-                                                        <input type="text" name="course" class="form-control" value="{% firstof profile.course not_specified %}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group">
                                                         <label class="bmd-label-floating">Faculdade (desejada)</label>
                                                         <input type="text" name="faculty" class="form-control" value="{% firstof profile.faculty not_specified %}">
                                                     </div>
                                                 </div>
-                                            </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label class="bmd-label-floating">Curso (desejado)</label>
+                                                        <input type="text" name="course" class="form-control" value="{% firstof profile.course not_specified %}">
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row">
+												<div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
+                                                        <label class="bmd-label-floating" style="margin-top: 4px;">Meta de produção</label>
+														<select name="target_grade" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="4" data-style="select-with-transition">
+															<option value="2 por mês">2 por mês</option>
+															<option value="1 por semana">1 por semana</option>
+															<option value="2 por semana">2 por semana</option>
+															<option value="3 por semana">3 por semana</option>
+														</select>
+                                                    </div>
+												</div>
+												<div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
+                                                        <label class="bmd-label-floating" style="margin-top: 4px;">Meta de nota</label>
+														<select name="target_grade" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="3" data-style="select-with-transition">
+															<option value="800">800</option>
+															<option value="900">900</option>
+															<option value="1000">1000</option>
+														</select>
+                                                    </div>
+												</div>
+											</div>
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group">

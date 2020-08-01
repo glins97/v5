@@ -17617,7 +17617,7 @@ NOTE: use percentage font sizes or else old IE chokes
 --------------------------------------------------------------------------------------------------*/
 .fc button {
   border: none;
-  border-radius: 30px;
+  border-radius: 3px;
   position: relative;
   padding: 6px 12px;
   font-weight: 400;
@@ -17635,7 +17635,7 @@ NOTE: use percentage font sizes or else old IE chokes
     .open > .fc button.btn-primary.dropdown-toggle,
     .open > .fc button.btn-primary.dropdown-toggle:focus,
     .open > .fc button.btn-primary.dropdown-toggle:hover {
-      background-color: #9c27b0;
+      background-color: #00bcd4;
       color: #ffffff; }
     .fc button:focus, .fc button:active, .fc button:hover, .fc button.btn-primary:focus, .fc button.btn-primary:active, .fc button.btn-primary:hover {
       box-shadow: 0 14px 26px -12px rgba(156, 39, 176, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2); }
@@ -17655,11 +17655,11 @@ NOTE: use percentage font sizes or else old IE chokes
       box-shadow: none; }
     .fc button.btn-simple, .fc button.btn-primary.btn-simple {
       background-color: transparent;
-      color: #9c27b0;
+      color: #00bcd4;
       box-shadow: none; }
       .fc button.btn-simple:hover, .fc button.btn-simple:focus, .fc button.btn-simple:active, .fc button.btn-primary.btn-simple:hover, .fc button.btn-primary.btn-simple:focus, .fc button.btn-primary.btn-simple:active {
         background-color: transparent;
-        color: #9c27b0; }
+        color: #00bcd4; }
 
 .fc button[disabled],
 .fc button[disabled]:focus,
@@ -19210,7 +19210,7 @@ select.selectpicker {
     box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4); }
 
 .bootstrap-select .dropdown-item.active {
-  background: #9c27b0;
+  background: #00bcd4;
   color: #ffffff; }
 
 select.bs-select-hidden,
@@ -19292,8 +19292,8 @@ select.selectpicker {
 .bootstrap-select.fit-width {
   width: auto !important; }
 
-.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
-  width: 220px; }
+/* .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+  width: 220px; } */
 
 .bootstrap-select .dropdown-toggle:focus {
   outline: thin dotted #333333 !important;
@@ -19606,7 +19606,7 @@ select.selectpicker {
 
 .bootstrap-select .btn.dropdown-toggle.select-with-transition {
   border: 0 !important;
-  background-image: linear-gradient(to top, #9c27b0 2px, rgba(156, 39, 176, 0) 2px), linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
+  background-image: linear-gradient(to top, #00bcd4 2px, rgba(0, 188, 212, 0) 2px), linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
   background-size: 0 100%, 100% 100%;
   background-repeat: no-repeat;
   background-position: bottom, 50% calc(100% - 1px);
