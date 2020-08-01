@@ -32,5 +32,5 @@ def update_correction_endpoint(request, id):
         correction.save()
         return redirect('/essays/?updated=True')
     except Exception as e:
-        logger.error(f'create_correction_endpoint@correction::Exception thrown | {request.user} {request} {id} {repr(e)}')
+        logger.error(f'update_correction_endpoint@correction::Exception thrown | {request.user} {request} {id} {repr(e)}')
         return redirect('/essays/{}/?updated=False'.format(id))
