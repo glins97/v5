@@ -3,6 +3,7 @@ from django.urls import include, path, re_path
 from django.utils.html import format_html
 from django.http import FileResponse
 from django import forms
+from django.contrib.auth.models import User
 
 from datetime import date
 import subprocess
@@ -44,7 +45,7 @@ class TPSAdminForm(forms.ModelForm):
 
         for question_number in range(1, 121):
             self.fields[f'q{question_number}'] = forms.ChoiceField(choices=[('NA', 'NA'), ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E')], initial=questions[question_number])
-
+        
     def save(self, commit=True):
         instance = super(TPSAdminForm, self).save(commit=False)
         instance.save()
@@ -53,7 +54,7 @@ class TPSAdminForm(forms.ModelForm):
             field = f'q{index}'
             if self.cleaned_data[field] != 'NA':
                 # gets matching model or creates object if no matches exist 
-                q = create_or_update(Question, tps=TPS.objects.get(id=instance.id), number=(index + 1))
+                q = create_or_update(Question, tps=TPS.objects.get(id=instance.id), number=index)
                 
                 # updates only necessary questions, avoiding creation of duplicates
                 if q.correct_answer != self.cleaned_data[field]: 
@@ -81,6 +82,17 @@ class TPSAdmin(admin.ModelAdmin):
             'fields': ('start_date', 'end_date',),
         }),
     )
+    
+    def render_change_form(self, request, context, *args, **kwargs):
+        teachers = [user.id for user in User.objects.filter() if user.groups.filter(name='tps-teachers').exists()]
+        context['adminform'].form.fields['teacher'].queryset = User.objects.filter(id__in=teachers)
+        return super(TPSAdmin, self).render_change_form(request, context, *args, **kwargs)
+
+    def render_add_form(self, request, context, *args, **kwargs):
+        teachers = [user.id for user in User.objects.filter() if user.groups.filter(name='tps-teachers').exists()]
+        context['adminform'].form.fields['teacher'].queryset = User.objects.filter(id__in=teachers)
+        return super(TPSAdmin, self).render_add_form(request, context, *args, **kwargs)
+
     def get_form(self, request, obj=None, **kwargs):
         kwargs['fields'] =  flatten_fieldsets(self.fieldsets)
         return super(TPSAdmin, self).get_form(request, obj, **kwargs)
@@ -97,7 +109,7 @@ class TPSAdmin(admin.ModelAdmin):
             '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
             '/static/tps/js/fields.js',
         )
-    list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'emails', 'url', 'relatórios',)
+    list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'end_date', 'url', 'relatórios',)
     list_filter = ('campus', 'week',)
     search_fields = ('campus', 'subject', 'week', )
     list_per_page = 20
@@ -107,9 +119,6 @@ class TPSAdmin(admin.ModelAdmin):
     
     def respostas(self, obj):
         return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj).count(), obj.max_answers)
-
-    def emails(self, obj):
-        return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj, mailed=True).count(), obj.max_answers)
 
     def relatórios(self, obj):
         if TPSAnswer.objects.filter(tps=obj).count():
