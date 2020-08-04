@@ -25,38 +25,6 @@ def get_question_html(question, question_answer):
             </tr> 
             """
 
-def get_rank(tps_answer):
-    sorted_tps_answers = sorted(TPSAnswer.objects.filter(tps=tps_answer.tps), key=lambda answer: (-answer.grade, answer.submission_date))
-    return sorted_tps_answers.index(tps_answer) + 1
-
-def is_tbl(tps_answer):
-    sorted_tps_answers = sorted(TPSAnswer.objects.filter(tps=tps_answer.tps), key=lambda answer: (-answer.grade, answer.submission_date))
-    
-    if tps_answer.tps.campus == 'GOI':
-        if sorted_tps_answers.index(tps_answer) <= 0.8 * len(sorted_tps_answers) - 1:
-            return False
-    elif tps_answer.tps.campus == 'BSB':
-        if sorted_tps_answers.index(tps_answer) <= 10:
-            return False
-    elif tps_answer.tps.campus == 'JUA':
-        if sorted_tps_answers.index(tps_answer) <= 20:
-            return False
-    return True 
-
-def is_score_z(tps_answer):
-    sorted_tps_answers = sorted(TPSAnswer.objects.filter(tps=tps_answer.tps), key=lambda answer: (-answer.grade, answer.submission_date))
-    
-    if tps_answer.tps.campus == 'GOI':
-        if sorted_tps_answers.index(tps_answer) > 0.8 * len(sorted_tps_answers) - 1:
-            return False
-    elif tps_answer.tps.campus == 'BSB':
-        if sorted_tps_answers.index(tps_answer) > 10:
-            return False
-    elif tps_answer.tps.campus == 'JUA':
-        if sorted_tps_answers.index(tps_answer) > 20:
-            return False
-    return True 
-
 def get_group(tpses, id):
     for tps in tpses:
         for grade_group in tpses[tps]:
