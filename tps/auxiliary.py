@@ -66,12 +66,8 @@ def separate_students(tps):
         for _, row in df.iterrows():
             if row['xC'] >= tps.max_questions * 0.8:
                 result['SCORE_Z'] = result['SCORE_Z'].append(row, ignore_index=True)
-                count_score_z += 1
-            elif row['xC'] >= tps.max_questions * 0.6:
-                result['TBL'] = result['TBL'].append(row, ignore_index=True)
-                count_tbl += 1
             else:
-                result['CBT'] = result['CBT'].append(row, ignore_index=True)
+                result['TBL'] = result['TBL'].append(row, ignore_index=True)
 
     return result
 
