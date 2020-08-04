@@ -125,7 +125,7 @@ class TPSAdmin(admin.ModelAdmin):
             return format_html(
                 '<a class="button" href="download/score_z/{}">Score Z</a>&nbsp'.format(obj.id) +
                 '<a class="button" href="download/tbl/{}">TBL</a>&nbsp'.format(obj.id) +
-                ('<a class="button" href="download/cbt/{}">CBT</a>&nbsp'.format(obj.id) if obj.campus == 'BSB' or obj.campus == 'JUA' else '') +
+                ('<a class="button" href="download/cbt/{}">CBT</a>&nbsp'.format(obj.id) if obj.campus == 'BSB' else '') +
                 '<a class="button" href="download/distrator/{}">Distrator</a>&nbsp'.format(obj.id))
         return 'Aguarde a primeira resposta'
 
