@@ -57,6 +57,7 @@
           <button class="btn btn-info" data-toggle="modal" data-target="#themeModal"> Visualizar tema </button>
           <a class="btn btn-info" style="color: white;" href="/api/essays/download/{{essay.id}}/"> Baixar correção </a>
           <div class="float-right">
+            <button class="btn btn-warning" onclick="document.getElementById('status-input').value='ACTIVE';updateExportCorrectionData();"> Salvar sem finalizar  </button>
             <button class="btn btn-danger" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false"> Anular redação </button>
           </div>
           
@@ -656,11 +657,11 @@
               <br>
               <div class="row">
                 <div class="col-md-12">
-                  <button type="button" class="btn btn-success pull-right" style="width:100% !important" onclick="updateExportCorrectionData()"> Salvar </button>
+                  <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Finalizar </button>
                   <form id="submitUpdateForm" class="form" method="post" action="/corrections/update/{{essay.id}}/">
                     {% csrf_token %}
                     <input type="hidden" class="form-control" name="data" maxlength="150" required="" id="formInput">
-                    <input type="hidden" class="form-control" name="status" maxlength="150" value="DONE">
+                    <input type="hidden" class="form-control" id="status-input" name="status" maxlength="150" value="DONE">
                   </form>
                 </div>
               </div>
