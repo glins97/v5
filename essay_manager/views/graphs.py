@@ -34,11 +34,11 @@ def graphs_view(request):
         'gradesc3': str(gradesc3[::-1]),
         'gradesc4': str(gradesc4[::-1]),
         'gradesc5': str(gradesc5[::-1]),
-        'avg_gradesc1': str(sum(gradesc1) / len(gradesc1)),
-        'avg_gradesc2': str(sum(gradesc2) / len(gradesc2)),
-        'avg_gradesc3': str(sum(gradesc3) / len(gradesc3)),
-        'avg_gradesc4': str(sum(gradesc4) / len(gradesc4)),
-        'avg_gradesc5': str(sum(gradesc5) / len(gradesc5)),
+        'avg_gradesc1': '{:.0f}'.format(sum(gradesc1) / len(gradesc1)),
+        'avg_gradesc2': '{:.0f}'.format(sum(gradesc2) / len(gradesc2)),
+        'avg_gradesc3': '{:.0f}'.format(sum(gradesc3) / len(gradesc3)),
+        'avg_gradesc4': '{:.0f}'.format(sum(gradesc4) / len(gradesc4)),
+        'avg_gradesc5': '{:.0f}'.format(sum(gradesc5) / len(gradesc5)),
         'user': get_user_details(request.user), 
     }
 
