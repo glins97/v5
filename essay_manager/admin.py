@@ -2,10 +2,14 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import Theme, Essay, Profile, Correction, ErrorClassification, GenericErrorClassification, Event
 
+class ThemeAdmin(admin.ModelAdmin):
+    search_fields = ('description', )
+
 class EssayAdmin(admin.ModelAdmin):
     autocomplete_fields = ('user', )
     list_display = ('id', 'aluno', 'fn', 'tema', 'nota', )
     list_filter = ('theme', )
+    autocomplete_fields = ('theme', )
     search_fields = ('user__first_name', 'user__last_name', 'theme__description')
     list_per_page = 100
 
@@ -77,7 +81,7 @@ class ErrorClassificationAdmin(admin.ModelAdmin):
     def nota(self, obj):
         return '{}'.format(200 - obj.weight * 40)
 
-admin.site.register(Theme)
+admin.site.register(Theme, ThemeAdmin)
 admin.site.register(Essay, EssayAdmin)
 admin.site.register(Profile)
 admin.site.register(Correction, CorrectionAdmin)
