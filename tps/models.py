@@ -104,6 +104,7 @@ class TPS(models.Model):
     questions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Caderno de questões')
     solutions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Gabarito comentado')
     notify = models.BooleanField(default=True, verbose_name="Enviar ranking")
+    separate = models.BooleanField(default=True, verbose_name="Separar alunos em grupos")
     mailed = models.BooleanField(default=True, verbose_name="Enviado ao professor")
 
     def __str__(self):
@@ -176,22 +177,23 @@ class TPSAnswer(models.Model):
     def save(self, *args, **kwargs):
         if not self.accounted and self.grade_group and self.rank:
             self.accounted = True
-            
-            if self.grade_group == 'SCORE_Z':
-                self.grade_points = 3
-            if self.grade_group == 'TBL':
-                self.grade_points = 2
-                if self.rank == 1:
+
+            if self.tps.separate: 
+                if self.grade_group == 'SCORE_Z':
                     self.grade_points = 3
-            if self.grade_group == 'CBT':
-                self.grade_points = 1
-            
-            score = TPSScore.objects.filter(group=self.tps.group, email=self.email, month=self.submission_date.month, campus=self.tps.campus).first()
-            if score:
-                score.score += self.grade_points
-                score.save()
-            else:
-                TPSScore(group=self.tps.group, email=self.email, month=self.submission_date.month, campus=self.tps.campus, score=self.grade_points).save()
+                if self.grade_group == 'TBL':
+                    self.grade_points = 2
+                    if self.rank == 1:
+                        self.grade_points = 3
+                if self.grade_group == 'CBT':
+                    self.grade_points = 1
+                
+                score = TPSScore.objects.filter(group=self.tps.group, email=self.email, month=self.submission_date.month, campus=self.tps.campus).first()
+                if score:
+                    score.score += self.grade_points
+                    score.save()
+                else:
+                    TPSScore(group=self.tps.group, email=self.email, month=self.submission_date.month, campus=self.tps.campus, score=self.grade_points).save()
 
         super(TPSAnswer, self).save(*args, **kwargs)
 
