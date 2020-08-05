@@ -19,7 +19,7 @@ def create_essay_endpoint(request):
         fn = 'uploads/{}_{}'.format(time.time(), str(obj).split('/')[-1].replace(' ', '_'))
         with open(fn, 'wb') as f:
             f.write(obj.file.read())
-        theme = Theme.objects.get(description=request.POST['theme'])
+        theme = Theme.objects.get(id=request.POST['theme'])
         Essay(user=request.user, theme=theme, file=fn).save()
         return redirect('/essays/?added=True')
     except Exception as e:

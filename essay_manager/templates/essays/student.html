@@ -289,11 +289,11 @@
     </script>
     <script>
       $(document).ready(function() {
-        // Javascript method's body can be found in assets/js/demos.js
-        md.initDashboardPageCharts();
-        
-        md.initVectorMap();
-        
+      // Initialise the wizard
+      demo.initMaterialWizard();
+      setTimeout(function() {
+        $('.card.card-wizard').addClass('active');
+      }, 600);
       });
     </script>
   </body>

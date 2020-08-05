@@ -46,7 +46,7 @@ def get_user_details(user):
         full_name += user.first_name
     if user.last_name:
         initials += user.last_name[0]
-        full_name += user.last_name
+        full_name += ' ' + user.last_name
     if not full_name:
         full_name = 'Aluno'
         initials = 'A'

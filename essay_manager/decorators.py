@@ -1,10 +1,13 @@
 from django.shortcuts import redirect
 from bauth.views import login_view
 from bauth.views import e403_view
+from django.views.decorators.csrf import csrf_exempt
+
 
 import logging
 logger = logging.getLogger('django')
 
+@csrf_exempt
 def login_required(f, *args, **kwargs):
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:

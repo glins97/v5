@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def login_endpoint(request):
     username = request.POST['username']
     password = request.POST['password']
