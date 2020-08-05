@@ -10,7 +10,7 @@ def login_required(f, *args, **kwargs):
         if request.user.is_authenticated:
             return f(request, *args, **kwargs)
         else:
-            logger.info(f'login_required@decorators::Unauthorized user | {request.user} {request} {args} {kwargs}')
+            logger.info(f'login_required@decorators::Unauthorized user | {request.user} {request}')
             return login_view(request)
     return wrapper
 

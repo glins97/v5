@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
 from django.conf.urls.static import static
 
 from essay_manager.views import *
@@ -110,6 +111,7 @@ urlpatterns = [
 
 handler404 = 'bauth.views.e404_view'
 handler500 = 'bauth.views.e500_view'
+handler400 = 'bauth.views.e500_view'
 
 admin.site.site_header = 'PPA Digital'
 admin.site.site_title = 'PPA Digital'

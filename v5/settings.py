@@ -23,18 +23,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1m8xf+vlv=^+l97q=+%xl)1kcoft%67p#5mf0#if!j3txzq8c*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '161.35.103.30',
-    '159.65.226.253',
-    'ppa.digital',
-    'www.ppa.digital',
-    'dev.ppa.digital',
-    'redacoes.ppa.digital',
-]
+DEBUG = ('DEBUG' in os.environ and os.environ['DEBUG']) or False
+ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [
+        'localhost',
+        '127.0.0.1',
+        '161.35.103.30',
+        '159.65.226.253',
+        'ppa.digital',
+        'www.ppa.digital',
+        'dev.ppa.digital',
+        'redacoes.ppa.digital',
+    ]
 
 
 # Application definition

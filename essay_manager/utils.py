@@ -38,10 +38,22 @@ def get_view_by_permission(request, *args, **kwargs):
     return kwargs.get('default', e403_view(request))
 
 def get_user_details(user):
+    full_name = ''
+    initials = ''
+    if user.first_name:
+        print('user.first_name', user.first_name)
+        initials += user.first_name[0] 
+        full_name += user.first_name
+    if user.last_name:
+        initials += user.last_name[0]
+        full_name += user.last_name
+    if not full_name:
+        full_name = 'Aluno'
+        initials = 'A'
     return {
         'first_name': user.first_name,
         'last_name': user.last_name,
-        'full_name': user.first_name + " " + user.last_name,
-        'initials': user.first_name[0] + user.last_name[0],
+        'full_name': full_name,
+        'initials': initials,
         'obj': user,
     }
