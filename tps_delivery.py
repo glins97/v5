@@ -8,7 +8,9 @@ logger = logging.getLogger('django')
 
 from django.utils.timezone import now
 from tps.models import TPS, TPSAnswer, Question, QuestionAnswer
-from tps.auxiliary import separate_students
+from tps.auxiliary import separate_students, generate_cbt, generate_tbl, generate_score_z, generate_distrator
+
+import subprocess
 
 def get_question_html(question, question_answer):
     answer = ''
@@ -100,6 +102,7 @@ def _mail_answers_goi():
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
 
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
+            mail_body += f'<p>Na eventualidade de problemas ou sugestões, responder diretamente esse email. </p>'    
             if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else ''):
                 tps_answer.mailed = True
                 tps_answer.mailed_answers = True
@@ -165,6 +168,7 @@ def _mail_answers_jua():
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
 
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
+            mail_body += f'<p>Na eventualidade de problemas ou sugestões, responder diretamente esse email. </p>'    
             if send_mail(tps_answer.email, f'resultados {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else ''):
                 tps_answer.mailed_results = True
                 tps_answer.mailed_answers = True
@@ -197,7 +201,7 @@ def _mail_results_bsb():
                 mail_body += f'<p>Ranking: {tps_answer.rank}</p>'   
                 mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'   
 
-            mail_body += f'<p>As soluções comentadas (e seu caderno de respostas) serão enviadas por e-mail às 18:00!</p>'    
+            mail_body += f'<p>As soluções comentadas (e seu caderno de respostas) serão enviadas por e-mail às 18:00!</p>'  
             if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body):
                 tps_answer.mailed_results = True
                 tps_answer.save()
@@ -255,6 +259,7 @@ def _mail_answers_bsb():
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
 
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
+            mail_body += f'<p>Na eventualidade de problemas ou sugestões, responder diretamente esse email. </p>'    
             if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body):
                 tps_answer.mailed_answers = True
                 tps_answer.save()
@@ -262,7 +267,42 @@ def _mail_answers_bsb():
             logger.error(f'Error mailing TPS Answer {tps_answer}. Error {e}', exc_info=e)
     logger.info(f'General tps results delivery finished')
 
+def _mail_teachers():
+    tpses = TPS.objects.filter(mailed=False, end_date__lte=now())
+    if not tpses.count(): return
+
+    logger.info('Starting general tps results delivery')
+    for tps in tpses:
+        logger.info(f'Mailing TPS {tps}')
+        try:
+            tps.mailed = True
+            if not tps.teacher:
+                tps.save()
+                continue
+            score_z = generate_score_z(tps)
+            subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', score_z, '--outdir', 'tps/outputs/pdfs'])
+            
+            tbl = generate_tbl(tps)
+            subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', tbl, '--outdir', 'tps/outputs/pdfs'])
+
+            cbt = generate_cbt(tps)
+            subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', cbt, '--outdir', 'tps/outputs/pdfs'])
+            
+            distrator = generate_distrator(tps)
+            subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', distrator, '--outdir', 'tps/outputs/pdfs'])
+            reports = [distrator.replace('xlsx', 'pdf'), score_z.replace('xlsx', 'pdf'), tbl.replace('xlsx', 'pdf')]
+            if tps.campus == 'BSB':
+                reports.append(cbt.replace('xlsx', 'pdf'))
+            mail_body = f'<p>Respostas para TPS {tps} concluídas. Relatórios se encontram em anexo (ou, caso não, acesse <a href="https://ppa.digital/admin/tps/tps/"> este link</a>).</p>'    
+            mail_body += f'<p>Na eventualidade de problemas, responder diretamente esse email.</p>'    
+            if send_mail(tps.teacher.username, f'relatórios {tps}', mail_body, reports, True):
+                tps.save()
+        except Exception as e:
+            logger.error(f'Error mailing TPS {tps}. Error {e}', exc_info=e)
+    logger.info(f'General tps results delivery finished')
+
 def main():
+    _mail_teachers()
     _mail_answers_bsb()
     _mail_results_bsb()
     _mail_answers_goi()
@@ -276,13 +316,17 @@ from email.encoders import encode_base64
 import codecs
 from threading import _start_new_thread
 
-def send_mail(email, subject, message, attachment=''):
+def send_mail(email, subject, message, attachments='', multiple_attachments=False):
     msg = MIMEMultipart()
     password = 'campusppa'
-    msg['To'] = 'nombregag@gmail.com'
+    msg['To'] = email
     msg['From'] = 'adm.ppa.digital@gmail.com'
     msg['Subject'] = 'PPA Digital: ' + subject
-    if attachment:
+    
+    if not multiple_attachments:
+        attachments = [attachments]
+
+    for attachment in attachments:
         openedfile = None
         with open(attachment, 'rb') as opened:
             openedfile = opened.read()

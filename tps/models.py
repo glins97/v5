@@ -104,6 +104,7 @@ class TPS(models.Model):
     questions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Caderno de questões')
     solutions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Gabarito comentado')
     notify = models.BooleanField(default=True, verbose_name="Enviar ranking")
+    mailed = models.BooleanField(default=True, verbose_name="Enviado ao professor")
 
     def __str__(self):
         return '{} {} {}'.format(self.campus, self.subject, self.week)
@@ -120,7 +121,7 @@ class TPS(models.Model):
         if not os.path.exists(directory):
             os.makedirs(directory)
         
-        if self.questions and '.pdf' in str(self.questions.file).lower()[-4:]:
+        if self.questions and '.pdf' in str(self.questions).lower()[-4:]:
             super(TPS, self).save(*args, **kwargs)
             info = pdfinfo_from_path(str(self.questions.file), userpw=None, poppler_path=None)
             maxPages = info["Pages"]
