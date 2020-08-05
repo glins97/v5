@@ -73,13 +73,13 @@ class TPSAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Conteúdo', {
-            'fields': ('subject', 'week', 'questions', 'solutions',),
+            'fields': ('subject', 'week', 'questions', 'solutions', ),
         }),
         ('Informações', {
-            'fields': ('campus', 'group', 'teacher', 'max_answers', 'max_questions', 'mailed'),
+            'fields': ('campus', 'group', 'teacher', 'max_answers', 'max_questions', ),
         }),
         ('Data', {
-            'fields': ('start_date', 'end_date',),
+            'fields': ('start_date', 'end_date', ),
         }),
     )
     
