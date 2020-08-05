@@ -157,7 +157,8 @@ class TPSAnswer(models.Model):
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     grade = models.IntegerField(default=0)
-    mailed = models.BooleanField(default=False)
+    mailed_results = models.BooleanField(default=False)
+    mailed_answers = models.BooleanField(default=False)
 
     grade_group = models.CharField(max_length=255, choices=grade_groups, null=True, blank=True)
     grade_points = models.IntegerField(default=0)
