@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.http import FileResponse
+from django.utils.timezone import now
 
 from essay_manager.decorators import login_required, has_permission
 from essay_manager.models import Theme, Essay, Correction
@@ -19,7 +20,26 @@ def create_essay_endpoint(request):
         fn = 'uploads/{}_{}'.format(time.time(), str(obj).split('/')[-1].replace(' ', '_'))
         with open(fn, 'wb') as f:
             f.write(obj.file.read())
-        theme = Theme.objects.get(id=request.POST['theme'])
+        
+        id = request.POST['theme_id']
+        if id == '-1':
+            obj_theme = request.FILES['theme_file'] 
+            fn_theme = 'uploads/THEME_{}_{}'.format(time.time(), str(obj_theme).split('/')[-1].replace(' ', '_'))
+            with open(fn_theme, 'wb') as f:
+                f.write(obj_theme.file.read())
+            theme = Theme(
+                description=request.POST['theme_name'], 
+                jury='ENEM',
+                start_date=now(),
+                end_date=now(),
+                axis='De outros alunos',
+                file=fn_theme,
+                type='FREE',
+            )
+            theme.save()
+        else:
+            theme = Theme.objects.get(id=request.POST['theme_id'])
+
         Essay(user=request.user, theme=theme, file=fn).save()
         return redirect('/essays/?added=True')
     except Exception as e:

@@ -9,10 +9,14 @@ from django.utils.html import mark_safe
 @has_permission('student')
 @login_required
 def _student_essays_view(request):
+    essays = Essay.objects.filter(user=request.user).order_by('-id')
+    for essay in essays:
+        if Correction.objects.filter(essay=essay, status='DONE').count() == 0:
+            essay.grade = '-'
     data = {
         'title': 'Redações',
         'added': request.GET.get('added', 'None'),
-        'essays': Essay.objects.filter(user=request.user).order_by('-id'),
+        'essays': essays,
         'user': get_user_details(request.user),
     }
     return render(request, 'essays/student.html', dict(data, **{key:request.GET[key] for key in request.GET}))
