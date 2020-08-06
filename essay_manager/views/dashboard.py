@@ -34,6 +34,8 @@ def student_dashboard_view(request):
                 grades.append(essay.grade)
         if has_correction:
             unique_corrections += 1
+        if Correction.objects.filter(essay=essay, status='DONE').count() == 0:
+            essay.grade = '-'
 
     data = {
         'title': 'Preparação',

@@ -41,7 +41,6 @@ def get_user_details(user):
     full_name = ''
     initials = ''
     if user.first_name:
-        print('user.first_name', user.first_name)
         initials += user.first_name[0] 
         full_name += user.first_name
     if user.last_name:
