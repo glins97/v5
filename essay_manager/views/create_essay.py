@@ -8,7 +8,7 @@ from essay_manager.utils import get_user_details
 def create_essay_view(request):
     data = {
         'title': 'Redações',
-        'themes': Theme.objects.all(),
+        'themes': Theme.objects.all().order_by('description'),
         'added': request.GET.get('added', 'None'),
         'user': get_user_details(request.user),
     }

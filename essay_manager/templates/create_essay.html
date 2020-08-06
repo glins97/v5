@@ -66,19 +66,14 @@
 											<h5 class="info-text"> Qual o tema da redação? </h5>
 											<div class="row justify-content-center">
 											  <div class="col-lg-10">
-												{% for chunk in themes|chunks:3 %}
-													<div class="row">
-													{% for theme in chunk %}
-													<div class="col-sm-4">
+												  {% for theme in themes %}
+													<div class="row" style="height: 40px;">
 														<div class="choice" data-toggle="wizard-radio">
-														<input type="radio" name="theme" value={{theme.id}}>
-														<div class="icon" style="border-radius: 14px; width:100% !important">
-															<p style="height: 110px; width: 200px; vertical-align: middle ; display:table-cell; text-align: center">{{theme.description}}</p>
-														</div>
-														<h6>{{theme.jury}}</h6>
+															<input type="radio" name="theme" value={{theme.id}}>
+															<div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
+																<p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    {{theme.description}}</p>
 														</div>
 													</div>
-													{% endfor %}
 												</div>
 												{% endfor %}
 											  </div>
