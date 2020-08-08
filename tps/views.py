@@ -13,12 +13,12 @@ def tps_view(request, id):
         if tps.questions:
             subject_desc = tps.subject
             supported_subjects = {
+                'SIM': 'Simulado',
                 'QUI': 'Química',
                 'BIO': 'Biologia',
                 'MAT': 'Matemática',
                 'FIS': 'Física',
                 'FIL': 'Filosofia',
-                'SIM': 'Simulado',
             }
             for supported_subject in supported_subjects:
                 if supported_subject in subject_desc.upper():
