@@ -102,6 +102,7 @@ urlpatterns = [
 
     # TPS RELATED
     # - views
+    re_path(r'tps/(?P<id>[\d-]+)/.+?/', tps_view, name='id'),
     re_path(r'tps/(?P<id>[\d-]+)/.+?/.+?/.+?/', tps_view, name='id'),
 
     # - apis

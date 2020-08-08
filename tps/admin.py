@@ -153,7 +153,7 @@ class TPSAdmin(admin.ModelAdmin):
     list_per_page = 20
 
     def url(self, obj):
-        return 'ppa.digital/tps/{}/{}/{}/{}/'.format(obj.id, obj.campus.lower(), obj.subject.lower()[:3], obj.week)
+        return 'ppa.digital/tps/{}/{}/'.format(obj.id, obj.campus.lower())
     
     def respostas(self, obj):
         return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj).count(), obj.max_answers)
