@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger('django')
 
 from django.utils.timezone import now
-from tps.models import TPS, TPSAnswer, Question, QuestionAnswer
+from tps.models import TPS, TPSAnswer, Question, QuestionAnswer, TPSScore
 from tps.auxiliary import separate_students, generate_cbt, generate_tbl, generate_score_z, generate_distrator
 
 import subprocess
@@ -91,12 +91,20 @@ def _mail_answers_goi():
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
             mail_body += f'<p>Nota: {tps_answer.grade}</p>' 
             tps_answer.rank = get_rank(tpses, tps_answer.id)
-            tps_answer.grade_group = get_group(tpses, tps_answer.id)
+            if tps.separate:
+                tps_answer.grade_group = get_group(tpses, tps_answer.id)
             tps_answer.save()
 
             if tps_answer.tps.notify:
                 mail_body += f'<p>Ranking: {tps_answer.rank}</p>'   
-                mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'   
+                if tps.separate:
+                    if tps_answer.rank == 1 and tps_answer.grade_group == 'TBL':
+                        mail_body += f'<p>Parabéns, você é o aluno master!</p>'   
+
+                    mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'  
+                    current_score = TPSScore.objects.filter(email=tps_answer.email, month=tps_answer.submission_date.month, campus=tps_answer.tps.campus).first()
+                    if current_score: 
+                        mail_body += '<p>Pontuação total neste mês: {}</p>'.format(current_score.score)   
 
             if tps_answer.tps.solutions:
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
@@ -104,7 +112,7 @@ def _mail_answers_goi():
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
             mail_body += f'<p>Na eventualidade de problemas ou sugestões, responder diretamente esse email. </p>'    
             if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else ''):
-                tps_answer.mailed = True
+                tps_answer.mailed_results = True
                 tps_answer.mailed_answers = True
                 tps_answer.save()
         except Exception as e:
@@ -157,12 +165,20 @@ def _mail_answers_jua():
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
             mail_body += f'<p>Nota: {tps_answer.grade}</p>' 
             tps_answer.rank = get_rank(tpses, tps_answer.id)
-            tps_answer.grade_group = get_group(tpses, tps_answer.id)
+            if tps.separate:
+                tps_answer.grade_group = get_group(tpses, tps_answer.id)
             tps_answer.save()
 
             if tps_answer.tps.notify:
                 mail_body += f'<p>Ranking: {tps_answer.rank}</p>'   
-                mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'   
+                if tps.separate:
+                    if tps_answer.rank == 1 and tps_answer.grade_group == 'TBL':
+                        mail_body += f'<p>Parabéns, você é o aluno master!</p>'   
+
+                    mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'  
+                    current_score = TPSScore.objects.filter(email=tps_answer.email, month=tps_answer.submission_date.month, campus=tps_answer.tps.campus).first()
+                    if current_score: 
+                        mail_body += '<p>Pontuação total neste mês: {}</p>'.format(current_score.score)   
 
             if tps_answer.tps.solutions:
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
@@ -194,15 +210,23 @@ def _mail_results_bsb():
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
             mail_body += f'<p>Nota: {tps_answer.grade}</p>' 
             tps_answer.rank = get_rank(tpses, tps_answer.id)
-            tps_answer.grade_group = get_group(tpses, tps_answer.id)
+            if tps.separate:
+                tps_answer.grade_group = get_group(tpses, tps_answer.id)
             tps_answer.save()
 
             if tps_answer.tps.notify:
                 mail_body += f'<p>Ranking: {tps_answer.rank}</p>'   
-                mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'   
+                if tps.separate:
+                    if tps_answer.rank == 1 and tps_answer.grade_group == 'TBL':
+                        mail_body += f'<p>Parabéns, você é o aluno master!</p>'   
+
+                    mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'  
+                    current_score = TPSScore.objects.filter(email=tps_answer.email, month=tps_answer.submission_date.month, campus=tps_answer.tps.campus).first()
+                    if current_score: 
+                        mail_body += '<p>Pontuação total neste mês: {}</p>'.format(current_score.score)   
 
             mail_body += f'<p>As soluções comentadas (e seu caderno de respostas) serão enviadas por e-mail às 18:00!</p>'  
-            if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body):
+            if send_mail(tps_answer.email, f'resultado {tps_answer.tps}', mail_body):
                 tps_answer.mailed_results = True
                 tps_answer.save()
         except Exception as e:
@@ -260,7 +284,7 @@ def _mail_answers_bsb():
 
             mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
             mail_body += f'<p>Na eventualidade de problemas ou sugestões, responder diretamente esse email. </p>'    
-            if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body):
+            if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else ''):
                 tps_answer.mailed_answers = True
                 tps_answer.save()
         except Exception as e:
@@ -327,6 +351,7 @@ def send_mail(email, subject, message, attachments='', multiple_attachments=Fals
         attachments = [attachments]
 
     for attachment in attachments:
+        if not attachment: continue
         openedfile = None
         with open(attachment, 'rb') as opened:
             openedfile = opened.read()
