@@ -53,6 +53,7 @@
               </div>
             </div>
           </div>
+
           <button class="btn btn-info" data-toggle="modal" data-target="#manualModal"> Consultar manual </button>
           <button class="btn btn-info" data-toggle="modal" data-target="#themeModal"> Visualizar tema </button>
           <a class="btn btn-info" style="color: white;" href="/api/essays/download/{{essay.id}}/"> Baixar correção </a>
@@ -100,6 +101,7 @@
               </div>
             </div>
           </div>
+
           <div class="modal has-info show" id="zeroModal" role="dialog" aria-labelledby="zeroModal" style="display: none;" aria-hidden="true">
             <div class="modal-dialog" style="width:900px !important; max-width:900px !important;">
               <div class="modal-content" style="width:900px !important;">
@@ -145,7 +147,7 @@
                   <div class="container cc-center">
                     <div class="video-container">
                       <div class="w-embed">
-                        <audio  id="recordedAudio" class="js-player" hidden="true">
+                        <audio id="recordedAudio" class="js-player" hidden="true">
                           <source/>
                         </audio>
                       </div>
@@ -160,6 +162,7 @@
               </div>
             </div>
           </div>
+          
           <div class="row" id="card-essay">
             <div class="col-md-12">
               <div class="card card-chart">
@@ -728,7 +731,9 @@
         </script><script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
         <script>
            document.addEventListener('DOMContentLoaded', () => {
-               const player = Plyr.setup('.js-player');
+               const player = Plyr.setup('.js-player', {
+                 'invertTime': false,
+               });
            });
         </script>
         <script>
