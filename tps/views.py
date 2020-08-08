@@ -2,7 +2,7 @@ from django.shortcuts import render
 from tps.models import TPS, TPSAnswer, Question
 from django.utils.timezone import now
 
-def tps_view(request, id, campus, subject, week):
+def tps_view(request, id):
     tpses = TPS.objects.filter(id=id)
     if tpses.count():
         tps = tpses.get()
@@ -11,16 +11,22 @@ def tps_view(request, id, campus, subject, week):
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Número limite de respostas já atingido.'})
         
         if tps.questions:
+            subject_desc = tps.subject
+            supported_subjects = {
+                'QUI': 'Química',
+                'BIO': 'Biologia',
+                'MAT': 'Matemática',
+                'FIS': 'Física',
+                'FIL': 'Filosofia',
+                'SIM': 'Simulado',
+            }
+            for supported_subject in supported_subjects:
+                if supported_subject in subject_desc.upper():
+                    subject_desc = supported_subjects[supported_subject]
+                    break            
             data = {
                 'id': id,
-                'subject_desc': {
-                    'QUI': 'Química',
-                    'BIO': 'Biologia',
-                    'MAT': 'Matemática',
-                    'FIS': 'Física',
-                    'FIL': 'Filosofia',
-                    'SIM': 'Simulado',
-                }.get(subject.upper(), subject.capitalize()),
+                'subject_desc': subject_desc,
                 'tps': tps,
                 'now': now(),
                 'questions': Question.objects.filter(tps=tps),
