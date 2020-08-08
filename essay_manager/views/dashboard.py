@@ -9,69 +9,60 @@ from functools import partial
 def student_dashboard_view(request):
     themes = Theme.objects.filter(start_date__lt=now(), end_date__gt=now())
     essays = Essay.objects.filter(user=request.user).order_by('-id')
-    corrections = Correction.objects.filter(essay__user=request.user)
-    themes_count = len(themes)
-    essays_count = len(essays)
-    corrections_count = len(corrections)
-    completed_themes = 0
-    
-    done_corrections = 0
-    active_corrections = 0
-    unique_corrections = 0
-    for theme in themes:
-        if len(Essay.objects.filter(theme=theme, user=request.user).all()) > 0:
-            completed_themes += 1
+    essays_count = essays.count()
+    essays_msg = 'O trabalho duro vence talento!'
 
     grades = []
+    correcting_essays_count = 0
+    corrected_essays_count = 0
     for essay in essays:
-        has_correction = False
-        for correction in Correction.objects.filter(essay=essay):
-            has_correction = True
-            if correction.status == 'ACTIVE':
-                active_corrections += 1
-            elif correction.status == 'DONE':
-                done_corrections += 1
-                grades.append(essay.grade)
-        if has_correction:
-            unique_corrections += 1
-        if Correction.objects.filter(essay=essay, status='DONE').count() == 0:
+        if Correction.objects.filter(essay=essay, status='DONE').count():
+            corrected_essays_count += 1
+            grades.append(essay.grade)
+        else: 
+            correcting_essays_count += 1
             essay.grade = '-'
+
+    correcting_essays_icon = 'warning'
+    correcting_essays_card_type = 'warning'
+    correcting_essays_msg = 'Aguarde a correção nos próximos dias!'
+    if correcting_essays_count == 0:
+        correcting_essays_icon = 'check'
+        correcting_essays_card_type = 'success'
+        correcting_essays_msg = 'Todas as redações foram corrigidas'
+
+    corrected_essays_icon = 'warning'
+    corrected_essays_card_type = 'warning'
+    corrected_essays_msg = 'Obrigado pelo empenho!'
+    if corrected_essays_count == essays_count:
+        corrected_essays_icon = 'check'
+        corrected_essays_card_type = 'success'
+        corrected_essays_msg = 'Busque outros temas!'
 
     data = {
         'title': 'Preparação',
-        'grades': str(grades[::-1]),
-        'essays': list(essays)[-5:],
-        'themes_count': themes_count,
-        'essays_count': essays_count,
-        'corrections_count': corrections_count,
+        
         'user': get_user_details(request.user), 
-        'events': Event.objects.filter(user=request.user), 
         'registered': request.GET.get('registered', False),   
         'authed': request.GET.get('authed', False),   
+        
+        'events': Event.objects.filter(user=request.user), 
+
+        'grades': str(grades[::-1]),
+        'essays': list(essays)[-5:],
+        'essays_count': essays_count,
+        'essays_msg': essays_msg,
+
+        'correcting_essays_count': correcting_essays_count,
+        'correcting_essays_icon': correcting_essays_icon,
+        'correcting_essays_card_type': correcting_essays_card_type,
+        'correcting_essays_msg': correcting_essays_msg,
+
+        'corrected_essays_count': corrected_essays_count,
+        'corrected_essays_icon': corrected_essays_icon,
+        'corrected_essays_card_type': corrected_essays_card_type,
+        'corrected_essays_msg': corrected_essays_msg,
     }
-
-    if themes_count == completed_themes:
-        data['themes_msg'] = 'Todos os temas concluídos'
-        data['themes_icon'] = 'check'
-        data['themes_card_type'] = 'success'
-    else:
-        data['themes_msg'] = '{} tema a fazer!'.format(themes_count - completed_themes)
-        data['themes_icon'] = 'warning'
-        data['themes_card_type'] = 'warning'
-
-    if unique_corrections == essays_count:
-        if active_corrections == 0:
-            data['corrections_msg'] = 'Todas as correções concluídas'
-            data['corrections_icon'] = 'check'
-            data['corrections_card_type'] = 'success'
-        else:
-            data['corrections_msg'] = '{} em andamento!'.format(essays_count - active_corrections)
-            data['corrections_icon'] = 'warning'
-            data['corrections_card_type'] = 'warning'
-    else:
-        data['corrections_msg'] = '{} em espera'.format(essays_count - unique_corrections)
-        data['corrections_icon'] = 'warning'
-        data['corrections_card_type'] = 'warning'
          
     return render(request, 'dashboard/student.html', data)
 
