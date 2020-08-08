@@ -16,11 +16,14 @@ def student_dashboard_view(request):
     correcting_essays_count = 0
     corrected_essays_count = 0
     for essay in essays:
-        if Correction.objects.filter(essay=essay, status='DONE').count():
+        corrections = Correction.objects.filter(essay=essay, status='DONE')
+        if corrections.count():
             corrected_essays_count += 1
+            essay.correction_date = corrections.first().end_date.date
             grades.append(essay.grade)
         else: 
             correcting_essays_count += 1
+            essay.correction_date = '-'
             essay.grade = '-'
 
     correcting_essays_icon = 'warning'

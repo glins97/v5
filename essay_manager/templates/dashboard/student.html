@@ -108,6 +108,7 @@
                             <th> Banca </th>
                             <th> Tema</th>
                             <th> Data de Submissão</th>
+                            <th> Data de Correção</th>
                             <th> Nota</th>
                           </thead>
                           
@@ -118,6 +119,7 @@
                               <td><a href='essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
                               <td><a href='essays/{{essay.id}}/'> {{ essay.theme }}</a></td>
                               <td><a href='essays/{{essay.id}}/'> {{ essay.upload_date }} </a></td>
+                              <td><a href='essays/{{essay.id}}/'> {{ essay.correction_date }} </a></td>
                               <td class="text-bold"><a href='essays/{{essay.id}}/'> {{ essay.grade }} </a></td>
                             </tr>
                             {% endfor %}
