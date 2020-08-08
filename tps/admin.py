@@ -77,8 +77,37 @@ class TPSAdminForm(forms.ModelForm):
             instance.save()
         return instance
 
+def duplicate_tps(modeladmin, request, queryset):
+    for tps in queryset:
+        t_copy = TPS(
+            subject=tps.subject,
+            week=tps.week,
+            campus=tps.campus,
+            group=tps.group,
+            teacher=tps.teacher,
+            start_date=tps.start_date,
+            end_date=tps.end_date,
+            max_questions=tps.max_questions,
+            max_answers=tps.max_answers,
+            questions=tps.questions,
+            solutions=tps.solutions,
+            notify=tps.notify,
+            separate=tps.separate,
+            mailed=tps.mailed,
+        )
+        t_copy.save()
+        for question in Question.objects.filter(tps=tps):
+            q_copy = Question(
+                tps=t_copy,
+                number=question.number,
+                correct_answer=question.correct_answer
+            )
+            q_copy.save()
+duplicate_tps.short_description = "Duplicar formulários selecionados"
+
 class TPSAdmin(admin.ModelAdmin):
     form = TPSAdminForm
+    actions = [duplicate_tps]
     
     fieldsets = (
         ('Conteúdo', {
