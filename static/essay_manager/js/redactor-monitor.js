@@ -1003,6 +1003,7 @@ var save = document.getElementById('save');
 
 var loadedMediaRecorder = false;
 var rec = null;
+var recStartTime = null;
 function startRecording() {
     navigator.mediaDevices.getUserMedia({audio:true})
     .then(stream => {handlerFunction(stream)})
@@ -1010,29 +1011,46 @@ function startRecording() {
         rec = new MediaRecorder(stream);
         rec.ondataavailable = e => {
             audioData.push(e.data);
+            el = document.getElementsByClassName('plyr__time--current')[0];
+            if (!recStartTime)
+                recStartTime = new Date()
+            var seconds = Math.trunc((new Date() - recStartTime) / 1000)
+            var minutes = 0;
+            while (seconds > 60) {
+                seconds -= 60;
+                minutes += 1;
+            }
+            if (seconds < 10)
+                seconds = "0" + seconds
+            if (minutes < 10)
+                minutes = "0" + minutes
+
+            el.innerHTML = minutes + ":" + seconds;
+
             var blob = null;
             if (rec.state == "inactive"){
                 blob = new Blob(audioData,{type:'audio/mpeg-3'});
                 recordedAudio.src = URL.createObjectURL(blob);
                 recordedAudio.controls = true;
-                recordedAudio.autoplay = true;
                 document.getElementById("audioControls").hidden = false; 
             updateb64(blob);
             }
         }
-        rec.start();
+        rec.start(250);
         record.textContent = "Parar gravação";
     }
 }
 
 record.onclick = e => {
     if (record.textContent == "Começar gravação"){
+        recStartTime = new Date();
         audioData = [];
         startRecording();
         save.disabled = true;
         record.textContent = "Parar gravação";
     }
     else {
+        recStartTime = null;
         rec.stop();
         save.disabled = false;
         record.textContent = "Começar gravação";
