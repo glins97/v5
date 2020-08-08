@@ -10501,6 +10501,14 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
   .footer .copyright {
     padding-right: 15px; } }
 
+.fill {
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+}
+
 .dropdown-menu {
   display: none;
   padding: 0.3125rem 0;

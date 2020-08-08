@@ -81,7 +81,7 @@
                       <div class="ct-chart" id="gradesChart"></div>
                     </div>
                     <div class="card-body">
-                      <h4 class="card-title">Jornada do Mil</h4>
+                      <h4 class="card-title">Jornada do 1000</h4>
                     </div>
                     <div class="card-footer">
                       <div class="stats">
@@ -92,10 +92,10 @@
                 </div>
               </div>
               {% endif %}
-              {% if essays_count > 0 %}
               <div class="row">
-                <div class="col-md-12">
-                  <div class="card">
+                {% if essays_count > 0 %}
+                <div class={% if theme %}"col-xl-8 col-lg-6 col-md-12 col-sm-12"{% else %}"col-md-12"{% endif %}>
+                  <div class="card" id="user-essays">
                     <div class="card-header card-header-icon card-header-info">
                       <div class="card-icon">
                         <i class="material-icons">assignment</i>
@@ -106,7 +106,6 @@
                       <div class="table-responsive">
                         <table class="table table-hover">
                           <thead class="text-bold">
-                            
                             <th> ID </th>
                             <th> Banca </th>
                             <th> Tema</th>
@@ -120,7 +119,7 @@
                             <tr>
                               <td><a href='essays/{{essay.id}}/'> {{ essay.id }} </a></td>
                               <td><a href='essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
-                              <td><a href='essays/{{essay.id}}/'> {{ essay.theme }}</a></td>
+                              <td><a href='essays/{{essay.id}}/'> {{ essay.theme|truncatechars:40 }}</a></td>
                               <td><a href='essays/{{essay.id}}/'> {{ essay.upload_date }} </a></td>
                               <td><a href='essays/{{essay.id}}/'> {{ essay.correction_date }} </a></td>
                               <td class="text-bold"><a href='essays/{{essay.id}}/'> {{ essay.grade }} </a></td>
@@ -138,12 +137,37 @@
                         Aqui serão mostradas apenas suas últimas 5 redações!
                         {% endif %}
                       </div>
-                      <a class="btn btn-info pull-right" href="/essays/new/">Adicionar</a>
+                      <a class="btn btn-info pull-right" href="/essays/new/">Adicionar nova redação</a>
                     </div>
                   </div>
                 </div>
+                {% endif %}
+
+                {% if theme %}
+                <div class={% if essays_count > 0 %}"col-xl-4 col-lg-6 col-md-12 col-sm-12"{% else %}"col-md-12"{% endif %}>
+                  <div id="week-theme" style="height: 420px; cursor: pointer;" class="card" onclick="location.href='/themes/{{theme.id}}/';">
+                    <div id="week-theme-header" class="card-header card-header-{% if theme.done %}success{% else %}info{% endif %} card-header-icon">
+                      <div class="card-icon">
+                        <i class="material-icons">content_paste</i>
+                      </div>
+                      <h4 class="card-title">Tema da semana</h4>
+                    </div>
+                    <div class="card-footer" style="height: 100%;">
+                      <div id='week-theme-img' class="fill" style="background-image: url('/{{theme.file}}');"></div>
+                    </div>
+                    <div class="card-footer">
+                      <h5 style="text-align:center"><i>" Alcoolismo, como evitar esse vício que assola grande parte da população mundial "</i></h5>
+                    </div>
+                    <div class="card-footer">
+                      <div class="stats">
+                        {% if theme.done %}Tema já entregue!{% else %}Você ainda não entregou uma redação com esse tema!{% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
               </div>
-              {% endif %}
               <div class="row">
                 <div class="col-md-12 ml-auto mr-auto">
                   <div class="card card-calendar">
@@ -224,6 +248,23 @@
         
         $('#fullCalendar').fullCalendar('addEventSource', events);
 
+      });
+    </script>
+    <script>
+      function updateWeekThemeBox(){
+        userEssays = document.getElementById('user-essays');
+        weekTheme = document.getElementById('week-theme');
+        weekThemeImg = document.getElementById('week-theme-img');
+
+        if (userEssays)
+          weekTheme.style.height = $('#user-essays').height() + "px";
+        else
+          weekTheme.style.height = "420px";
+      }
+      
+      window.addEventListener("resize", updateWeekThemeBox);
+      $(document).ready(function() {
+        updateWeekThemeBox();
       });
     </script>
     <script>

@@ -9,8 +9,6 @@ def  to_str(self, *args, **kwargs):
     return '{} {}'.format(self.first_name, self.last_name)
 User.__str__ = to_str
 
-from essay_manager.apis.essay import send_mail
-
 juries = (
     ('ENEM', 'ENEM'),
     ('CESPE', 'CESPE'),
@@ -58,6 +56,8 @@ class Theme(models.Model):
     jury = models.CharField(max_length=255, choices=juries)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    highlighted_start_date = models.DateTimeField(blank=True, null=True)
+    highlighted_end_date = models.DateTimeField(blank=True, null=True)
     axis = models.CharField(max_length=255, choices=axes, default='OTHER')
     file = models.FileField(upload_to='uploads/')
     type = models.CharField(default='PAID', choices=theme_types, max_length=255)
@@ -130,6 +130,7 @@ class Correction(models.Model):
             self.essay.save()
 
         # if self.status == 'DONE':
+        #     from essay_manager.apis.essay import send_mail
         #     send_mail(self.essay.user, 'redação corrigida!', '<p>Acesse a plataforma para conferir a correção!</p>')
         super(Correction, self).save(*args, **kwargs)
     
