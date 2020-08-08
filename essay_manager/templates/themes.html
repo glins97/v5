@@ -17,7 +17,7 @@
 							{% for theme in themes %}
 							{% if theme.axis == axis %}
 							<div class="col-lg-4 col-md-6 col-sm-12">
-								<div class="card card-stats">
+								<div class="card card-stats" onclick="location.href='/themes/{{theme.id}}/';" style="cursor: pointer;">
 									<div class="card-header card-header-{% if theme.completed %}success{%else%}warning{% endif %} card-header-icon">
 										<div class="card-icon">
 											<i class="material-icons">{% if theme.completed %}check{% else %}assignment{% endif %}</i>

@@ -9,12 +9,10 @@ def themes_view(request):
     themes = []
     axes = {}
     for theme in Theme.objects.filter(active=True):
-        theme.completed = Essay.objects.filter(theme=theme, user=request.user).count() > 0
         axes[theme.axis] = 1
-        if theme.completed:
-            themes.append(theme)
-        elif theme.start_date < now() and theme.end_date > now():
-            themes.append(theme)
+        theme.completed = Essay.objects.filter(theme=theme, user=request.user).count() > 0
+        themes.append(theme)
+
     data = {
         'title': 'Temas',
         'axes': sorted(axes.keys(), key=lambda axis: axis if axis != 'Outros eixos' else 'zzzzzzzzzzzzzzzzzzzz'),
