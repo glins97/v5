@@ -16,10 +16,19 @@ class TPSScoreAdmin(admin.ModelAdmin):
     list_filter = ('month', 'campus', 'group',)
     list_per_page = 40
 
+def resend_results(modeladmin, request, queryset):
+    queryset.update(mailed_results=False)
+resend_results.short_description = "Reenviar resultados"
+
+def resend_answers(modeladmin, request, queryset):
+    queryset.update(mailed_answers=False)
+resend_answers.short_description = "Reenviar respostas"
+
 class TPSAnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'email', 'tps', 'grade',)
     list_filter = ('tps', 'grade',)
     list_per_page = 100
+    actions = [resend_results, resend_answers]
 
 from django.contrib.admin.utils import flatten_fieldsets
 
