@@ -9,6 +9,8 @@ def  to_str(self, *args, **kwargs):
     return '{} {}'.format(self.first_name, self.last_name)
 User.__str__ = to_str
 
+from essay_manager.apis.essay import send_mail
+
 juries = (
     ('ENEM', 'ENEM'),
     ('CESPE', 'CESPE'),
@@ -126,6 +128,9 @@ class Correction(models.Model):
             for comp in j_data['competencies']['grades']:
                 self.essay.grade += int(j_data['competencies']['grades'][comp])
             self.essay.save()
+
+        # if self.status == 'DONE':
+        #     send_mail(self.essay.user, 'redação corrigida!', '<p>Acesse a plataforma para conferir a correção!</p>')
         super(Correction, self).save(*args, **kwargs)
     
     class Meta:
