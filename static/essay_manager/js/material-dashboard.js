@@ -631,22 +631,33 @@ md = {
   lastEnd: null,
   lastInfo: null,
   updateData: {},
-  oldEvent: {},
   editMode: false,
 
   saveEvent: function() {
-    if (editMode)
+    if (editMode){
+      this.updateData = {};
+      this.updateData['title'] = $('#eventTextArea').val();
+      $('#eventTextArea').val('');
       this.updateEvent();
+    }
     else
       this.addEvent();
   },
   
   updateEvent: function() {
     $calendar = $('#fullCalendar');
-    this.lastInfo.title = $('#eventTextArea').val();
-    $('#eventTextArea').val('');
-    if (!this.lastInfo.title) return;
-    
+
+    var startDate = this.lastInfo.start._i;
+    startDate.setHours(startDate.getHours() + 3);
+    var endDate = this.lastInfo.start._d;
+    endDate.setHours(endDate.getHours() + 3);
+
+    oldEvent = {};
+    oldEvent['old_title'] = this.lastInfo.title;
+    oldEvent['old_year'] = startDate.getFullYear();
+    oldEvent['old_month'] = startDate.getMonth(); 
+    oldEvent['old_day'] = startDate.getDate(); 
+
     var new_events = [];
     var old_events = $calendar.fullCalendar('clientEvents');
     for (var event in old_events){
@@ -655,9 +666,9 @@ md = {
       }
     }
     eventData = {
-      title: this.lastInfo.title,
-      start: this.lastInfo.start._i,
-      end: this.lastInfo.start._i,
+      title: this.updateData['title'] ? this.updateData['title'] : this.lastInfo.title,
+      start: endDate,
+      end: endDate,
       'allDay': true,
       'className': 'event-azure',
     };
@@ -666,11 +677,10 @@ md = {
     $calendar.fullCalendar('renderEvent', eventData, true);
 
     var formData = new FormData();
-    this.updateData['title'] = this.lastInfo.title;
     for (var key in this.updateData)  
       formData.append(key, this.updateData[key]);  
-    for (var key in this.oldEvent)  
-      formData.append(key, this.oldEvent[key]);  
+    for (var key in oldEvent)  
+      formData.append(key, oldEvent[key]);  
 
     const csrftoken = Cookies.get('csrftoken');
     var xhr = new XMLHttpRequest();  
@@ -773,12 +783,18 @@ md = {
         $('#eventTextArea').val(info.title);
         $('#openEventModal').click(); 
         editMode = true;
-        me.oldEvent = {};
-        me.oldEvent['old_title'] = info.title;
-        me.oldEvent['old_year'] = info.start._i.getFullYear();
-        me.oldEvent['old_month'] = info.start._i.getMonth(); 
-        me.oldEvent['old_day'] = info.start._i.getDate(); 
-      }
+      },
+      eventDrop: function(info) {
+        me.lastInfo = info;
+        var endDate = info.start._d;
+        endDate.setHours(endDate.getHours() + 3);
+        
+        me.updateData = {};
+        me.updateData['year'] = endDate.getFullYear();
+        me.updateData['month'] = endDate.getMonth(); 
+        me.updateData['day'] = endDate.getDate();
+        me.updateEvent();
+      },
     });
   },
 
