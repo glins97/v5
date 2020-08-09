@@ -10,14 +10,14 @@
         <!-- End Navbar -->
         <div class="content">
           <div class="content">
-            <button data-toggle="modal" id="openAddEventModal" data-target="#addEventModal" hidden="true"></button>
-            <div class="modal has-info show" id="addEventModal" role="dialog" aria-labelledby="addEventModal" style="display: none;" aria-hidden="true">
+            <button data-toggle="modal" id="openEventModal" data-target="#eventModal" hidden="true"></button>
+            <div class="modal has-info show" id="eventModal" role="dialog" aria-labelledby="eventModal" style="display: none;" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-body">
-                    <label for="addEventTextArea">Tema:</label>
-                    <textarea class="form-control" id="addEventTextArea"></textarea>
-                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveNewEvent();">Salvar</button>
+                    <label for="eventTextArea">Tema:</label>
+                    <textarea class="form-control" id="eventTextArea"></textarea>
+                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveEvent();">Salvar</button>
                   </div>
                 </div>
               </div>
@@ -241,6 +241,7 @@
             'title': '{{event.title}}',
             'start': new Date({{event.year}}, {{event.month}}, {{event.day}}),
             'end': new Date({{event.year}}, {{event.month}}, {{event.day}}),
+            'allDay': true,
             'className': 'event-azure',
           },
           {% endfor %}

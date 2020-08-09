@@ -629,17 +629,75 @@ md = {
 
   lastStart: null,
   lastEnd: null,
-  saveNewEvent: function() {
+  lastInfo: null,
+  updateData: {},
+  oldEvent: {},
+  editMode: false,
+
+  saveEvent: function() {
+    if (editMode)
+      this.updateEvent();
+    else
+      this.addEvent();
+  },
+  
+  updateEvent: function() {
+    $calendar = $('#fullCalendar');
+    this.lastInfo.title = $('#eventTextArea').val();
+    $('#eventTextArea').val('');
+    if (!this.lastInfo.title) return;
+    
+    var new_events = [];
+    var old_events = $calendar.fullCalendar('clientEvents');
+    for (var event in old_events){
+      if (old_events[event]['_id'] != this.lastInfo['_id']) {
+        new_events.push(old_events[event]);
+      }
+    }
+    eventData = {
+      title: this.lastInfo.title,
+      start: this.lastInfo.start._i,
+      end: this.lastInfo.start._i,
+      'allDay': true,
+      'className': 'event-azure',
+    };
+    $calendar.fullCalendar('removeEvents');
+    $calendar.fullCalendar('addEventSource', new_events);
+    $calendar.fullCalendar('renderEvent', eventData, true);
+
+    var formData = new FormData();
+    this.updateData['title'] = this.lastInfo.title;
+    for (var key in this.updateData)  
+      formData.append(key, this.updateData[key]);  
+    for (var key in this.oldEvent)  
+      formData.append(key, this.oldEvent[key]);  
+
+    const csrftoken = Cookies.get('csrftoken');
+    var xhr = new XMLHttpRequest();  
+    xhr.open("POST", "/api/events/update/");  
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.send(formData); 
+    xhr.onreadystatechange = function() { 
+      if (xhr.readyState == 4)
+        if (xhr.status == 200){
+          $calendar.fullCalendar('unselect');
+        }
+    };
+  },
+
+  addEvent: function() {
     $calendar = $('#fullCalendar');
     var eventData;
-    event_title = $('#addEventTextArea').val();
-    $('#addEventTextArea').val('');
+    event_title = $('#eventTextArea').val();
+    $('#eventTextArea').val('');
 
     if (event_title) {
       eventData = {
         title: event_title,
         start: lastStart,
         end: lastEnd,
+        'allDay': true,
+        'className': 'event-azure',
       };
       $calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
     }
@@ -659,7 +717,6 @@ md = {
         if (xhr.status == 200)
           $calendar.fullCalendar('unselect');
     };
-
   },
 
   initFullCalendar: function() {
@@ -669,6 +726,7 @@ md = {
     y = today.getFullYear();
     m = today.getMonth();
     d = today.getDate();
+    var me = this;
 
     $calendar.fullCalendar({
       monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
@@ -700,103 +758,27 @@ md = {
       },
 
       select: function(start, end) {
-        $('#openAddEventModal').click();
+        $('#openEventModal').click();
+        editMode = false;
         lastStart = start;
         lastEnd = end;
-        // on select we show the Sweet Alert modal with an input
-        // swal({
-        //     html: '<div class="form-group">' +
-        //       '<input class="form-control" placeholder="Tema" id="input-field">' +
-        //       '</div>',
-        //     showCancelButton: true,
-        //     confirmButtonClass: 'btn btn-success',
-        //     cancelButtonClass: 'btn btn-danger',
-        //     buttonsStyling: false
-        //   }).then(function(result) {
-
-        //     var eventData;
-        //     event_title = $('#input-field').val();
-
-        //     if (event_title) {
-        //       eventData = {
-        //         title: event_title,
-        //         start: start,
-        //         end: end
-        //       };
-        //       $calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
-        //     }
-
-        //     $calendar.fullCalendar('unselect');
-
-        //   })
-        //   .catch(swal.noop);
       },
       editable: true,
       eventLimit: true, // allow "more" link when too many events
 
-
       // color classes: [ event-blue | event-azure | event-green | event-orange | event-red ]
-      events: [
-        // {
-        //   title: 'All Day Event',
-        //   start: new Date(2020, 0, 1),
-        //   className: 'event-azure'
-        // },
-        // {
-        //   id: 999,
-        //   title: 'Repeating Event',
-        //   start: new Date(y, m, d - 4, 6, 0),
-        //   allDay: false,
-        //   className: 'event-rose'
-        // },
-        // {
-        //   id: 999,
-        //   title: 'Repeating Event',
-        //   start: new Date(y, m, d + 3, 6, 0),
-        //   allDay: false,
-        //   className: 'event-rose'
-        // },
-        // {
-        //   title: 'Meeting',
-        //   start: new Date(y, m, d - 1, 10, 30),
-        //   allDay: false,
-        //   className: 'event-green'
-        // },
-        // {
-        //   title: 'Lunch',
-        //   start: new Date(y, m, d + 7, 12, 0),
-        //   end: new Date(y, m, d + 7, 14, 0),
-        //   allDay: false,
-        //   className: 'event-red'
-        // },
-        // {
-        //   title: 'Md-pro Launch',
-        //   start: new Date(y, m, d - 2, 12, 0),
-        //   allDay: true,
-        //   className: 'event-azure'
-        // },
-        // {
-        //   title: 'Birthday Party',
-        //   start: new Date(y, m, d + 1, 19, 0),
-        //   end: new Date(y, m, d + 1, 22, 30),
-        //   allDay: false,
-        //   className: 'event-azure'
-        // },
-        // {
-        //   title: 'Click for Creative Tim',
-        //   start: new Date(y, m, 21),
-        //   end: new Date(y, m, 22),
-        //   url: 'http://www.creative-tim.com/',
-        //   className: 'event-orange'
-        // },
-        // {
-        //   title: 'Click for Google',
-        //   start: new Date(y, m, 21),
-        //   end: new Date(y, m, 22),
-        //   url: 'http://www.creative-tim.com/',
-        //   className: 'event-orange'
-        // }
-      ]
+      events: [],
+      eventClick: function(info) {
+        me.lastInfo = info;    
+        $('#eventTextArea').val(info.title);
+        $('#openEventModal').click(); 
+        editMode = true;
+        me.oldEvent = {};
+        me.oldEvent['old_title'] = info.title;
+        me.oldEvent['old_year'] = info.start._i.getFullYear();
+        me.oldEvent['old_month'] = info.start._i.getMonth(); 
+        me.oldEvent['old_day'] = info.start._i.getDate(); 
+      }
     });
   },
 

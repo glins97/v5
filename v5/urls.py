@@ -85,6 +85,7 @@ urlpatterns = [
     path('api/password/change/', change_password_endpoint),
     path('api/events/', get_events_endpoint),
     path('api/events/new/', create_event_endpoint),
+    path('api/events/update/', update_event_endpoint),
     path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
 
