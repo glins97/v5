@@ -70,7 +70,7 @@ class Theme(models.Model):
 
     def save(self, *args, **kwargs):
         if self.file and '.pdf' in str(self.file).lower()[-4:]:
-            super(TPS, self).save(*args, **kwargs)
+            super(Theme, self).save(*args, **kwargs)
             info = pdfinfo_from_path(str(self.file.file), userpw=None, poppler_path=None)
             maxPages = info["Pages"]
             images = []
