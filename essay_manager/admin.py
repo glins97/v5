@@ -2,8 +2,28 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import Theme, Essay, Profile, Correction, ErrorClassification, GenericErrorClassification, Event
 
+def deactivate_themes(modeladmin, request, queryset):
+    queryset.update(active=False)
+deactivate_themes.short_description = "Desativar temas selecionados"
+
+def activate_themes(modeladmin, request, queryset):
+    queryset.update(active=True)
+activate_themes.short_description = "Ativar temas selecionados"
+
 class ThemeAdmin(admin.ModelAdmin):
     search_fields = ('description', )
+    fieldsets = (
+        ('Geral', {
+            'fields': ('active', 'description', 'jury', 'axis', 'type', 'file', ),
+        }),
+        ('Disponibilidade', {
+            'fields': ('start_date', 'end_date', ),
+        }),
+        ('Tema da semana', {
+            'fields': ('highlighted_start_date', 'highlighted_end_date', ),
+        }),
+    )
+    actions = [activate_themes, deactivate_themes]
 
 class EssayAdmin(admin.ModelAdmin):
     autocomplete_fields = ('user', )

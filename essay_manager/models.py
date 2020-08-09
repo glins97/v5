@@ -55,16 +55,16 @@ axes = (
 )
 
 class Theme(models.Model):
-    active = models.BooleanField(default=False)
-    description = models.CharField(max_length=255)
-    jury = models.CharField(max_length=255, choices=juries)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    highlighted_start_date = models.DateTimeField(blank=True, null=True)
-    highlighted_end_date = models.DateTimeField(blank=True, null=True)
-    axis = models.CharField(max_length=255, choices=axes, default='OTHER')
-    file = models.FileField(upload_to='uploads/')
-    type = models.CharField(default='PAID', choices=theme_types, max_length=255)
+    active = models.BooleanField(default=False, verbose_name='Visível')
+    description = models.CharField(max_length=255, verbose_name='Nome')
+    jury = models.CharField(max_length=255, choices=juries, verbose_name='Banca')
+    start_date = models.DateTimeField(verbose_name='Data de iníncio')
+    end_date = models.DateTimeField(verbose_name='Data de término')
+    highlighted_start_date = models.DateTimeField(blank=True, null=True, verbose_name='Data de início')
+    highlighted_end_date = models.DateTimeField(blank=True, null=True, verbose_name='Data de término')
+    axis = models.CharField(max_length=255, choices=axes, default='OTHER', verbose_name='Eixo')
+    file = models.FileField(upload_to='uploads/', verbose_name='Arquivo descritivo')
+    type = models.CharField(default='PAID', choices=theme_types, max_length=255, verbose_name='Disponibilidade')
     def __str__(self):
         return self.description
 
