@@ -117,10 +117,6 @@ class TPS(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             super(TPS, self).save(*args, **kwargs)
-
-        directory = f'uploads/tps/{self.id}'
-        if not os.path.exists(directory):
-            os.makedirs(directory)
         
         if self.questions and '.pdf' in str(self.questions).lower()[-4:]:
             super(TPS, self).save(*args, **kwargs)
@@ -132,7 +128,7 @@ class TPS(models.Model):
 
             min_shape = sorted( [(np.sum(i.size), i.size ) for i in images])[0][1]
             imgs_comb = np.vstack( (np.asarray( i.resize(min_shape) ) for i in images ) )
-            imgs_comb = PIL.Image.fromarray( imgs_comb)
+            imgs_comb = PIL.Image.fromarray(imgs_comb)
             
             destination = str(self.questions.file).lower().replace('.pdf', '.png')
             imgs_comb.save(str(self.questions.file).lower().replace('.pdf', '.png'))
