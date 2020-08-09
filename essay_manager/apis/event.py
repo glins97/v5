@@ -52,12 +52,30 @@ def update_event_endpoint(request):
         return JsonResponse(
             {
                 'title': event.title,
-                'yeay': event.year,
+                'year': event.year,
                 'month': event.month,
                 'day': event.day,
             },
         safe=False)
     except Exception as e:
         logger.error(f'update_event@essay::Exception thrown | {request.user} {request} {repr(e)}')
+        return JsonResponse([], safe=False)
+
+@login_required
+def delete_event_endpoint(request):
+    try:
+        event = Event.objects.filter(user=request.user, title=request.POST['old_title'], year=request.POST['old_year'], month=request.POST['old_month'], day=request.POST['old_day']).first()
+        if not event: return JsonResponse([], safe=False)
+        event.delete()
+        return JsonResponse(
+            {
+                'title': event.title,
+                'year': event.year,
+                'month': event.month,
+                'day': event.day,
+            },
+        safe=False)
+    except Exception as e:
+        logger.error(f'delete_event@essay::Exception thrown | {request.user} {request} {repr(e)}')
         return JsonResponse([], safe=False)
 

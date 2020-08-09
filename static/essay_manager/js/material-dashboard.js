@@ -633,11 +633,53 @@ md = {
   updateData: {},
   editMode: false,
 
+  deleteEvent: function() {
+    $calendar = $('#fullCalendar');
+
+    var startDate = this.lastInfo.start._i;
+    startDate.setHours(startDate.getHours() + 3);
+    var endDate = this.lastInfo.start._d;
+    endDate.setHours(endDate.getHours() + 3);
+
+    oldEvent = {};
+    oldEvent['old_title'] = this.lastInfo.title;
+    oldEvent['old_year'] = startDate.getFullYear();
+    oldEvent['old_month'] = startDate.getMonth(); 
+    oldEvent['old_day'] = startDate.getDate(); 
+
+    var new_events = [];
+    var old_events = $calendar.fullCalendar('clientEvents');
+    for (var event in old_events){
+      if (old_events[event]['_id'] != this.lastInfo['_id']) {
+        new_events.push(old_events[event]);
+      }
+    }
+    $calendar.fullCalendar('removeEvents');
+    $calendar.fullCalendar('addEventSource', new_events);
+
+    var formData = new FormData();
+    for (var key in oldEvent)  
+      formData.append(key, oldEvent[key]);  
+
+    const csrftoken = Cookies.get('csrftoken');
+    var xhr = new XMLHttpRequest();  
+    xhr.open("POST", "/api/events/delete/");  
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.send(formData); 
+    xhr.onreadystatechange = function() { 
+      console.log(xhr.status, xhr.readyState, xhr.response);
+      if (xhr.readyState == 4)
+        if (xhr.status == 200){
+          $calendar.fullCalendar('unselect');
+        }
+    };
+  },
+
   saveEvent: function() {
     if (editMode){
       this.updateData = {};
-      this.updateData['title'] = $('#eventTextArea').val();
-      $('#eventTextArea').val('');
+      this.updateData['title'] = $('#updateEventTextArea').val();
+      $('#updateEventTextArea').val('');
       this.updateEvent();
     }
     else
@@ -781,7 +823,7 @@ md = {
       eventClick: function(info) {
         me.lastInfo = info;    
         $('#eventTextArea').val(info.title);
-        $('#openEventModal').click(); 
+        $('#openUpdateEventModal').click(); 
         editMode = true;
       },
       eventDrop: function(info) {

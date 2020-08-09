@@ -86,6 +86,7 @@ urlpatterns = [
     path('api/events/', get_events_endpoint),
     path('api/events/new/', create_event_endpoint),
     path('api/events/update/', update_event_endpoint),
+    path('api/events/delete/', delete_event_endpoint),
     path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
 

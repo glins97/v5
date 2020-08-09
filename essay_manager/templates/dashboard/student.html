@@ -11,12 +11,25 @@
         <div class="content">
           <div class="content">
             <button data-toggle="modal" id="openEventModal" data-target="#eventModal" hidden="true"></button>
+            <button data-toggle="modal" id="openUpdateEventModal" data-target="#updateEventModal" hidden="true"></button>
             <div class="modal has-info show" id="eventModal" role="dialog" aria-labelledby="eventModal" style="display: none;" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-body">
                     <label for="eventTextArea">Tema:</label>
                     <textarea class="form-control" id="eventTextArea"></textarea>
+                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveEvent();">Salvar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal has-info show" id="updateEventModal" role="dialog" aria-labelledby="updateEventModal" style="display: none;" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <label for="updateEventTextArea">Tema:</label>
+                    <textarea class="form-control" id="updateEventTextArea"></textarea>
+                    <button class="btn btn-danger btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.deleteEvent();">Deletar</button>
                     <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveEvent();">Salvar</button>
                   </div>
                 </div>
