@@ -45,13 +45,12 @@ productions = (
 axes = (
     ('Saúde', 'Saúde'),
     ('Educação', 'Educação'),
-    ('Política', 'Política'),
-    ('Economia', 'Economia'),
-    ('Social', 'Social'),
+    ('Política e Economia', 'Política e Economia'),
+    ('Organização Social', 'Organização Social'),
     ('Meio Ambiente', 'Meio Ambiente'),
     ('Tecnologia', 'Tecnologia'),
-    ('Outros eixos', 'Outros eixos'),
-    ('De outros alunos', 'De outros alunos'),
+    ('Outros Eixos', 'Outros Eixos'),
+    ('De Outros Alunos', 'De Outros Alunos'),
 )
 
 class Theme(models.Model):
