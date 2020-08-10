@@ -218,9 +218,10 @@ def _mail_results_bsb():
                         mail_body += f'<p>Parabéns, você é o aluno master!</p>'   
 
                     mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'  
-                    current_score = TPSScore.objects.filter(email=tps_answer.email, month=tps_answer.submission_date.month, campus=tps_answer.tps.campus).first()
-                    if current_score: 
-                        mail_body += '<p>Pontuação total neste mês: {}</p>'.format(current_score.score)   
+                    if tps.group != 'PARTICULARES':
+                        current_score = TPSScore.objects.filter(email=tps_answer.email, month=tps_answer.submission_date.month, campus=tps_answer.tps.campus).first()
+                        if current_score: 
+                            mail_body += '<p>Pontuação total neste mês: {}</p>'.format(current_score.score)   
 
             mail_body += f'<p>As soluções comentadas (e seu caderno de respostas) serão enviadas por e-mail às 18:00!</p>'  
             if send_mail(tps_answer.email, f'resultado {tps_answer.tps}', mail_body):
