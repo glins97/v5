@@ -9,13 +9,26 @@ def themes_view(request):
     themes = []
     axes = {}
     for theme in Theme.objects.filter(active=True):
-        axes[theme.axis] = 1
+        if theme.axis not in axes:
+            axes[theme.axis] = {
+                'description': theme.axis, 
+                'total_themes': 1, 
+                'done_themes': 0, 
+            }
+        else:
+            axes[theme.axis]['total_themes'] += 1
         theme.completed = Essay.objects.filter(theme=theme, user=request.user).count() > 0
+        if theme.completed:
+            axes[theme.axis]['done_themes'] += 1
         themes.append(theme)
+    
+    axes_l = []
+    for axis in sorted(axes.keys(), key=lambda axis: axis if axis != 'Outros eixos' else 'zzzzzzzzzzzzzzzzzzzz'):
+        axes_l.append(axes[axis])
 
     data = {
         'title': 'Temas',
-        'axes': sorted(axes.keys(), key=lambda axis: axis if axis != 'Outros eixos' else 'zzzzzzzzzzzzzzzzzzzz'),
+        'axes': axes_l,
         'themes': themes,
         'user': get_user_details(request.user),
     }
