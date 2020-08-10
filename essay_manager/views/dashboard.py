@@ -43,9 +43,10 @@ def student_dashboard_view(request):
         corrected_essays_msg = 'Busque outros temas!'
 
     theme = Theme.objects.filter(active=True, highlighted_start_date__lt=now(), highlighted_end_date__gt=now()).first()
-    theme.done = False
-    if Essay.objects.filter(user=request.user, theme=theme).count():
-        theme.done = True
+    if theme:
+        theme.done = False
+        if Essay.objects.filter(user=request.user, theme=theme).count():
+            theme.done = True
     data = {
         'title': 'Preparação',
         
