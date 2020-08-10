@@ -47,7 +47,7 @@ def tps_view(request, id):
                     'FIS': 'Física',
                     'FIL': 'Filosofia',
                     'SIM': 'Simulado',
-                }.get(subject.upper(), subject.capitalize()),
+                }.get(tps.subject.upper()[:3], tps.subject.title()),
                 'tps': tps,
                 'questions': Question.objects.filter(tps=tps),
             }
