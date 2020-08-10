@@ -6,3 +6,4 @@ from .document import *
 from .pdf_filler import *
 from .password import *
 from .event import *
+from .exercises import *

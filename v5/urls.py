@@ -73,6 +73,8 @@ urlpatterns = [
     path('themes/<int:id>/', theme_view),
     path('management/', management_view),
     path('graphs/', graphs_view),
+    path('exercises/<int:id>/', exercise_view),
+    path('exercises/', exercises_view),
     path('password/change/', change_password_view),
 
     # - apis
@@ -87,6 +89,9 @@ urlpatterns = [
     path('api/events/new/', create_event_endpoint),
     path('api/events/update/', update_event_endpoint),
     path('api/events/delete/', delete_event_endpoint),
+    path('api/exercises/interest/<int:id>/', interest_exercise_endpoint),
+    path('api/exercises/uninterest/<int:id>/', uninterest_exercise_endpoint),
+    path('api/exercises/complete/<int:id>/', complete_exercise_endpoint),
     path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
 

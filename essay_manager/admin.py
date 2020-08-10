@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Theme, Essay, Profile, Correction, ErrorClassification, GenericErrorClassification, Event
+from .models import *
 
 def deactivate_themes(modeladmin, request, queryset):
     queryset.update(active=False)
@@ -108,3 +108,5 @@ admin.site.register(Correction, CorrectionAdmin)
 admin.site.register(ErrorClassification, ErrorClassificationAdmin)
 admin.site.register(GenericErrorClassification, GenericErrorClassificationAdmin)
 admin.site.register(Event)
+admin.site.register(ExerciseList)
+admin.site.register(InterestedExerciseList)

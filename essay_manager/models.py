@@ -404,3 +404,26 @@ class Event(models.Model):
     class Meta:
         verbose_name = 'evento'
         verbose_name_plural = 'eventos'
+
+class ExerciseList(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    file = models.FileField(upload_to='uploads/')
+
+    def __str__(self):
+        return self.title 
+
+    class Meta:
+        verbose_name = 'exercício'
+        verbose_name_plural = 'exercícios'
+
+class InterestedExerciseList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    list = models.ForeignKey(ExerciseList, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+    completion_date = models.DateTimeField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.completed and not self.completion_date:
+            self.completion_date = now()
+        super(InterestedExerciseList, self).save(*args, **kwargs)

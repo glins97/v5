@@ -54,6 +54,14 @@
 				</a>
 			</li>
 			{% endif %}
+			{% if user.obj|has_permission:'student' %}
+			<li class="nav-item {% if title == 'Exercícios' %}active{%endif%}">
+				<a class="nav-link" href="/exercises/">
+					<i class="material-icons">subject</i>
+					<p>Exercícios</p>
+				</a>
+			</li>
+			{% endif %}
 			{% if user.obj|has_permission:'superuser' %}
 			<li class="nav-item {% if title == 'Gestão' %}active{%endif%}">
 				<a class="nav-link" href="/management/">
