@@ -45,8 +45,11 @@ def themes_view(request):
             elif theme.jury == 'CESPE':
                axes_cespe[theme.axis]['total_themes'] += 1
 
-        theme.completed = Essay.objects.filter(theme=theme, user=request.user).count() > 0
+        theme.last_essay = '-'
+        theme.done_essays = Essay.objects.filter(theme=theme, user=request.user).count()
+        theme.completed = theme.done_essays > 0
         if theme.completed:
+            theme.last_essay = Essay.objects.filter(theme=theme, user=request.user).first().upload_date
             axes[theme.axis]['done_themes'] += 1
             if theme.jury == 'ENEM':
                axes_enem[theme.axis]['done_themes'] += 1
