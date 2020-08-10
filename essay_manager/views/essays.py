@@ -83,7 +83,9 @@ def _student_essay_view(request, id):
         'username': first_name[0].upper() + first_name[1:].lower(), 
         'data': mark_safe(corrections[0].data) if corrections else {},
     }
-    return render(request, 'essay/student.html', data)
+    if essay.theme.jury == 'VUNESP':
+        return render(request, 'essay/student/vunesp.html', data)
+    return render(request, 'essay/student/enem.html', data)
 
 def add_padding(l, chunk_size, padding):
     while len(l) % chunk_size != 0:
@@ -132,7 +134,9 @@ def _monitor_essay_view(request, id):
         'generic_error_classifications_c5': add_padding(generic_error_classifications_c5, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
         'data': mark_safe(corrections[0].data),
     }
-    return render(request, 'essay/monitor.html', data)
+    if essay.theme.jury == 'VUNESP':
+        return render(request, 'essay/monitor/vunesp.html', data)
+    return render(request, 'essay/monitor/enem.html', data)
 
 def essays_view(request):
     return get_view_by_permission(request, **{

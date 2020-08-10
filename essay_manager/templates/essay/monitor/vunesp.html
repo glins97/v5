@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
+{% include "head.html" %}
+{% load chunks %}
+<body class="">
+  <div class="wrapper ">
+    {% include "sidebar.html" %}
+    <div class="main-panel">
+      <!-- Navbar -->
+      {% include "navbar.html" %}
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row sticky-top" id="btns">
+              <div class="col-md-auto ml-auto mr-auto" style="max-width: 80vw; min-width: 650px;">
+                <div class="card card-chart text-center">
+                  <div class="card-body text-center">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn shadow-none btn-outline-danger" id="selectColorDanger">
+                        <input type="radio" name="options" id="option4" aria-pressed="false">        c1
+                      </label>
+                      <label class="btn shadow-none btn-outline-primary" id="selectColorPrimary" style="margin-left: -1px;">
+                        <input type="radio" name="options" id="option1" aria-pressed="false">        c2
+                      </label>
+                      <label class="btn shadow-none btn-outline-info" id="selectColorInfo" style="margin-left: -1px;"> 
+                        <input type="radio" name="options" id="option6" aria-pressed="false" class="text-center">        c3
+                      </label>
+                    <label class="btn shadow-none btn-outline-warning" id="selectColorWarning">
+                      <input type="radio" name="options" id="option5" aria-pressed="false">        c4
+                    </label>
+                    <label class="btn shadow-none btn-outline-success" id="selectColorSuccess">
+                      <input type="radio" name="options" id="option3" aria-pressed="false">        c5
+                    </label>
+                    <label class="btn shadow-none btn-outline-dark" id="selectColorGrey" style="margin-left: -2px; border: 1px !important; border-color: #333333 !important; border-style: solid !important;
+                      border-width: 1px !important; ">
+                      <input type="radio" name="options" id="option2" aria-pressed="false"> Tese
+                    </label>
+                  </div>
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn shadow-none btn-outline-info" style="margin-left: 20px; margin-right: -1px;" id="selectModeLine">
+                      <input type="radio" name="selectModeLine" style="box-shadow:none !important;"  aria-pressed="false"> MARCAÇÃO
+                    </label>
+                    <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="selectModeComment">
+                      <input type="radio" name="selectModeComment" style="box-shadow:none !important;"  aria-pressed="false"> COMENTÁRIO
+                    </label>
+                    <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="selectModeAudio">
+                      <input type="radio" name="selectModeAudio" style="box-shadow:none !important;"  aria-pressed="false"> ÁUDIO
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <button class="btn btn-info" data-toggle="modal" data-target="#manualModal"> Consultar manual </button> -->
+          <button class="btn btn-info" data-toggle="modal" data-target="#themeModal"> Visualizar tema </button>
+          <!-- <a class="btn btn-info" style="color: white;" href="/api/essays/download/{{essay.id}}/"> Baixar correção </a> -->
+          <div class="float-right">
+            <button class="btn btn-warning" onclick="document.getElementById('status-input').value='ACTIVE';updateExportCorrectionData();"> Salvar sem finalizar  </button>
+            <!-- <button class="btn btn-danger" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false"> Anular redação </button> -->
+          </div>
+          
+          <!-- <div class="modal has-info show" id="manualModal" role="dialog" aria-labelledby="manualModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
+              <div class="modal-content ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
+                <div class="modal-header">
+                  <h4 class="modal-title">Manual do avaliador</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img src="/uploads/MANUAL_AVALIADOR-02.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-03.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-04.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-05.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-06.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-07.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-08.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-09.jpg" width="100%"/>
+                  <img src="/uploads/MANUAL_AVALIADOR-10.jpg" width="100%"/>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="modal has-info show" id="themeModal" role="dialog" aria-labelledby="themeModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog ml-auto mr-auto" style="width: 90% !important; max-width: 90% !important;">
+              <div class="modal-content ml-auto mr-auto" style="width: 90% !important; max-width: 90% !important;">
+                <div class="modal-header">
+                  <h4 class="modal-title">Tema do Aluno</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img src=/{{essay.theme.file}} width="100%"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <button data-toggle="modal" id="openAudioModal" data-target="#audioModal" hidden="true"></button>
+          <div class="modal has-info show" id="audioModal" role="dialog" aria-labelledby="audioModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="container cc-center">
+                    <div class="video-container">
+                      <div class="w-embed">
+                        <audio id="recordedAudio" class="js-player" hidden="true">
+                          <source/>
+                        </audio>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="audioControls">
+                    <button class="btn btn-info btn-link" id="record">Começar gravação</button>
+                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="saveAudio();">Salvar</button>
+                    <button class="btn btn-danger btn-link float-right pull-right" id="cancel" data-dismiss="modal">Cancelar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row" id="card-essay">
+            <div class="col-md-12">
+              <div class="card card-chart">
+                <div class="card-body">
+                  <h3 class="card-title text-center">Redação #{{essay.id}}</h3>
+                  <h5 class="card-title text-center">{{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h5>
+                  <h4 class="card-title text-center">{{essay.upload_date}}</h4>
+                </div>
+                <div class="card-footer">
+                  <i> <img id="src" class="src" src="/{{essay.file}}" width="100%"/> </i> 
+                </div>
+                <canvas id="canvas" class="src" style="cursor: default;"></canvas>
+                <canvas id="canvasPlaceholder" class="src" style="cursor: default;"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-auto ml-auto mr-auto">
+              <button hidden="true" id="openCommentModal" class="btn btn-primary btn-round" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
+                <div class="ripple-container"></div>
+              </button>
+                <div class="modal has-info show" id="myModal" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                  <div class="modal-dialog" style="width:900px !important; max-width:900px !important;">
+                    <div class="modal-content" style="width:900px !important;">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Adicionar comentário para {{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" style="margin-top: -10px; !important">
+                        <div class="row">
+                          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn shadow-none btn-outline-info" style="margin-left: 45px; margin-right: -1px;" id="modalC1" onclick="showCompetencyErrors('errorsC1');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 1
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -2px;" id="modalC2" onclick="showCompetencyErrors('errorsC2');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 2
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="modalC3" onclick="showCompetencyErrors('errorsC3');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 3
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="modalC4" onclick="showCompetencyErrors('errorsC4');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 4
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="modalC5" onclick="showCompetencyErrors('errorsC5');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 5
+                            </label>
+                          </div>
+                        </div>
+                        <div class="container collapse" id="errorsC1">
+                          {% for chunk in error_classifications_c1|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC2">
+                          {% for chunk in error_classifications_c2|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC3">
+                          {% for chunk in error_classifications_c3|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC4">
+                          {% for chunk in error_classifications_c4|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC5">
+                          {% for chunk in error_classifications_c5|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="comment-text">Comentários</label>
+                              <textarea class="form-control" id="comment-text" rows="5" style="width:90% !important;"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-link" data-dismiss="modal" onclick="saveComment();">Salvar
+                          <div class="ripple-container"><div class="ripple-decorator ripple-on ripple-out" style="left: 36.0833px; top: 14px; background-color: rgb(244, 67, 54); transform: scale(8.51041);"></div></div></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card has-info card">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Expressão</h3>
+                      <div class="container">
+                        <p>Grafia / Acentuação:</p>
+                        <div id="slider-grafia" class="slider slider-info"></div>
+                        <br>
+                        <br>
+                        <p>Morfossintaxe:</p>
+                        <div id="slider-morfo" class="slider slider-info"></div>
+                        <br>
+                        <br>
+                        <p>Propriedade vocabular:</p>
+                        <div id="slider-vocab" class="slider slider-info"></div>
+                        <br>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card has-info card">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Estrutura</h3>
+                      <div class="container">
+                        <p>Projeto de texto:</p>
+                        <div id="slider-projeto" class="slider slider-info"></div>
+                        <br>
+                        <br>
+                        <p>Desenvolvimento das ideias:</p>
+                        <div id="slider-dev" class="slider slider-info"></div>
+                        <br>
+                        <br>
+                        <p>Síntese:</p>
+                        <div id="slider-sintese" class="slider slider-info"></div>
+                        <br>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card has-info card-chart">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Nota</h3>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Número de linhas</label>
+                              <input type="text" id="formtextarea-lines" class="form-control" value="" style="width: 100%;" onchange="updateTextfield('formtextarea-lines', 'lines')">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Número de erros</label>
+                              <input type="text"  id="formtextarea-errors" class="form-control" value="" style="width: 100%;" onchange="updateTextfield('formtextarea-errors', 'errors')">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="formtextarea-generic">Comentários gerais</label>
+                              <br>
+                              <textarea class="form-control" id="formtextarea-generic" rows="5" onchange="updateTextfield('formtextarea-generic', 'generic')"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Finalizar </button>
+                  <form id="submitUpdateForm" class="form" method="post" action="/corrections/update/{{essay.id}}/">
+                    {% csrf_token %}
+                    <input type="hidden" class="form-control" name="data" maxlength="150" required="" id="formInput">
+                    <input type="hidden" class="form-control" id="status-input" name="status" maxlength="150" value="DONE">
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% include "footer.html" %}
+          </div>
+        </div>
+        <!--   Core JS Files   -->
+        <script src="/static/essay_manager/js/core/jquery.min.js"></script>
+        <script src="/static/essay_manager/js/core/popper.min.js"></script>
+        <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
+        <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+        <script src="/static/essay_manager/js/redactor-monitor-vunesp.js?{% now 'U' %}"></script>
+        <!-- Plugin for the momentJs  -->
+        <script src="/static/essay_manager/js/plugins/moment.min.js"></script>
+        <!--  Plugin for Sweet Alert -->
+        <script src="/static/essay_manager/js/plugins/sweetalert2.js"></script>
+        <!-- Forms Validations Plugin -->
+        <script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
+        <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+        <script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
+        <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+        <script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
+        <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+        <script src="/static/essay_manager/js/plugins/bootstrap-datetimepicker.min.js"></script>
+        <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
+        <script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
+        <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+        <script src="/static/essay_manager/js/plugins/bootstrap-tagsinput.js"></script>
+        <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+        <script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
+        <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+        <script src="/static/essay_manager/js/plugins/fullcalendar.min.js"></script>
+        <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
+        <script src="/static/essay_manager/js/plugins/jquery-jvectormap.js"></script>
+        <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+        <script src="/static/essay_manager/js/plugins/nouislider.min.js"></script>
+        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+        <!-- Library for adding dinamically elements -->
+        <script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
+        <!--  Google Maps Plugin    -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+        <!-- Chartist JS -->
+        <script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
+        <!--  Notifications Plugin    -->
+        <script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
+        <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+        <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+        <script>
+          $(document).ready(function() {
+            noUiSlider.create(document.getElementById('slider-grafia'), {
+              start: 0,
+              step: 1,
+              connect: [true, false],
+
+              orientation: 'horizontal',
+              behaviour: 'tap-drag',
+              tooltips: true,
+              range: {
+                min: 0,
+                max: 15
+              },
+              format: {
+                to: function ( value ) {
+                  return Math.round(value);
+                },
+                from: function ( value ) {
+                  return Math.round(value);
+                }
+              },
+            });
+            document.getElementById('slider-grafia').noUiSlider.on('change.one', function() {
+              competencies['grades']['grafia'] = document.getElementById('slider-grafia').noUiSlider.get();
+            });
+            noUiSlider.create(document.getElementById('slider-morfo'), {
+              start: 0,
+              step: 1,
+              connect: [true, false],
+
+              orientation: 'horizontal',
+              behaviour: 'tap-drag',
+              tooltips: true,
+              range: {
+                min: 0,
+                max: 15
+              },
+              format: {
+                to: function ( value ) {
+                  return Math.round(value);
+                },
+                from: function ( value ) {
+                  return Math.round(value);
+                }
+              }
+            });
+            document.getElementById('slider-morfo').noUiSlider.on('change.one', function() {
+              competencies['grades']['morfo'] = document.getElementById('slider-morfo').noUiSlider.get();
+            });
+            noUiSlider.create(document.getElementById('slider-vocab'), {
+              start: 0,
+              step: 1,
+              connect: [true, false],
+
+              orientation: 'horizontal',
+              behaviour: 'tap-drag',
+              tooltips: true,
+              range: {
+                min: 0,
+                max: 15
+              },
+              format: {
+                to: function ( value ) {
+                  return Math.round(value);
+                },
+                from: function ( value ) {
+                  return Math.round(value);
+                }
+              }
+            });
+            document.getElementById('slider-vocab').noUiSlider.on('change.one', function() {
+              competencies['grades']['vocab'] = document.getElementById('slider-vocab').noUiSlider.get();
+            });
+            noUiSlider.create(document.getElementById('slider-projeto'), {
+              start: 0,
+              step: 1,
+              connect: [true, false],
+
+              orientation: 'horizontal',
+              behaviour: 'tap-drag',
+              tooltips: true,
+              range: {
+                min: 0,
+                max: 15
+              },
+              format: {
+                to: function ( value ) {
+                  return Math.round(value);
+                },
+                from: function ( value ) {
+                  return Math.round(value);
+                }
+              }
+            });
+            document.getElementById('slider-projeto').noUiSlider.on('change.one', function() {
+              competencies['grades']['projeto'] = document.getElementById('slider-projeto').noUiSlider.get();
+            });
+            noUiSlider.create(document.getElementById('slider-dev'), {
+              start: 0,
+              step: 1,
+              connect: [true, false],
+
+              orientation: 'horizontal',
+              behaviour: 'tap-drag',
+              tooltips: true,
+              range: {
+                min: 0,
+                max: 15
+              },
+              format: {
+                to: function ( value ) {
+                  return Math.round(value);
+                },
+                from: function ( value ) {
+                  return Math.round(value);
+                }
+              }
+            });
+            document.getElementById('slider-dev').noUiSlider.on('change.one', function() {
+              competencies['grades']['dev'] = document.getElementById('slider-dev').noUiSlider.get();
+            });
+            noUiSlider.create(document.getElementById('slider-sintese'), {
+              start: 0,
+              step: 1,
+              connect: [true, false],
+
+              orientation: 'horizontal',
+              behaviour: 'tap-drag',
+              tooltips: true,
+              range: {
+                min: 0,
+                max: 15
+              },
+              format: {
+                to: function ( value ) {
+                  return Math.round(value);
+                },
+                from: function ( value ) {
+                  return Math.round(value);
+                }
+              }
+            });
+            document.getElementById('slider-sintese').noUiSlider.on('change.one', function() {
+              competencies['grades']['sintese'] = document.getElementById('slider-sintese').noUiSlider.get();
+            });
+          });
+        </script>
+        <script type="text/javascript">
+           $('.w-dropdown').hover(function(evt)
+           {
+           evt.preventDefault();
+           
+           var openClass = 'w--open';
+           var $view = $(this);
+           if (evt.type == 'mouseenter')
+           
+           { $view.find('.w-dropdown-toggle').addClass(openClass); $view.find('.w-dropdown-list').addClass(openClass); }
+           else if (evt.type == 'mouseleave')
+           
+           { $view.find('.w-dropdown-toggle').removeClass(openClass); $view.find('.w-dropdown-list').removeClass(openClass); }
+           });
+        </script><script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+        <script>
+           document.addEventListener('DOMContentLoaded', () => {
+               const player = Plyr.setup('.js-player', {
+                 'invertTime': false,
+               });
+           });
+        </script>
+        <script>
+          $(document).ready(function() {
+            $().ready(function() {
+              setUsername('{{username}}');
+              importCorrectionData({{data}});
+              
+              {% if created == 'True' %}
+              md.showNotification('top', 'center', 'Correção iniciada.', 'success');
+              {% elif created == 'False' %}
+              md.showNotification('top', 'center', 'Falha ao iniciar correção. Contate o administrador e corrija outra redação.', 'danger');
+              {% endif %}
+              $sidebar = $('.sidebar');
+              
+              $sidebar_img_container = $sidebar.find('.sidebar-background');
+              
+              $full_page = $('.full-page');
+              
+              $sidebar_responsive = $('body> .navbar-collapse');
+              
+              window_width = $(window).width();
+              
+              fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+              
+              if (window_width> 767 && fixed_plugin_open == 'Dashboard') {
+                if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
+                  $('.fixed-plugin .dropdown').addClass('open');
+                }
+                
+              }
+              
+              $('.fixed-plugin a').click(function(event) {
+                // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+                if ($(this).hasClass('switch-trigger')) {
+                  if (event.stopPropagation) {
+                    event.stopPropagation();
+                  } else if (window.event) {
+                    window.event.cancelBubble = true;
+                  }
+                }
+              });
+              
+              $('.fixed-plugin .active-color span').click(function() {
+                $full_page_background = $('.full-page-background');
+                
+                $(this).siblings().removeClass('active');
+                $(this).addClass('active');
+                
+                var new_color = $(this).data('color');
+                
+                if ($sidebar.length != 0) {
+                  $sidebar.attr('data-color', new_color);
+                }
+                
+                if ($full_page.length != 0) {
+                  $full_page.attr('filter-color', new_color);
+                }
+                
+                if ($sidebar_responsive.length != 0) {
+                  $sidebar_responsive.attr('data-color', new_color);
+                }
+              });
+              
+              $('.fixed-plugin .background-color .badge').click(function() {
+                $(this).siblings().removeClass('active');
+                $(this).addClass('active');
+                
+                var new_color = $(this).data('background-color');
+                
+                if ($sidebar.length != 0) {
+                  $sidebar.attr('data-background-color', new_color);
+                }
+              });
+              
+              $('.fixed-plugin .img-holder').click(function() {
+                $full_page_background = $('.full-page-background');
+                
+                $(this).parent('li').siblings().removeClass('active');
+                $(this).parent('li').addClass('active');
+                
+                
+                var new_image = $(this).find("img").attr('src');
+                
+                if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+                  $sidebar_img_container.fadeOut('fast', function() {
+                    $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+                    $sidebar_img_container.fadeIn('fast');
+                  });
+                }
+                
+                if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+                  var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+                  
+                  $full_page_background.fadeOut('fast', function() {
+                    $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                    $full_page_background.fadeIn('fast');
+                  });
+                }
+                
+                if ($('.switch-sidebar-image input:checked').length == 0) {
+                  var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
+                  var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+                  
+                  $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+                  $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                }
+                
+                if ($sidebar_responsive.length != 0) {
+                  $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+                }
+              });
+              
+              $('.switch-sidebar-image input').change(function() {
+                $full_page_background = $('.full-page-background');
+                
+                $input = $(this);
+                
+                if ($input.is(':checked')) {
+                  if ($sidebar_img_container.length != 0) {
+                    $sidebar_img_container.fadeIn('fast');
+                    $sidebar.attr('data-image', '#');
+                  }
+                  
+                  if ($full_page_background.length != 0) {
+                    $full_page_background.fadeIn('fast');
+                    $full_page.attr('data-image', '#');
+                  }
+                  
+                  background_image = true;
+                } else {
+                  if ($sidebar_img_container.length != 0) {
+                    $sidebar.removeAttr('data-image');
+                    $sidebar_img_container.fadeOut('fast');
+                  }
+                  
+                  if ($full_page_background.length != 0) {
+                    $full_page.removeAttr('data-image', '#');
+                    $full_page_background.fadeOut('fast');
+                  }
+                  
+                  background_image = false;
+                }
+              });
+              
+              $('.switch-sidebar-mini input').change(function() {
+                $body = $('body');
+                
+                $input = $(this);
+                
+                if (md.misc.sidebar_mini_active == true) {
+                  $('body').removeClass('sidebar-mini');
+                  md.misc.sidebar_mini_active = false;
+                  
+                  $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
+                  
+                } else {
+                  
+                  $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
+                  
+                  setTimeout(function() {
+                    $('body').addClass('sidebar-mini');
+                    
+                    md.misc.sidebar_mini_active = true;
+                  }, 300);
+                }
+                
+                // we simulate the window Resize so the charts will get updated in realtime.
+                var simulateWindowResize = setInterval(function() {
+                  window.dispatchEvent(new Event('resize'));
+                }, 180);
+                
+                // we stop the simulation of Window Resize after the animations are completed
+                setTimeout(function() {
+                  clearInterval(simulateWindowResize);
+                }, 1000);
+                
+              });
+            });
+          });
+        </script>
+        <script>
+          $(document).ready(function() {
+            // Javascript method's body can be found in assets/js/demos.js
+            md.initDashboardPageCharts();
+            
+            md.initVectorMap();
+            
+          });
+        </script>
+        <script>
+          $(document).ready(function() {
+            var allCheckboxes = document.querySelectorAll('input[type=checkbox]');
+            [].forEach.call(allCheckboxes, function (checkbox) {
+              checkbox.checked = checkbox.defaultChecked;
+            });
+          });
+        </script>
+        
+      </body>
+      
+      </html>
+      
