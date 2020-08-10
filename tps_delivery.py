@@ -176,9 +176,6 @@ def _mail_answers_jua():
                         mail_body += f'<p>Parabéns, você é o aluno master!</p>'   
 
                     mail_body += f'<p>Grupo: {tps_answer.grade_group}</p>'  
-                    current_score = TPSScore.objects.filter(email=tps_answer.email, month=tps_answer.submission_date.month, campus=tps_answer.tps.campus).first()
-                    if current_score: 
-                        mail_body += '<p>Pontuação total neste mês: {}</p>'.format(current_score.score)   
 
             if tps_answer.tps.solutions:
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
@@ -303,18 +300,37 @@ def _mail_teachers():
             if not tps.teacher:
                 tps.save()
                 continue
-            score_z = generate_score_z(tps)
-            subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', score_z, '--outdir', 'tps/outputs/pdfs'])
             
-            tbl = generate_tbl(tps)
-            subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', tbl, '--outdir', 'tps/outputs/pdfs'])
+            reports = []
+            if tps.campus == 'BSB':
+                if tps.group == 'PARTICULARES':
+                    tbl = generate_tbl(tps)
+                    subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', tbl, '--outdir', 'tps/outputs/pdfs'])
+                    cbt = generate_cbt(tps)
+                    subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', cbt, '--outdir', 'tps/outputs/pdfs'])
+                    reports.append(tbl)
+                    reports.append(cbt)
+                else:   
+                    score_z = generate_score_z(tps)
+                    subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', score_z, '--outdir', 'tps/outputs/pdfs'])
+                    tbl = generate_tbl(tps)
+                    subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', tbl, '--outdir', 'tps/outputs/pdfs'])
+                    cbt = generate_cbt(tps)
+                    subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', cbt, '--outdir', 'tps/outputs/pdfs'])
+                    reports.append(score_z)
+                    reports.append(tbl)
+                    reports.append(cbt) 
+            else:
+                score_z = generate_score_z(tps)
+                subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', score_z, '--outdir', 'tps/outputs/pdfs'])
+                tbl = generate_tbl(tps)
+                subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', tbl, '--outdir', 'tps/outputs/pdfs'])
+                reports.append(score_z)
+                reports.append(tbl)
 
-            cbt = generate_cbt(tps)
-            subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', cbt, '--outdir', 'tps/outputs/pdfs'])
-            
             distrator = generate_distrator(tps)
             subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', distrator, '--outdir', 'tps/outputs/pdfs'])
-            reports = [distrator.replace('xlsx', 'pdf'), score_z.replace('xlsx', 'pdf'), tbl.replace('xlsx', 'pdf')]
+            reports.append(distrator)
             if tps.campus == 'BSB':
                 reports.append(cbt.replace('xlsx', 'pdf'))
             mail_body = f'<p>Respostas para TPS {tps} concluídas. Relatórios se encontram em anexo (ou, caso não, acesse <a href="https://ppa.digital/admin/tps/tps/"> este link</a>).</p>'    
