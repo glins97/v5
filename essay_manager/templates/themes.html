@@ -11,55 +11,248 @@
 			<div class="content">
 				<div class="content">
 					<div class="container-fluid">
-						{% for axis in axes %}
-						<div class="row">
-							<div class="card card-plain ml-4 mr-4">
-								<div class="card-header card-header-icon card-header-{% if axis.done_themes == axis.total_themes %}success{% else %}info{% endif %}">
-									<div class="card-icon">
-										<i class="material-icons">assignment</i>
+						<div class="page-categories">
+							<ul class="nav nav-pills nav-pills-info nav-pills-icons" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" data-toggle="tab" href="#all" role="tablist">
+										Todas as bancas
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#enem" role="tablist">
+										ENEM
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#vunesp" role="tablist">
+										VUNESP
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#cespe" role="tablist">
+										CESPE
+									</a>
+								</li>
+							</ul>
+							<div class="tab-content tab-space tab-subcategories">
+								<div class="tab-pane active" id="all">
+									{% if axes %}
+									{% for axis in axes %}
+									<div class="row">
+										<div class="card card-plain ml-4 mr-4">
+											<div class="card-header card-header-icon card-header-{% if axis.done_themes == axis.total_themes %}success{% else %}info{% endif %}">
+												<div class="card-icon">
+													<i class="material-icons">assignment</i>
+												</div>
+												<h4 class="card-title mt-0"> {{axis.description}}</h4>
+												<p class="card-category"> {{axis.done_themes}} temas feitos de {{axis.total_themes}} </p>
+											</div>
+											<div class="card-body">
+												<div class="table-responsive">
+													<table class="table table-hover">
+														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+															<tr>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Nome
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Banca
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Redações
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Última redação
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+															{% for theme in themes %}
+															{% if theme.axis == axis.description %}
+															<tr>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> 0 </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> - </a> </td>
+															</tr>
+															{% endif %}
+															{% endfor %}
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<br>
+										</div>
 									</div>
-									<h4 class="card-title mt-0"> {{axis.description}}</h4>
-									<p class="card-category"> {{axis.done_themes}} temas feitos de {{axis.total_themes}} </p>
+									{% endfor %}
+									{% else %}
+									<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+									{% endif %}
 								</div>
-								<div class="card-body">
-									<div class="table-responsive">
-										<table class="table table-hover">
-											<thead class="" style="background-color: rgb(238, 238, 238) !important;">
-												<tr>
-													<th style="background-color: rgb(238, 238, 238) !important">
-														Nome
-													</th>
-													<th style="background-color: rgb(238, 238, 238) !important">
-														Banca
-													</th>
-													<th style="background-color: rgb(238, 238, 238) !important">
-														Redações
-													</th>
-													<th style="background-color: rgb(238, 238, 238) !important">
-														Última redação
-													</th>
-												</tr>
-											</thead>
-											<tbody>
-												{% for theme in themes %}
-												{% if theme.axis == axis.description %}
-												<tr>
-													<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a>
-													<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a>
-													<td> <a href="/themes/{{theme.id}}/"> 0 </a>
-													<td> <a href="/themes/{{theme.id}}/"> - </a>
-												</tr>
-												{% endif %}
-												{% endfor %}
-											</tbody>
-										</table>
+								<div class="tab-pane" id="enem">
+									{% if axes_enem %}
+									{% for axis in axes_enem %}
+									<div class="row">
+										<div class="card card-plain ml-4 mr-4">
+											<div class="card-header card-header-icon card-header-{% if axis.done_themes == axis.total_themes %}success{% else %}info{% endif %}">
+												<div class="card-icon">
+													<i class="material-icons">assignment</i>
+												</div>
+												<h4 class="card-title mt-0"> {{axis.description}}</h4>
+												<p class="card-category"> {{axis.done_themes}} temas feitos de {{axis.total_themes}} </p>
+											</div>
+											<div class="card-body">
+												<div class="table-responsive">
+													<table class="table table-hover">
+														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+															<tr>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Nome
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Banca
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Redações
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Última redação
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+															{% for theme in themes %}
+															{% if theme.axis == axis.description %}
+															<tr>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> 0 </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> - </a> </td>
+															</tr>
+															{% endif %}
+															{% endfor %}
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<br>
+										</div>
 									</div>
+									{% endfor %}
+									{% else %}
+									<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+									{% endif %}
 								</div>
-								<br>
-								{% endfor %}
+								<div class="tab-pane" id="vunesp">
+									{% if axes_vunesp %}
+									{% for axis in axes_vunesp %}
+									<div class="row">
+										<div class="card card-plain ml-4 mr-4">
+											<div class="card-header card-header-icon card-header-{% if axis.done_themes == axis.total_themes %}success{% else %}info{% endif %}">
+												<div class="card-icon">
+													<i class="material-icons">assignment</i>
+												</div>
+												<h4 class="card-title mt-0"> {{axis.description}}</h4>
+												<p class="card-category"> {{axis.done_themes}} temas feitos de {{axis.total_themes}} </p>
+											</div>
+											<div class="card-body">
+												<div class="table-responsive">
+													<table class="table table-hover">
+														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+															<tr>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Nome
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Banca
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Redações
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Última redação
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+															{% for theme in themes %}
+															{% if theme.axis == axis.description %}
+															<tr>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> 0 </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> - </a> </td>
+															</tr>
+															{% endif %}
+															{% endfor %}
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<br>
+										</div>
+									</div>
+									{% endfor %}
+									{% else %}
+									<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+									{% endif %}
+								</div>
+								<div class="tab-pane" id="cespe">
+									{% if axes_cespe %}
+									{% for axis in axes_cespe %}
+									<div class="row">
+										<div class="card card-plain ml-4 mr-4">
+											<div class="card-header card-header-icon card-header-{% if axis.done_themes == axis.total_themes %}success{% else %}info{% endif %}">
+												<div class="card-icon">
+													<i class="material-icons">assignment</i>
+												</div>
+												<h4 class="card-title mt-0"> {{axis.description}}</h4>
+												<p class="card-category"> {{axis.done_themes}} temas feitos de {{axis.total_themes}} </p>
+											</div>
+											<div class="card-body">
+												<div class="table-responsive">
+													<table class="table table-hover">
+														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+															<tr>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Nome
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Banca
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Redações
+																</th>
+																<th style="background-color: rgb(238, 238, 238) !important">
+																	Última redação
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+															{% for theme in themes %}
+															{% if theme.axis == axis.description %}
+															<tr>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> 0 </a> </td>
+																<td> <a href="/themes/{{theme.id}}/"> - </a> </td>
+															</tr>
+															{% endif %}
+															{% endfor %}
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<br>
+										</div>
+									</div>
+									{% endfor %}
+									{% else %}
+									<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+									{% endif %}
+								</div>
 							</div>
 						</div>
-						{% endfor %}
 					</div>
 					{% include "footer.html" %}
 				</div>
