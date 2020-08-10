@@ -159,12 +159,23 @@ class TPSAdmin(admin.ModelAdmin):
         return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj).count(), obj.max_answers)
 
     def relatórios(self, obj):
+        all_buttons = {
+            'SCORE_Z': '<a class="button" href="download/score_z/{}">Score Z</a>&nbsp'.format(obj.id),
+            'TBL': '<a class="button" href="download/tbl/{}">TBL</a>&nbsp'.format(obj.id),
+            'CBT': '<a class="button" href="download/cbt/{}">CBT</a>&nbsp'.format(obj.id),
+            'DISTRATOR': '<a class="button" href="download/distrator/{}">Distrator</a>&nbsp'.format(obj.id),
+        }
+        available_buttons = []
         if TPSAnswer.objects.filter(tps=obj).count():
-            return format_html(
-                '<a class="button" href="download/score_z/{}">Score Z</a>&nbsp'.format(obj.id) +
-                '<a class="button" href="download/tbl/{}">TBL</a>&nbsp'.format(obj.id) +
-                ('<a class="button" href="download/cbt/{}">CBT</a>&nbsp'.format(obj.id) if obj.campus == 'BSB' else '') +
-                '<a class="button" href="download/distrator/{}">Distrator</a>&nbsp'.format(obj.id))
+            if obj.campus == 'BSB':
+                if obj.group == 'PARTICULARES':
+                    available_buttons = [all_buttons['TBL'], all_buttons['CBT'], all_buttons['DISTRATOR']]
+                else:
+                    available_buttons = [all_buttons['SCORE_Z'], all_buttons['TBL'], all_buttons['CBT'], all_buttons['DISTRATOR']]
+            else:
+                available_buttons = [all_buttons['SCORE_Z'], all_buttons['TBL'], all_buttons['DISTRATOR']]
+
+            return format_html(''.join(available_buttons))
         return 'Aguarde a primeira resposta'
 
     def get_urls(self):

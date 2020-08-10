@@ -49,17 +49,24 @@ def separate_students(tps):
                 result['TBL'] = result['TBL'].append(row, ignore_index=True)
             count += 1
     elif tps.campus == 'BSB':
-        count_score_z = 0
-        count_tbl = 0
-        for _, row in df.iterrows():
-            if row['xC'] >= tps.max_questions * 0.8:
-                result['SCORE_Z'] = result['SCORE_Z'].append(row, ignore_index=True)
-                count_score_z += 1
-            elif row['xC'] >= tps.max_questions * 0.6:
-                result['TBL'] = result['TBL'].append(row, ignore_index=True)
-                count_tbl += 1
-            else:
-                result['CBT'] = result['CBT'].append(row, ignore_index=True)
+        if tps.group == 'PARTICULARES':
+            for _, row in df.iterrows():
+                if row['xC'] >= tps.max_questions * 0.7:
+                    result['TBL'] = result['TBL'].append(row, ignore_index=True)
+                else:
+                    result['CBT'] = result['CBT'].append(row, ignore_index=True)
+        else:
+            count_score_z = 0
+            count_tbl = 0
+            for _, row in df.iterrows():
+                if row['xC'] >= tps.max_questions * 0.8:
+                    result['SCORE_Z'] = result['SCORE_Z'].append(row, ignore_index=True)
+                    count_score_z += 1
+                elif row['xC'] >= tps.max_questions * 0.6:
+                    result['TBL'] = result['TBL'].append(row, ignore_index=True)
+                    count_tbl += 1
+                else:
+                    result['CBT'] = result['CBT'].append(row, ignore_index=True)
     elif tps.campus == 'JUA':
         count_score_z = 0
         count_tbl = 0
