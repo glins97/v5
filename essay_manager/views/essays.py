@@ -21,18 +21,27 @@ def _student_essays_view(request):
     }
     return render(request, 'essays/student.html', dict(data, **{key:request.GET[key] for key in request.GET}))
 
+def get_verbose_mode(mode):
+    return {
+        '1': 'Jornada 1',
+        '2': 'Jornada 2',
+        '3': 'Jornada 3',
+    }.get(mode, '-')
+
 @has_permission('monitor')
 @login_required
 def _monitor_essays_view(request):
     essays = Essay.objects.filter().order_by('id')
     uncorrected_essays = []
     for essay in essays:
+        essay.verbose_mode = get_verbose_mode(essay.mode)
         if not Correction.objects.filter(essay=essay).count():
             uncorrected_essays.append(essay)
     uncorrected_essays_count = len(uncorrected_essays)
 
     active_correction_essays = [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay, status='ACTIVE')]
     for index, essay in enumerate(active_correction_essays):
+        active_correction_essays[index].verbose_mode = get_verbose_mode(essay.mode)
         active_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='ACTIVE').get().user
     active_corrections_essays_count = len(active_correction_essays)
 
@@ -48,7 +57,7 @@ def _monitor_essays_view(request):
         'title': 'Redações',
         'added': request.GET.get('added', 'None'),
         'mailed': request.GET.get('mailed', 'None'),
-        'essays': [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay).count() == 0],
+        'essays': uncorrected_essays,
         'active_correction_essays': active_correction_essays,
         'done_correction_essays': done_correction_essays,
 

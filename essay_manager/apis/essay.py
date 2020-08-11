@@ -40,7 +40,7 @@ def create_essay_endpoint(request):
         else:
             theme = Theme.objects.get(id=request.POST['theme_id'])
 
-        Essay(user=request.user, theme=theme, file=fn).save()
+        Essay(user=request.user, theme=theme, file=fn, mode=request.POST['mode']).save()
         return redirect('/essays/?added=True')
     except Exception as e:
         logger.error(f'create_essay_endpoint@essay::Exception thrown | {request.user} {request} {repr(e)}')

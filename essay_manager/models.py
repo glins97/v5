@@ -35,6 +35,12 @@ target_grades = (
     (1000, 1000),
 )
 
+essay_mode = (
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+)
+
 productions = (
     ('2 por mês', '2 por mês'),
     ('1 por semana', '1 por semana'),
@@ -98,6 +104,7 @@ class Essay(models.Model):
     grade = models.IntegerField(default=0)
     mailed = models.BooleanField(default=False)
     nullified = models.BooleanField(default=False)
+    mode = models.CharField(default='1', choices=essay_mode, max_length=255)
 
     def __str__(self):
         return '#{} - {} {}, {} => {}'.format(self.id, self.user.first_name, self.user.last_name, self.theme, self.file)
