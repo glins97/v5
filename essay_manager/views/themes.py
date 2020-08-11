@@ -18,19 +18,25 @@ def themes_view(request):
                 'total_themes': 1, 
                 'done_themes': 0, 
             }
-            if theme.jury == 'ENEM':
+
+        if theme.jury == 'ENEM':
+            if theme.axis not in axes_enem:
                 axes_enem[theme.axis] = {
                     'description': theme.axis, 
                     'total_themes': 1, 
                     'done_themes': 0, 
                 }
-            elif theme.jury == 'VUNESP':
+
+        if theme.jury == 'VUNESP':
+            if theme.axis not in axes_vunesp:
                 axes_vunesp[theme.axis] = {
                     'description': theme.axis, 
                     'total_themes': 1, 
                     'done_themes': 0, 
                 }
-            elif theme.jury == 'CESPE':
+                
+        if theme.jury == 'CESPE':
+            if theme.axis not in axes_cespe:
                 axes_cespe[theme.axis] = {
                     'description': theme.axis, 
                     'total_themes': 1, 

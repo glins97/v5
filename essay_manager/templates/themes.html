@@ -122,7 +122,7 @@
 														</thead>
 														<tbody>
 															{% for theme in themes %}
-															{% if theme.axis == axis.description %}
+															{% if theme.axis == axis.description and theme.jury == "ENEM" %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
@@ -176,7 +176,7 @@
 														</thead>
 														<tbody>
 															{% for theme in themes %}
-															{% if theme.axis == axis.description %}
+															{% if theme.axis == axis.description and theme.jury == "VUNESP" %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
@@ -230,7 +230,7 @@
 														</thead>
 														<tbody>
 															{% for theme in themes %}
-															{% if theme.axis == axis.description %}
+															{% if theme.axis == axis.description and theme.jury == "CESPE" %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
