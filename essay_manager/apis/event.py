@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from essay_manager.decorators import login_required, has_permission
 from essay_manager.models import Event
 from django.http import JsonResponse
+from datetime import datetime
 
 import logging
 logger = logging.getLogger('django')
@@ -13,9 +14,10 @@ def get_events_endpoint(request):
             [
                 {
                     'title': event.title,
-                    'year': event.year,
-                    'month': event.month,
-                    'day': event.day,
+                    'start': datetime(year=event.year, month=event.month + 1, day=event.day).isoformat(),
+                    'end': datetime(year=event.year, month=event.month + 1, day=event.day).isoformat(),
+                    'allDay': True,
+                    'className': 'event-azure',
                 } for event in Event.objects.filter(user=request.user)
             ],
         safe=False)

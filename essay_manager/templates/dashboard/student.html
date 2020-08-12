@@ -248,19 +248,20 @@
     <script>
       $(document).ready(function() {
         md.initFullCalendar();
-        var events = [
-          {% for event in events %}
-          {
-            'title': '{{event.title}}',
-            'start': new Date({{event.year}}, {{event.month}}, {{event.day}}),
-            'end': new Date({{event.year}}, {{event.month}}, {{event.day}}),
-            'allDay': true,
-            'className': 'event-azure',
-          },
-          {% endfor %}
-        ]
+        md.loadEvents();
+        // var events = [
+        //   {% for event in events %}
+        //   {
+        //     'title': '{{event.title}}',
+        //     'start': new Date({{event.year}}, {{event.month}}, {{event.day}}),
+        //     'end': new Date({{event.year}}, {{event.month}}, {{event.day}}),
+        //     'allDay': true,
+        //     'className': 'event-azure',
+        //   },
+        //   {% endfor %}
+        // ]
         
-        $('#fullCalendar').fullCalendar('addEventSource', events);
+        // $('#fullCalendar').fullCalendar('addEventSource', events);
 
       });
     </script>
