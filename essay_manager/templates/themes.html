@@ -144,17 +144,9 @@
 									{% endif %}
 								</div>
 								<div class="tab-pane" id="vunesp">
-									{% if axes_vunesp %}
-									{% for axis in axes_vunesp %}
+									{% if themes %}
 									<div class="row">
 										<div class="card card-plain ml-4 mr-4">
-											<div class="card-header card-header-icon card-header-{% if axis.done_themes == axis.total_themes %}success{% else %}info{% endif %}">
-												<div class="card-icon">
-													<i class="material-icons">assignment</i>
-												</div>
-												<h4 class="card-title mt-0"> {{axis.description}}</h4>
-												<p class="card-category"> {{axis.done_themes}} temas feitos de {{axis.total_themes}} </p>
-											</div>
 											<div class="card-body">
 												<div class="table-responsive">
 													<table class="table table-hover">
@@ -176,7 +168,7 @@
 														</thead>
 														<tbody>
 															{% for theme in themes %}
-															{% if theme.axis == axis.description %}
+															{% if theme.jury == "VUNESP" %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
@@ -192,7 +184,6 @@
 											<br>
 										</div>
 									</div>
-									{% endfor %}
 									{% else %}
 									<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
 									{% endif %}
