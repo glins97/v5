@@ -614,9 +614,9 @@ md = {
   deleteEvent: function() {
     $calendar = $('#fullCalendar');
 
-    var startDate = this.lastInfo.start._i;
+    var startDate = new Date(this.lastInfo.start._i);
     startDate.setHours(startDate.getHours() + 3);
-    var endDate = this.lastInfo.start._d;
+    var endDate = new Date(this.lastInfo.start._d);
     endDate.setHours(endDate.getHours() + 3);
 
     oldEvent = {};
@@ -657,19 +657,20 @@ md = {
     if (editMode){
       this.updateData = {};
       this.updateData['title'] = $('#updateEventTextArea').val();
-      $('#updateEventTextArea').val('');
       this.updateEvent();
     }
     else
       this.addEvent();
+    $('#updateEventTextArea').val('');
+
   },
   
   updateEvent: function() {
     $calendar = $('#fullCalendar');
 
-    var startDate = this.lastInfo.start._i;
+    var startDate = new Date(this.lastInfo.start._i);
     startDate.setHours(startDate.getHours() + 3);
-    var endDate = this.lastInfo.start._d;
+    var endDate = new Date(this.lastInfo.start._d);
     endDate.setHours(endDate.getHours() + 3);
 
     oldEvent = {};
@@ -806,7 +807,7 @@ md = {
       },
       eventDrop: function(info) {
         me.lastInfo = info;
-        var endDate = info.start._d;
+        var endDate = new Date(info.start._d);
         endDate.setHours(endDate.getHours() + 3);
         
         me.updateData = {};
