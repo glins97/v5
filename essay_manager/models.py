@@ -435,3 +435,10 @@ class InterestedExerciseList(models.Model):
         if self.completed and not self.completion_date:
             self.completion_date = now()
         super(InterestedExerciseList, self).save(*args, **kwargs)
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    href = models.CharField(max_length=255, blank=True, null=True)
+    received = models.BooleanField(default=False)
