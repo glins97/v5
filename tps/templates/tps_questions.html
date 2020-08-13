@@ -83,7 +83,7 @@
 									  	<i><img id="src" src="/{{tps.questions}}" width="100%"/></i>
                     </div>
                     <div class="tab-pane" id="answers">
-                      <form id="login-form" class="form" method="post" action="/tps/answer/{{id}}/">
+                      <form id="login-form" class="form" method="post" action="/tps/answer/{{id}}/" onkeydown="return event.key != 'Enter';">
                         {% if tps.start_date > now %}
                         <h4 style="text-align: center; margin-top: 10px; width: 480px;"> Respostas ainda não liberadas! </h4>
                         <p style="text-align: center; margin-top: 10px; width: 480px;"> Serão liberadas dia {{ tps.start_date }} </p>

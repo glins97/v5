@@ -27,22 +27,20 @@ def get_question_html(question, question_answer):
             </tr> 
             """
 
-def get_group(tpses, id):
-    for tps in tpses:
-        for grade_group in tpses[tps]:
-            if id in tpses[tps][grade_group]:
-                return grade_group
+def get_group(tps, id):
+    for grade_group in tps:
+        if id in tps[grade_group]:
+            return grade_group
     return ''
 
-def get_rank(tpses, id):
+def get_rank(tps, id):
     rank = 0
-    for tps in tpses:
-        for grade_group in ['SCORE_Z', 'TBL', 'CBT']:
-            if grade_group not in tpses[tps]: continue
-            for aid in tpses[tps][grade_group]:
-                rank += 1
-                if aid == id:
-                    return rank
+    for grade_group in ['SCORE_Z', 'TBL', 'CBT']:
+        if grade_group not in tps: continue
+        for aid in tps[grade_group]:
+            rank += 1
+            if aid == id:
+                return rank
     return ''
 
 def _mail_answers_goi():
@@ -90,9 +88,9 @@ def _mail_answers_goi():
                 """
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
             mail_body += f'<p>Nota: {tps_answer.grade}</p>' 
-            tps_answer.rank = get_rank(tpses, tps_answer.id)
+            tps_answer.rank = get_rank(tpses[tps_answer.tps], tps_answer.id)
             if tps.separate:
-                tps_answer.grade_group = get_group(tpses, tps_answer.id)
+                tps_answer.grade_group = get_group(tpses[tps_answer.tps], tps_answer.id)
             tps_answer.save()
 
             if tps_answer.tps.notify:
@@ -164,9 +162,9 @@ def _mail_answers_jua():
                 """
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
             mail_body += f'<p>Nota: {tps_answer.grade}</p>' 
-            tps_answer.rank = get_rank(tpses, tps_answer.id)
+            tps_answer.rank = get_rank(tpses[tps_answer.tps], tps_answer.id)
             if tps.separate:
-                tps_answer.grade_group = get_group(tpses, tps_answer.id)
+                tps_answer.grade_group = get_group(tpses[tps_answer.tps], tps_answer.id)
             tps_answer.save()
 
             if tps_answer.tps.notify:
@@ -206,9 +204,9 @@ def _mail_results_bsb():
         try:
             mail_body = f'<p>Aluno: {tps_answer.name}</p>'   
             mail_body += f'<p>Nota: {tps_answer.grade}</p>' 
-            tps_answer.rank = get_rank(tpses, tps_answer.id)
+            tps_answer.rank = get_rank(tpses[tps_answer.tps], tps_answer.id)
             if tps.separate:
-                tps_answer.grade_group = get_group(tpses, tps_answer.id)
+                tps_answer.grade_group = get_group(tpses[tps_answer.tps], tps_answer.id)
             tps_answer.save()
 
             if tps_answer.tps.notify:

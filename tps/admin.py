@@ -25,8 +25,9 @@ def resend_answers(modeladmin, request, queryset):
 resend_answers.short_description = "Reenviar respostas"
 
 class TPSAnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'tps', 'grade',)
+    list_display = ('id', 'name', 'email', 'submission_date', 'tps', 'grade',)
     list_filter = ('tps', 'grade',)
+    search_fields = ('tps__subject', 'name', 'email', )
     list_per_page = 100
     actions = [resend_results, resend_answers]
 

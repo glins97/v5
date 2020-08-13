@@ -3,10 +3,10 @@ from tps.models import TPS, TPSAnswer, Question, QuestionAnswer
 from django.utils.timezone import now
 
 def save_tps_answer(request, id):
-    tpses = TPS.objects.all().filter(id=id)
+    tpses = TPS.objects.filter(id=id)
     if tpses.count():
         tps = tpses.get()
-        answers = TPSAnswer.objects.all().filter(tps=tps)
+        answers = TPSAnswer.objects.filter(tps=tps)
         if answers.count() >= tps.max_answers:
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Número limite de respostas já atingido.'})
         if tps.start_date > now():
@@ -15,8 +15,14 @@ def save_tps_answer(request, id):
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Tempo limite de resposta excedido.'})
         if not request.POST.get('name', False) or not request.POST.get('email', False):
             return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Favor preencher nome e email!'})
-        if TPSAnswer.objects.all().filter(tps=tps, name=request.POST.get('name', '')).count() or TPSAnswer.objects.all().filter(tps=tps, email=request.POST.get('email', '')).count():
-            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Apenas uma resposta por aluno.'})
+        if TPSAnswer.objects.filter(tps=tps, name=request.POST.get('name', '')).count():
+            if (now() - TPSAnswer.objects.filter(tps=tps, name=request.POST.get('name', '')).first().submission_date).seconds < 300:
+                return render(request, 'feed.html', {'title': 'Salvo!', 'description': 'O trabalho duro vence o talento.'})
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Resposta para "{}" cadastrada em {}.'.format(request.POST.get('name', ''), TPSAnswer.objects.filter(tps=tps, name=request.POST.get('name', '')).first().submission_date.strftime("%m/%d/%Y às %H:%M:%S"))})
+        if TPSAnswer.objects.filter(tps=tps, email=request.POST.get('email', '')).count():
+            if (now() - TPSAnswer.objects.filter(tps=tps, email=request.POST.get('email', '')).first().submission_date).seconds < 300:
+                return render(request, 'feed.html', {'title': 'Salvo!', 'description': 'O trabalho duro vence o talento.'})
+            return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Resposta para "{}" cadastrada em {}.'.format(request.POST.get('email', ''), TPSAnswer.objects.filter(tps=tps, email=request.POST.get('email', '')).first().submission_date.strftime("%m/%d/%Y às %H:%M:%S"))})
 
         tps_answer = TPSAnswer(
             tps=tps,
