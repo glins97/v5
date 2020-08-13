@@ -1,5 +1,14 @@
 {% load permissions %}
 
+<script>
+    function updateNotifications(){
+        const csrftoken = Cookies.get('csrftoken');
+        var xhr = new XMLHttpRequest(); 
+        xhr.open("GET", "/api/notifications/read/all");  
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr.send();
+    }
+</script>
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
     <div class="container-fluid">
         <div class="navbar-wrapper">
@@ -22,7 +31,7 @@
                 <div class="input-group no-border"> </div>
             </form>
             <ul class="navbar-nav">
-    			{% if user.obj|has_permission:'superuser' %}
+                {% if user.obj|has_permission:'superuser' %}
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="/admin/" style="color: inherit;" target="_self">
                         <i class="material-icons">account_balance</i>
@@ -40,6 +49,28 @@
                         </p>
                     </a>
                 </li> -->
+                {% if user.obj|has_permission:'student' %}
+                <li class="nav-item dropdown">
+                    <a onclick="updateNotifications();" class="nav-link" style="cursor: pointer;" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="material-icons">notifications</i>
+                        {% if new_notifications %}
+                        <span class="notification">{{new_notifications}}</span>
+                        {% endif %}
+                        <p class="d-lg-none d-md-block">
+                            Notificações
+                        </p>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        {% if notifications %}
+                        {% for notification in notifications %}
+                    <a class="dropdown-item" href="{% if notification.href%}{{notification.href}}{% endif %}" onclick="return {% if notification.href %}true{% else %}false{% endif %}">{% if notification.received == False %}<small>NOVO</small>&nbsp;&nbsp;{% endif %}{{notification.title}}</a>
+                        {% endfor %}
+                        {% else %}
+                        <a class="dropdown-item" href="">Sem notificações!</a>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="/api/logout/" style="color: inherit;" target="_self">
                         <i class="material-icons">input</i>

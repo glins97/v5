@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from essay_manager.decorators import login_required, has_permission
-from essay_manager.models import Theme, Essay, Correction, Event
+from essay_manager.models import Theme, Essay, Correction, Event, Notification
 from essay_manager.utils import get_view_by_permission, get_user_details
 from django.utils.timezone import now
 from functools import partial
@@ -47,6 +47,9 @@ def student_dashboard_view(request):
         theme.done = False
         if Essay.objects.filter(user=request.user, theme=theme).count():
             theme.done = True
+
+    notifications = Notification.objects.filter(user=request.user).order_by('-id')
+    new_notifications = Notification.objects.filter(user=request.user, received=False).count()
     data = {
         'title': 'Preparação',
         
@@ -71,6 +74,9 @@ def student_dashboard_view(request):
         'corrected_essays_icon': corrected_essays_icon,
         'corrected_essays_card_type': corrected_essays_card_type,
         'corrected_essays_msg': corrected_essays_msg,
+    
+        'notifications': notifications,
+        'new_notifications': new_notifications,
     }
          
     return render(request, 'dashboard/student.html', data)

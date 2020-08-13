@@ -236,8 +236,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
     <!-- Library for adding dinamically elements -->
     <script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
-    <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
     <!-- Chartist JS -->
     <script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
     <!--  Notifications Plugin    -->
@@ -248,20 +246,7 @@
     <script>
       $(document).ready(function() {
         md.initFullCalendar();
-        var events = [
-          {% for event in events %}
-          {
-            'title': '{{event.title}}',
-            'start': new Date({{event.year}}, {{event.month}}, {{event.day}}),
-            'end': new Date({{event.year}}, {{event.month}}, {{event.day}}),
-            'allDay': true,
-            'className': 'event-azure',
-          },
-          {% endfor %}
-        ]
-        
-        $('#fullCalendar').fullCalendar('addEventSource', events);
-
+        md.loadEvents();
       });
     </script>
     <script>

@@ -382,8 +382,9 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     school = models.CharField(max_length=255, default='PPA')
     target_grade = models.IntegerField(choices=target_grades, blank=True, null=True)
-    production = models.CharField(max_length=255, choices=productions, blank=True, null=True)
+    target_production = models.CharField(max_length=255, choices=productions, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
     state = models.CharField(max_length=255, blank=True, null=True)
@@ -434,3 +435,10 @@ class InterestedExerciseList(models.Model):
         if self.completed and not self.completion_date:
             self.completion_date = now()
         super(InterestedExerciseList, self).save(*args, **kwargs)
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    href = models.CharField(max_length=255, blank=True, null=True)
+    received = models.BooleanField(default=False)

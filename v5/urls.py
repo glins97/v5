@@ -92,6 +92,7 @@ urlpatterns = [
     path('api/exercises/interest/<int:id>/', interest_exercise_endpoint),
     path('api/exercises/uninterest/<int:id>/', uninterest_exercise_endpoint),
     path('api/exercises/complete/<int:id>/', complete_exercise_endpoint),
+    path('api/notifications/read/all/', read_all_notifications_endpoint),
     path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
 
