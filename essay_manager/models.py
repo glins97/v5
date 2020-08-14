@@ -147,9 +147,11 @@ class Correction(models.Model):
                 self.essay.grade += int(j_data['competencies']['grades'][comp])
             self.essay.save()
 
-        # if self.status == 'DONE':
+        if self.status == 'DONE':
+            Notification(user=self.essay.user, title=f'Redação #{self.essay.id} corrigida!', description='', href=f'/essays/{self.essay.id}').save()
         #     from essay_manager.apis.essay import send_mail
         #     send_mail(self.essay.user, 'redação corrigida!', '<p>Acesse a plataforma para conferir a correção!</p>')
+
         super(Correction, self).save(*args, **kwargs)
     
     class Meta:
