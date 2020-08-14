@@ -143,6 +143,12 @@
           <div class="modal has-info show" id="audioModal" role="dialog" aria-labelledby="audioModal" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Adicionar áudio para {{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
                 <div class="modal-body">
                   <div class="container cc-center">
                     <div class="video-container">
@@ -194,7 +200,7 @@
                         </button>
                       </div>
                       <div class="modal-body" style="margin-top: -10px; !important">
-                        <div class="row">
+                        <div class="row" hidden=true>
                           <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn shadow-none btn-outline-info" style="margin-left: 45px; margin-right: -1px;" id="modalC1" onclick="showCompetencyErrors('errorsC1');">
                               <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 1

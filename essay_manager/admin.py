@@ -77,10 +77,10 @@ class CorrectionAdmin(admin.ModelAdmin):
         return o.essay.grade
 
 class GenericErrorClassificationAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'name', 'pai', 'nota', )
-    list_filter = ('competency', )
-    search_fields = ('name', 'competency')
-    list_per_page = 20
+    list_display = ('codigo', 'jury', 'name', 'pai', 'nota', )
+    list_filter = ('competency', 'jury')
+    search_fields = ('name', 'competency', 'jury')
+    list_per_page = 100
 
     def codigo(self, obj):
         return '{}'.format(obj.get_verbose_code())
@@ -89,13 +89,17 @@ class GenericErrorClassificationAdmin(admin.ModelAdmin):
         return '{}'.format(obj.parent.get_verbose_code() if obj.parent else '-')
 
     def nota(self, obj):
-        return '{}'.format(200 - obj.weight * 40)
+        if obj.jury == 'ENEM':
+            return '{}'.format(200 - obj.weight * 40)
+        elif obj.jury == 'VUNESP':
+            return '{}'.format(obj.weight)
+        return '-'
 
 class ErrorClassificationAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'name', 'pai', 'nota', )
-    list_filter = ('competency', )
-    search_fields = ('name', 'competency')
-    list_per_page = 20
+    list_display = ('codigo', 'jury', 'name', 'pai', 'nota', )
+    list_filter = ('competency', 'jury')
+    search_fields = ('name', 'competency', 'jury')
+    list_per_page = 100
 
     def codigo(self, obj):
         return '{}'.format(obj.get_verbose_code())
@@ -110,8 +114,8 @@ admin.site.register(Theme, ThemeAdmin)
 admin.site.register(Essay, EssayAdmin)
 # admin.site.register(Profile)
 admin.site.register(Correction, CorrectionAdmin)
-# admin.site.register(ErrorClassification, ErrorClassificationAdmin)
-# admin.site.register(GenericErrorClassification, GenericErrorClassificationAdmin)
+admin.site.register(ErrorClassification, ErrorClassificationAdmin)
+admin.site.register(GenericErrorClassification, GenericErrorClassificationAdmin)
 # admin.site.register(Event)
 admin.site.register(ExerciseList)
 admin.site.register(Notification)

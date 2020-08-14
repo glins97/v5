@@ -214,15 +214,15 @@ function importCorrectionData(data) {
     
     competencies['comments'] = textfieldComments;
     competencies['grades'] = grades;
-
     for (var key in grades){
-        var el = document.getElementById('slider-' + key);
+        var el = document.getElementById('inlineRadioOptionsc' + key + '-' + grades[key]);
+        console.log('el', el)
         if (el)
-            el.noUiSlider.set(grades[key]);
+            el.click();
     }
 
     for (var key in textfieldComments){
-        var el = document.getElementById('formtextarea-' + key);
+        var el = document.getElementById('formTextarea' + key);
         if (el)
             el.value = textfieldComments[key];
     }
@@ -671,11 +671,87 @@ $(document).ready(function() {
         drawImages();
     });
 
-    competencies['grades'] = {};
-  });
+    competencies['grades'] = {
+        'a': 3,
+        'b': 4,
+        'c': 4,
+    };
+
+    $('input[type=radio][name=inlineRadioOptions]').on('change', function() {
+        switch ($(this).val()) {
+          case 'option3':
+            competencies['grades']['a'] = '3';
+            break;
+          case 'option2':
+            competencies['grades']['a'] = '2';
+            break;
+          case 'option1':
+            competencies['grades']['a'] = '1';
+            break;
+          case 'option0':
+            competencies['grades']['a'] = '0';
+            break;
+            default: break;
+        }
+    });
+
+    $('input[type=radio][name=inlineRadioOptions2]').on('change', function() {
+        switch ($(this).val()) {
+          case 'option4':
+            competencies['grades']['b'] = '4';
+            break;
+          case 'option3':
+            competencies['grades']['b'] = '3';
+            break;
+          case 'option2':
+            competencies['grades']['b'] = '2';
+            break;
+          case 'option1':
+            competencies['grades']['b'] = '1';
+            break;
+          case 'option0':
+            competencies['grades']['b'] = '0';
+            break;
+            default: break;
+        }
+    });
+
+    $('input[type=radio][name=inlineRadioOptions3]').on('change', function() {
+        switch ($(this).val()) {
+          case 'option4':
+            competencies['grades']['c'] = '4';
+            break;
+          case 'option3':
+            competencies['grades']['c'] = '3';
+            break;
+          case 'option2':
+            competencies['grades']['c'] = '2';
+            break;
+          case 'option1':
+            competencies['grades']['c'] = '1';
+            break;
+          case 'option0':
+            competencies['grades']['c'] = '0';
+            break;
+            default: break;
+        }
+    });
+});
 
 function updateTextfield(textfield, comp) {
     competencies['comments'][comp] = document.getElementById(textfield).value;
+}
+
+function updateTextfieldValue(checkbox, textfield, value, comp, weight) {
+    var checked = document.getElementById(checkbox).checked;
+    if (checked)
+        document.getElementById(textfield).value += value;
+    else {
+        document.getElementById(textfield).value = document.getElementById(textfield).value.replace(value, '');
+    }
+
+    document.getElementById('inlineRadioOptions' + comp + '-' + weight).checked = true;
+    document.getElementById('inlineRadioOptions' + comp + '-' + weight).dispatchEvent(new Event('change'));
 }
 
 loadModeSelectionButtons();

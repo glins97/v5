@@ -101,6 +101,9 @@ def add_padding(l, chunk_size, padding):
         l.append(padding)
     return l
 
+def wrap_errors(e):
+    return add_padding(e, 3, mark_safe(""" <div class="form-check col-sm"> </div> """))
+
 @has_permission('monitor')
 @login_required
 def _monitor_essay_view(request, id):
@@ -108,19 +111,6 @@ def _monitor_essay_view(request, id):
     if not corrections.count():
         return redirect(f'/corrections/new/{id}/')
 
-    error_classifications_c1 = [o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='1')), key=lambda e: int(e.code)) if o.parent is None]
-    error_classifications_c2 = [o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='2')), key=lambda e: int(e.code)) if o.parent is None]
-    error_classifications_c3 = [o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='3')), key=lambda e: int(e.code)) if o.parent is None]
-    error_classifications_c4 = [o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='4')), key=lambda e: int(e.code)) if o.parent is None]
-    error_classifications_c5 = [o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='5')), key=lambda e: int(e.code)) if o.parent is None]
-
-    generic_error_classifications_c1 = [o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='1')), key=lambda e: int(e.code)) if o.parent is None]
-    generic_error_classifications_c2 = [o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='2')), key=lambda e: int(e.code)) if o.parent is None]
-    generic_error_classifications_c3 = [o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='3')), key=lambda e: int(e.code)) if o.parent is None]
-    generic_error_classifications_c4 = [o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='4')), key=lambda e: int(e.code)) if o.parent is None]
-    generic_error_classifications_c5 = [o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='5')), key=lambda e: int(e.code)) if o.parent is None]
-
-    error_classifications_g0 = sorted([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='0')), key=lambda e: int(e.code)) if o.parent is None], key=lambda item: str(item))
     essay = Essay.objects.get(id=id)
     first_name = essay.user.first_name.split()[0]
     data = {
@@ -129,23 +119,38 @@ def _monitor_essay_view(request, id):
         'user': get_user_details(request.user),
         'username': first_name[0].upper() + first_name[1:].lower(), 
         'created': request.GET.get('created', None),
-        'error_classifications_c1': add_padding(error_classifications_c1, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'error_classifications_c2': add_padding(error_classifications_c2, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'error_classifications_c3': add_padding(error_classifications_c3, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'error_classifications_c4': add_padding(error_classifications_c4, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'error_classifications_c5': add_padding(error_classifications_c5, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'error_classifications_g0': add_padding(error_classifications_g0, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-
-        'generic_error_classifications_c1': add_padding(generic_error_classifications_c1, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'generic_error_classifications_c2': add_padding(generic_error_classifications_c2, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'generic_error_classifications_c3': add_padding(generic_error_classifications_c3, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'generic_error_classifications_c4': add_padding(generic_error_classifications_c4, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
-        'generic_error_classifications_c5': add_padding(generic_error_classifications_c5, 3, mark_safe(""" <div class="form-check col-sm"> </div> """)),
         'data': mark_safe(corrections[0].data),
     }
-    if essay.theme.jury == 'VUNESP':
+    if essay.theme.jury == 'ENEM':
+        data['error_classifications_c1'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='1')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c2'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='2')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c3'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='3')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c4'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='4')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c5'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='5')), key=lambda e: int(e.code)) if o.parent is None])
+
+        data['generic_error_classifications_c1'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='1')), key=lambda e: int(e.code)) if o.parent is None])
+        data['generic_error_classifications_c2'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='2')), key=lambda e: int(e.code)) if o.parent is None])
+        data['generic_error_classifications_c3'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='3')), key=lambda e: int(e.code)) if o.parent is None])
+        data['generic_error_classifications_c4'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='4')), key=lambda e: int(e.code)) if o.parent is None])
+        data['generic_error_classifications_c5'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='5')), key=lambda e: int(e.code)) if o.parent is None])
+
+        data['error_classifications_g0'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='0', jury='ENEM')), key=lambda e: int(e.code)) if o.parent is None])
+        return render(request, 'essay/monitor/enem.html', data)
+    
+    elif essay.theme.jury == 'VUNESP':
+        data['error_classifications_c1'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='1')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c2'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='2')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c3'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='3')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c4'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='4')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c5'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='5')), key=lambda e: int(e.code)) if o.parent is None])
+
+        data['generic_error_classifications_ca'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='a')), key=lambda e: int(e.code)) if o.parent is None])
+        data['generic_error_classifications_cb'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='b')), key=lambda e: int(e.code)) if o.parent is None])
+        data['generic_error_classifications_cc'] = wrap_errors([o.get_html() for o in sorted(list(GenericErrorClassification.objects.filter(competency='c')), key=lambda e: int(e.code)) if o.parent is None])
+
+        data['error_classifications_g0'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='0', jury='VUNESP')), key=lambda e: int(e.code)) if o.parent is None])
         return render(request, 'essay/monitor/vunesp.html', data)
-    return render(request, 'essay/monitor/enem.html', data)
+    return redirect('/essays/')
 
 def essays_view(request):
     return get_view_by_permission(request, **{

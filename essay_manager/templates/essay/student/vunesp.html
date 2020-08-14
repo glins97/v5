@@ -34,45 +34,60 @@
 						</div>
 						<br>
 						
+						
 						<div class="row">
 							<div class="col-md-12">
-							  <div class="card has-info card">
+							  <div class="card has-info card-chart">
 								<div class="card-body">
-								  <h3 class="card-title text-center">Expressão</h3>
+								  <h3 class="card-title text-center">Critério A</h3>
+								  <br>
 								  <div class="container">
-									<p>Grafia / Acentuação:</p>
-									<div id="slider-grafia" class="slider slider-info"></div>
-									<br>
-									<br>
-									<p>Morfossintaxe:</p>
-									<div id="slider-morfo" class="slider slider-info"></div>
-									<br>
-									<br>
-									<p>Propriedade vocabular:</p>
-									<div id="slider-vocab" class="slider slider-info"></div>
-									<br>
+									<div class="row">
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option3" disabled type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-3" checked="true"> 3
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option2" disabled type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-2"> 2
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option1" disabled type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-1"> 1
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option0" disabled type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-0"> 0
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									</div>
 								  </div>
 								</div>
-							  </div>
-							</div>
-						  </div>
-						  <div class="row">
-							<div class="col-md-12">
-							  <div class="card has-info card">
-								<div class="card-body">
-								  <h3 class="card-title text-center">Estrutura</h3>
+								<div class="card-footer">
 								  <div class="container">
-									<p>Projeto de texto:</p>
-									<div id="slider-projeto" class="slider slider-info"></div>
-									<br>
-									<br>
-									<p>Desenvolvimento das ideias:</p>
-									<div id="slider-dev" class="slider slider-info"></div>
-									<br>
-									<br>
-									<p>Síntese:</p>
-									<div id="slider-sintese" class="slider slider-info"></div>
-									<br>
+									<div class="row">
+									  <div class="col-sm form-check">
+										<div class="form-group">
+										  <label for="formTextareaca">Comentários gerais</label>
+										  <textarea class="form-control" id="formTextareaca" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareaca', 'ca')"></textarea>
+										</div>
+									  </div>
+									</div>
 								  </div>
 								</div>
 							  </div>
@@ -82,32 +97,126 @@
 							<div class="col-md-12">
 							  <div class="card has-info card-chart">
 								<div class="card-body">
-								  <h3 class="card-title text-center">Nota</h3>
+								  <h3 class="card-title text-center">Critério B</h3>
+								  <br>
+								  <div class="container">
+									<div class="row">
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option4" disabled type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-4" checked> 4
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option3" disabled type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-3"> 3
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option2" disabled type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-2"> 2
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option1" disabled type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-1"> 1
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option0" disabled type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-0"> 0
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									</div>
+								  </div>
 								</div>
 								<div class="card-footer">
 								  <div class="container">
 									<div class="row">
 									  <div class="col-sm form-check">
 										<div class="form-group">
-										  <label class="bmd-label-floating">Número de linhas</label>
-										  <input disabled type="text" id="formtextarea-lines" class="form-control" value="" style="width: 100%;">
+										  <label for="formTextareacb">Comentários gerais</label>
+										  <textarea class="form-control" id="formTextareacb" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareacb', 'cb')"></textarea>
 										</div>
 									  </div>
 									</div>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						  </div>
+						  <div class="row">
+							<div class="col-md-12">
+							  <div class="card has-info card-chart">
+								<div class="card-body">
+								  <h3 class="card-title text-center">Critério C</h3>
+								  <br>
+								  <div class="container">
 									<div class="row">
 									  <div class="col-sm form-check">
-										<div class="form-group">
-										  <label class="bmd-label-floating">Número de erros</label>
-										  <input disabled type="text" id="formtextarea-errors" class="form-control" value="" style="width: 100%;">
-										</div>
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option4" disabled type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-4" checked> 4
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option3" disabled type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-3"> 3
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option2" disabled type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-2"> 2
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option1" disabled type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-1"> 1
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
+									  </div>
+									  <div class="col-sm form-check">
+										<label class="form-check-label">
+										  <input class="form-check-input" value="option0" disabled type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-0"> 0
+										  <span class="circle">
+											<span class="check"></span>
+										  </span>
+										</label>
 									  </div>
 									</div>
+								  </div>
+								</div>
+								<div class="card-footer">
+								  <div class="container">
 									<div class="row">
 									  <div class="col-sm form-check">
 										<div class="form-group">
-										  <label for="formtextarea-generic">Comentários gerais</label>
-										  <br>
-										  <textarea disabled class="form-control" id="formtextarea-generic" rows="5"></textarea>
+										  <label for="formTextareacc">Comentários gerais</label>
+										  <textarea class="form-control" id="formTextareacc" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareacc', 'cc')"></textarea>
 										</div>
 									  </div>
 									</div>

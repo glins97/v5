@@ -164,6 +164,9 @@ competencies = (
     ('3', 'Competência 3'),
     ('4', 'Competência 4'),
     ('5', 'Competência 5'),
+    ('a', 'Critério A'),
+    ('b', 'Critério B'),
+    ('c', 'Critério C'),
     ('0', 'Nota 0'),
 )
 
@@ -178,6 +181,7 @@ class ErrorClassification(models.Model):
     weight = models.IntegerField(default=1)
     active = models.BooleanField(default=True)
     target = models.CharField(default='comment-text', max_length=255)
+    jury = models.CharField(default='VUNESP', choices=juries, max_length=255)
 
     def to_json(self):
         return json.drops({
@@ -221,7 +225,7 @@ class ErrorClassification(models.Model):
             code=self.get_verbose_code().replace('.', '-'),
             target=self.target,
             desc=self.description if self.description else '',
-            name='{} {}'.format(self.get_verbose_code(), self.name),
+            name='{}'.format(self.name),
             competency=self.competency,
             weight=self.weight,
             apply='false'))
@@ -242,7 +246,7 @@ class ErrorClassification(models.Model):
         """.format(
             code=self.get_verbose_code().replace('.', '-'),
             desc=self.description if self.description else '',
-            name='{} {}'.format(self.get_verbose_code(), self.name),
+            name='{}'.format(self.name),
             children='\n'.join([self.encapsulate_row(child.get_html()) for child in ErrorClassification.objects.filter(parent=self)])))
 
     def get_html(self):
@@ -276,14 +280,15 @@ class GenericErrorClassification(models.Model):
     code = models.CharField(max_length=255, blank=True, null=True, default='')
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=1023, blank=True, null=True)
-    competency = models.CharField(max_length=255, default='1', choices=competencies)
+    competency = models.CharField(max_length=255, default='a', choices=competencies)
     has_children = models.BooleanField(default=False, editable=False)
     parent = models.ForeignKey('GenericErrorClassification', on_delete=models.CASCADE, blank=True, null=True)
     p_parent = models.ForeignKey('GenericErrorClassification', on_delete=models.CASCADE, blank=True, null=True, related_name='gec_previous_parent', editable=False)
     weight = models.IntegerField(default=1)
     active = models.BooleanField(default=True)
     apply_on_select = models.BooleanField(default=False)
-    target = models.CharField(default='formTextareac1', max_length=255)
+    target = models.CharField(default='formTextareaca', max_length=255)
+    jury = models.CharField(default='VUNESP', choices=juries, max_length=255)
 
     def to_json(self):
         return json.drops({

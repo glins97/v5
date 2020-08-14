@@ -189,17 +189,19 @@ function importCorrectionData(data) {
     competencies['grades'] = grades;
 
     for (var key in grades){
-        var el = document.getElementById('slider-' + key);
-        if (el)
-            el.noUiSlider.set(grades[key]);
+        var el = document.getElementById('inlineRadioOptionsc' + key + '-' + grades[key]);
+        console.log('el', el)
+        if (el){
+            el.checked = true;
+            el.disabled = false;
+        }
     }
 
     for (var key in textfieldComments){
-        var el = document.getElementById('formtextarea-' + key);
+        var el = document.getElementById('formTextarea' + key);
         if (el)
             el.value = textfieldComments[key];
     }
-    
     loadModule();
 }
 

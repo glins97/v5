@@ -100,6 +100,12 @@
           <div class="modal has-info show" id="audioModal" role="dialog" aria-labelledby="audioModal" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Adicionar áudio para {{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
                 <div class="modal-body">
                   <div class="container cc-center">
                     <div class="video-container">
@@ -151,7 +157,7 @@
                         </button>
                       </div>
                       <div class="modal-body" style="margin-top: -10px; !important">
-                        <div class="row">
+                        <div class="row" hidden=true>
                           <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn shadow-none btn-outline-info" style="margin-left: 45px; margin-right: -1px;" id="modalC1" onclick="showCompetencyErrors('errorsC1');">
                               <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 1
@@ -236,43 +242,64 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <div class="card has-info card">
+                  <div class="card has-info card-chart">
                     <div class="card-body">
-                      <h3 class="card-title text-center">Expressão</h3>
+                      <h3 class="card-title text-center">Critério A</h3>
+                      <br>
                       <div class="container">
-                        <p>Grafia / Acentuação:</p>
-                        <div id="slider-grafia" class="slider slider-info"></div>
-                        <br>
-                        <br>
-                        <p>Morfossintaxe:</p>
-                        <div id="slider-morfo" class="slider slider-info"></div>
-                        <br>
-                        <br>
-                        <p>Propriedade vocabular:</p>
-                        <div id="slider-vocab" class="slider slider-info"></div>
-                        <br>
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-3" checked="true"> 3
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-2"> 2
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-1"> 1
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option0" type="radio" name="inlineRadioOptions" id="inlineRadioOptionsca-0"> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="card has-info card">
-                    <div class="card-body">
-                      <h3 class="card-title text-center">Estrutura</h3>
+                    <div class="card-footer">
                       <div class="container">
-                        <p>Projeto de texto:</p>
-                        <div id="slider-projeto" class="slider slider-info"></div>
-                        <br>
-                        <br>
-                        <p>Desenvolvimento das ideias:</p>
-                        <div id="slider-dev" class="slider slider-info"></div>
-                        <br>
-                        <br>
-                        <p>Síntese:</p>
-                        <div id="slider-sintese" class="slider slider-info"></div>
-                        <br>
+                        {% for chunk in generic_error_classifications_ca|chunks:3 %}
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          {% for error_classification_html in chunk %}
+                          {{ error_classification_html }}
+                          {% endfor %}
+                        </div>
+                        {% endfor %}
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="formTextareaca">Comentários gerais</label>
+                              <textarea class="form-control" id="formTextareaca" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareaca', 'ca')"></textarea>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -282,32 +309,140 @@
                 <div class="col-md-12">
                   <div class="card has-info card-chart">
                     <div class="card-body">
-                      <h3 class="card-title text-center">Nota</h3>
-                    </div>
-                    <div class="card-footer">
+                      <h3 class="card-title text-center">Critério B</h3>
+                      <br>
                       <div class="container">
                         <div class="row">
                           <div class="col-sm form-check">
-                            <div class="form-group">
-                              <label class="bmd-label-floating">Número de linhas</label>
-                              <input type="text" id="formtextarea-lines" class="form-control" value="" style="width: 100%;" onchange="updateTextfield('formtextarea-lines', 'lines')">
-                            </div>
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-4" checked> 4
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-3"> 3
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-2"> 2
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-1"> 1
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option0" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionscb-0"> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        {% for chunk in generic_error_classifications_cb|chunks:3 %}
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          {% for error_classification_html in chunk %}
+                          {{ error_classification_html }}
+                          {% endfor %}
+                        </div>
+                        {% endfor %}
                         <div class="row">
                           <div class="col-sm form-check">
                             <div class="form-group">
-                              <label class="bmd-label-floating">Número de erros</label>
-                              <input type="text"  id="formtextarea-errors" class="form-control" value="" style="width: 100%;" onchange="updateTextfield('formtextarea-errors', 'errors')">
+                              <label for="formTextareacb">Comentários gerais</label>
+                              <textarea class="form-control" id="formTextareacb" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareacb', 'cb')"></textarea>
                             </div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card has-info card-chart">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Critério C</h3>
+                      <br>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option4" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-4" checked> 4
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option3" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-3"> 3
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option2" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-2"> 2
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option1" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-1"> 1
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" value="option0" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionscc-0"> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        {% for chunk in generic_error_classifications_cc|chunks:3 %}
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          {% for error_classification_html in chunk %}
+                          {{ error_classification_html }}
+                          {% endfor %}
+                        </div>
+                        {% endfor %}
                         <div class="row">
                           <div class="col-sm form-check">
                             <div class="form-group">
-                              <label for="formtextarea-generic">Comentários gerais</label>
-                              <br>
-                              <textarea class="form-control" id="formtextarea-generic" rows="5" onchange="updateTextfield('formtextarea-generic', 'generic')"></textarea>
+                              <label for="formTextareacc">Comentários gerais</label>
+                              <textarea class="form-control" id="formTextareacc" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareacc', 'cc')"></textarea>
                             </div>
                           </div>
                         </div>
@@ -331,196 +466,14 @@
             {% include "footer.html" %}
           </div>
         </div>
-        <!--   Core JS Files   -->
         <script src="/static/essay_manager/js/core/jquery.min.js"></script>
         <script src="/static/essay_manager/js/core/popper.min.js"></script>
         <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
         <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
         <script src="/static/essay_manager/js/redactor-monitor-vunesp.js?{% now 'U' %}"></script>
-        <!-- Plugin for the momentJs  -->
-        <script src="/static/essay_manager/js/plugins/moment.min.js"></script>
-        <!--  Plugin for Sweet Alert -->
-        <script src="/static/essay_manager/js/plugins/sweetalert2.js"></script>
-        <!-- Forms Validations Plugin -->
-        <script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
-        <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-        <script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
-        <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-        <script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
-        <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-        <script src="/static/essay_manager/js/plugins/bootstrap-datetimepicker.min.js"></script>
-        <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-        <script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
-        <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-        <script src="/static/essay_manager/js/plugins/bootstrap-tagsinput.js"></script>
-        <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-        <script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
-        <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-        <script src="/static/essay_manager/js/plugins/fullcalendar.min.js"></script>
-        <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-        <script src="/static/essay_manager/js/plugins/jquery-jvectormap.js"></script>
-        <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-        <script src="/static/essay_manager/js/plugins/nouislider.min.js"></script>
-        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-        <!-- Library for adding dinamically elements -->
         <script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
-        <!--  Google Maps Plugin    -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-        <!-- Chartist JS -->
         <script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
-        <!--  Notifications Plugin    -->
-        <script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
-        <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
         <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
-        <script>
-          $(document).ready(function() {
-            noUiSlider.create(document.getElementById('slider-grafia'), {
-              start: 0,
-              step: 1,
-              connect: [true, false],
-
-              orientation: 'horizontal',
-              behaviour: 'tap-drag',
-              tooltips: true,
-              range: {
-                min: 0,
-                max: 15
-              },
-              format: {
-                to: function ( value ) {
-                  return Math.round(value);
-                },
-                from: function ( value ) {
-                  return Math.round(value);
-                }
-              },
-            });
-            document.getElementById('slider-grafia').noUiSlider.on('change.one', function() {
-              competencies['grades']['grafia'] = document.getElementById('slider-grafia').noUiSlider.get();
-            });
-            noUiSlider.create(document.getElementById('slider-morfo'), {
-              start: 0,
-              step: 1,
-              connect: [true, false],
-
-              orientation: 'horizontal',
-              behaviour: 'tap-drag',
-              tooltips: true,
-              range: {
-                min: 0,
-                max: 15
-              },
-              format: {
-                to: function ( value ) {
-                  return Math.round(value);
-                },
-                from: function ( value ) {
-                  return Math.round(value);
-                }
-              }
-            });
-            document.getElementById('slider-morfo').noUiSlider.on('change.one', function() {
-              competencies['grades']['morfo'] = document.getElementById('slider-morfo').noUiSlider.get();
-            });
-            noUiSlider.create(document.getElementById('slider-vocab'), {
-              start: 0,
-              step: 1,
-              connect: [true, false],
-
-              orientation: 'horizontal',
-              behaviour: 'tap-drag',
-              tooltips: true,
-              range: {
-                min: 0,
-                max: 15
-              },
-              format: {
-                to: function ( value ) {
-                  return Math.round(value);
-                },
-                from: function ( value ) {
-                  return Math.round(value);
-                }
-              }
-            });
-            document.getElementById('slider-vocab').noUiSlider.on('change.one', function() {
-              competencies['grades']['vocab'] = document.getElementById('slider-vocab').noUiSlider.get();
-            });
-            noUiSlider.create(document.getElementById('slider-projeto'), {
-              start: 0,
-              step: 1,
-              connect: [true, false],
-
-              orientation: 'horizontal',
-              behaviour: 'tap-drag',
-              tooltips: true,
-              range: {
-                min: 0,
-                max: 15
-              },
-              format: {
-                to: function ( value ) {
-                  return Math.round(value);
-                },
-                from: function ( value ) {
-                  return Math.round(value);
-                }
-              }
-            });
-            document.getElementById('slider-projeto').noUiSlider.on('change.one', function() {
-              competencies['grades']['projeto'] = document.getElementById('slider-projeto').noUiSlider.get();
-            });
-            noUiSlider.create(document.getElementById('slider-dev'), {
-              start: 0,
-              step: 1,
-              connect: [true, false],
-
-              orientation: 'horizontal',
-              behaviour: 'tap-drag',
-              tooltips: true,
-              range: {
-                min: 0,
-                max: 15
-              },
-              format: {
-                to: function ( value ) {
-                  return Math.round(value);
-                },
-                from: function ( value ) {
-                  return Math.round(value);
-                }
-              }
-            });
-            document.getElementById('slider-dev').noUiSlider.on('change.one', function() {
-              competencies['grades']['dev'] = document.getElementById('slider-dev').noUiSlider.get();
-            });
-            noUiSlider.create(document.getElementById('slider-sintese'), {
-              start: 0,
-              step: 1,
-              connect: [true, false],
-
-              orientation: 'horizontal',
-              behaviour: 'tap-drag',
-              tooltips: true,
-              range: {
-                min: 0,
-                max: 15
-              },
-              format: {
-                to: function ( value ) {
-                  return Math.round(value);
-                },
-                from: function ( value ) {
-                  return Math.round(value);
-                }
-              }
-            });
-            document.getElementById('slider-sintese').noUiSlider.on('change.one', function() {
-              competencies['grades']['sintese'] = document.getElementById('slider-sintese').noUiSlider.get();
-            });
-          });
-        </script>
         <script type="text/javascript">
            $('.w-dropdown').hover(function(evt)
            {
@@ -720,15 +673,6 @@
                 
               });
             });
-          });
-        </script>
-        <script>
-          $(document).ready(function() {
-            // Javascript method's body can be found in assets/js/demos.js
-            md.initDashboardPageCharts();
-            
-            md.initVectorMap();
-            
           });
         </script>
         <script>
