@@ -13,14 +13,8 @@
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-md-6">
-								<h3>Tema: {{theme.description}}</h3>
-								<p>Banca: {{theme.jury}}</p>
-								<p>Data limite: {{theme.end_date}}</p>
-							</div>
-							<div class="col-md-6">
-								<p>  </p>
-								<p>  </p>
-								<a class="btn btn-info pull-right" href="/{{theme.file}}">Download</a>
+								<h3>{{theme.description}}</h3>
+								<p>{{theme.jury}} <a class="btn btn-info btn-link btn-link-info" href="/{{theme.file}}">Download</a> </p>
 							</div>
 						</div>
 						<div class="row">

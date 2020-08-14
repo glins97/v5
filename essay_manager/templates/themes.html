@@ -52,16 +52,16 @@
 													<table class="table table-hover">
 														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
 															<tr>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 70%">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
 																	Nome
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
 																	Banca
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Redações
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Última redação
 																</th>
 															</tr>
@@ -71,9 +71,9 @@
 															{% if theme.axis == axis.description %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+																<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 															</tr>
 															{% endif %}
 															{% endfor %}
@@ -106,16 +106,16 @@
 													<table class="table table-hover">
 														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
 															<tr>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 70%">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
 																	Nome
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
 																	Banca
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Redações
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Última redação
 																</th>
 															</tr>
@@ -125,9 +125,9 @@
 															{% if theme.axis == axis.description and theme.jury == "ENEM" %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+																<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 															</tr>
 															{% endif %}
 															{% endfor %}
@@ -160,16 +160,16 @@
 													<table class="table table-hover">
 														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
 															<tr>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 70%">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
 																	Nome
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
 																	Banca
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Redações
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Última redação
 																</th>
 															</tr>
@@ -179,9 +179,9 @@
 															{% if theme.axis == axis.description and theme.jury == "VUNESP" %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+																<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 															</tr>
 															{% endif %}
 															{% endfor %}
@@ -214,16 +214,16 @@
 													<table class="table table-hover">
 														<thead class="" style="background-color: rgb(238, 238, 238) !important;">
 															<tr>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 70%">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
 																	Nome
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
 																	Banca
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Redações
 																</th>
-																<th style="background-color: rgb(238, 238, 238) !important">
+																<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
 																	Última redação
 																</th>
 															</tr>
@@ -233,9 +233,9 @@
 															{% if theme.axis == axis.description and theme.jury == "CESPE" %}
 															<tr>
 																<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
-																<td> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+																<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+																<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 															</tr>
 															{% endif %}
 															{% endfor %}

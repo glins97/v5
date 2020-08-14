@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import *
+import os
 
 def deactivate_themes(modeladmin, request, queryset):
     queryset.update(active=False)
@@ -11,19 +12,23 @@ def activate_themes(modeladmin, request, queryset):
 activate_themes.short_description = "Ativar temas selecionados"
 
 class ThemeAdmin(admin.ModelAdmin):
+    list_display = ('description', 'active', 'arquivo_existe', 'jury', 'file')
     search_fields = ('description', )
     fieldsets = (
         ('Geral', {
             'fields': ('active', 'description', 'jury', 'axis', 'type', 'file', ),
-        }),
-        ('Disponibilidade', {
-            'fields': ('start_date', 'end_date', ),
         }),
         ('Tema da semana', {
             'fields': ('highlighted_start_date', 'highlighted_end_date', ),
         }),
     )
     actions = [activate_themes, deactivate_themes]
+
+    def arquivo_existe(self, obj):
+        # return True
+        if os.path.exists(str(obj.file)):
+            return format_html('<img src="/static/admin/img/icon-yes.svg" alt="True">')
+        return format_html('<img src="/static/admin/img/icon-no.svg" alt="False">')
 
 class EssayAdmin(admin.ModelAdmin):
     autocomplete_fields = ('user', )

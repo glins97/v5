@@ -63,8 +63,6 @@ class Theme(models.Model):
     active = models.BooleanField(default=False, verbose_name='Visível')
     description = models.CharField(max_length=255, verbose_name='Nome')
     jury = models.CharField(max_length=255, choices=juries, verbose_name='Banca')
-    start_date = models.DateTimeField(verbose_name='Data de iníncio')
-    end_date = models.DateTimeField(verbose_name='Data de término')
     highlighted_start_date = models.DateTimeField(blank=True, null=True, verbose_name='Data de início')
     highlighted_end_date = models.DateTimeField(blank=True, null=True, verbose_name='Data de término')
     axis = models.CharField(max_length=255, choices=axes, default='OTHER', verbose_name='Eixo')

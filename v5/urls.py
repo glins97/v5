@@ -1,18 +1,3 @@
-"""v5 URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.conf import settings
@@ -58,6 +43,22 @@ def uploaded_file_redirect(request, url):
         response = e500_view(request)
     return response
 
+def manuals_file_redirect(request, manual, url):
+    fn = f'uploads/manuals/{manual}/{url}'
+
+    mimetypes.init()
+    try:
+        print('file_name', fn)
+        fsock = open(fn, "rb")
+        file_name = os.path.basename(fn) 
+        mime_type_guess = mimetypes.guess_type(file_name)
+        if mime_type_guess is not None:
+            response = HttpResponse(fsock, content_type=mime_type_guess[0])
+        response['Content-Disposition'] = 'attachment; filename=' + file_name            
+    except IOError:
+        response = e500_view(request)
+    return response
+
 urlpatterns = [    
     path('admin/', admin.site.urls),
 
@@ -93,6 +94,7 @@ urlpatterns = [
     path('api/exercises/uninterest/<int:id>/', uninterest_exercise_endpoint),
     path('api/exercises/complete/<int:id>/', complete_exercise_endpoint),
     path('api/notifications/read/all/', read_all_notifications_endpoint),
+    path('uploads/manuals/<str:manual>/<str:url>/', manuals_file_redirect),
     path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
 

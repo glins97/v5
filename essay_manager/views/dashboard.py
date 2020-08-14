@@ -7,7 +7,7 @@ from functools import partial
 
 @has_permission('student')
 def student_dashboard_view(request):
-    themes = Theme.objects.filter(start_date__lt=now(), end_date__gt=now())
+    themes = Theme.objects.all()
     essays = Essay.objects.filter(user=request.user).order_by('-id')
     essays_count = essays.count()
     essays_msg = 'O trabalho duro vence talento!'
