@@ -24,14 +24,6 @@
 				</a>
 			</li>
 			{% endif %}
-			{% if user.obj|has_permission:'student' %}
-			<li class="nav-item {% if title == 'Perfil' %}active{%endif%}">
-				<a class="nav-link" href="/profile/">
-					<i class="material-icons">person</i>
-					<p>Perfil</p>
-				</a>
-			</li>
-			{% endif %}
 			<li class="nav-item {% if title == 'Redações' %}active{%endif%}">
 				<a class="nav-link" href="/essays/">
 					<i class="material-icons">assignment</i>
@@ -61,6 +53,14 @@
 					<p>Exercícios</p>
 				</a>
 			</li>
+			{% if user.obj|has_permission:'student' %}
+			<li class="nav-item {% if title == 'Perfil' %}active{%endif%}">
+				<a class="nav-link" href="/profile/">
+					<i class="material-icons">person</i>
+					<p>Perfil</p>
+				</a>
+			</li>
+			{% endif %}
 			{% endif %}
 			{% if user.obj|has_permission:'superuser' %}
 			<li class="nav-item {% if title == 'Gestão' %}active{%endif%}">
