@@ -28,20 +28,63 @@
 									  <div class="wizard-navigation">
 										<ul class="nav nav-pills">
 										  <li class="nav-item">
-											<a class="nav-link active" href="#file" data-toggle="tab" role="tab">
-											  Redação escaneada
+											<a class="nav-link active" href="#theme" data-toggle="tab" role="tab">
+												Tema
 											</a>
 										  </li>
 										  <li class="nav-item">
-											<a class="nav-link" href="#theme" data-toggle="tab" role="tab">
-											  Tema
+											<a class="nav-link" href="#file" data-toggle="tab" role="tab">
+											  Redação escaneada
 											</a>
 										  </li>
 										</ul>
 									  </div>
 									  <div class="card-body has-info">
 										<div class="tab-content">
-										  <div class="tab-pane active" id="file">
+											<div class="tab-pane active" id="theme">
+											  <h5 class="info-text"> Qual o tema da redação? </h5>
+											  <div class="row justify-content-center">
+												<div class="col-lg-10">
+													{% for theme in themes %}
+													  <div class="row" style="height: 40px;">
+														  <div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden = true;">
+															  <input type="radio" name="theme_id" value={{theme.id}}>
+															  <div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
+																  <p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    {{theme.description}}</p>
+															  </div>
+														  </div>
+													  </div>
+												  {% endfor %}
+												  <div class="row" style="height: 40px;">
+													  <div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden = false;">
+														  <input type="radio" name="theme_id" value=-1>
+														  <div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
+															  <p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    Outro</p>
+														  </div>
+													  </div>
+												  </div>
+												  <div id="newTheme" class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput" hidden=true>
+													  <div class="form-group" style="margin-top: 35px;">
+														  <label class="bmd-label-floating">Nome do tema</label>
+														  <input type="text" name="theme_name" class="form-control" value="">
+													  </div>
+													  <div class="fileinput-new thumbnail">
+														  <img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
+													  </div>
+													  <div class="fileinput-preview fileinput-exists thumbnail"></div>
+													  <div>
+														  <span class="btn btn-info btn-file">
+															  <span class="fileinput-new">Selecionar tema</span>
+															  <span class="fileinput-exists">Mudar arquivo</span>
+															  <input type="file" name="theme_file" accept="image/x-png,image/jpeg,application/pdf">
+														  </span>
+														  <a class="btn btn-danger fileinput-exists" style="color: white" data-dismiss="fileinput">Cancelar</a>
+													  </div>
+												  </div>
+												</div>
+											  </div>
+											</div>
+										  <div class="tab-pane" id="file">
 											<div class="row justify-content-center">
 											  <div class="col-lg-10 mt-3">
 												<div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
@@ -63,49 +106,6 @@
 															<span class="fileinput-new">Selecionar redação</span>
 															<span class="fileinput-exists">Mudar arquivo</span>
 															<input type="file" name="file" accept="image/x-png,image/jpeg,application/pdf">
-														</span>
-														<a class="btn btn-danger fileinput-exists" style="color: white" data-dismiss="fileinput">Cancelar</a>
-													</div>
-												</div>
-											  </div>
-											</div>
-										  </div>
-										  <div class="tab-pane" id="theme">
-											<h5 class="info-text"> Qual o tema da redação? </h5>
-											<div class="row justify-content-center">
-											  <div class="col-lg-10">
-												  {% for theme in themes %}
-													<div class="row" style="height: 40px;">
-														<div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden = true;">
-															<input type="radio" name="theme_id" value={{theme.id}}>
-															<div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
-																<p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    {{theme.description}}</p>
-															</div>
-														</div>
-													</div>
-												{% endfor %}
-												<div class="row" style="height: 40px;">
-													<div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden = false;">
-														<input type="radio" name="theme_id" value=-1>
-														<div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
-															<p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    Outro</p>
-														</div>
-													</div>
-												</div>
-												<div id="newTheme" class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput" hidden=true>
-													<div class="form-group" style="margin-top: 35px;">
-														<label class="bmd-label-floating">Nome do tema</label>
-														<input type="text" name="theme_name" class="form-control" value="">
-													</div>
-													<div class="fileinput-new thumbnail">
-														<img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
-													</div>
-													<div class="fileinput-preview fileinput-exists thumbnail"></div>
-													<div>
-														<span class="btn btn-info btn-file">
-															<span class="fileinput-new">Selecionar tema</span>
-															<span class="fileinput-exists">Mudar arquivo</span>
-															<input type="file" name="theme_file" accept="image/x-png,image/jpeg,application/pdf">
 														</span>
 														<a class="btn btn-danger fileinput-exists" style="color: white" data-dismiss="fileinput">Cancelar</a>
 													</div>
