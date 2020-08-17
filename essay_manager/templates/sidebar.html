@@ -24,12 +24,6 @@
 				</a>
 			</li>
 			{% endif %}
-			<li class="nav-item {% if title == 'Redações' %}active{%endif%}">
-				<a class="nav-link" href="/essays/">
-					<i class="material-icons">assignment</i>
-					<p>Redações </p>
-				</a>
-			</li>
 			{% if user.obj|has_permission:'student' %}
 			<li class="nav-item {% if title == 'Temas' %}active{%endif%}">
 				<a class="nav-link" href="/themes/">
@@ -38,6 +32,12 @@
 				</a>
 			</li>
 			{% endif %}
+			<li class="nav-item {% if title == 'Redações' %}active{%endif%}">
+				<a class="nav-link" href="/essays/">
+					<i class="material-icons">assignment</i>
+					<p>Redações </p>
+				</a>
+			</li>
 			{% if user.obj|has_permission:'student' %}
 			<li class="nav-item {% if title == 'Performance' %}active{%endif%}">
 				<a class="nav-link" href="/graphs/">
