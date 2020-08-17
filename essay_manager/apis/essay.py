@@ -30,8 +30,6 @@ def create_essay_endpoint(request):
             theme = Theme(
                 description=request.POST['theme_name'], 
                 jury='ENEM',
-                start_date=now(),
-                end_date=now(),
                 axis='De outros alunos',
                 file=fn_theme,
                 type='FREE',
