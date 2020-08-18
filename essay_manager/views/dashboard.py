@@ -36,7 +36,7 @@ def student_dashboard_view(request):
 
     corrected_essays_icon = 'warning'
     corrected_essays_card_type = 'warning'
-    corrected_essays_msg = 'Obrigado pelo empenho!'
+    corrected_essays_msg = 'Redação é método.'
     if corrected_essays_count == essays_count:
         corrected_essays_icon = 'check'
         corrected_essays_card_type = 'success'
