@@ -230,7 +230,7 @@ def _mail_results_bsb():
     logger.info(f'General tps results delivery finished')
 
 def _mail_answers_bsb():
-    if (now().hour != 18): return
+    if (now().hour >= 18): return
 
     answers = TPSAnswer.objects.filter(mailed_answers=False, tps__end_date__lte=now(), tps__campus='BSB')
     tpses = {
