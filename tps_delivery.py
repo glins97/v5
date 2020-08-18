@@ -34,8 +34,8 @@ def get_group(tps, id):
     return ''
 
 def get_rank(tps, id):
-    rank = 0
     for grade_group in ['SCORE_Z', 'TBL', 'CBT']:
+        rank = 0
         if grade_group not in tps: continue
         for aid in tps[grade_group]:
             rank += 1
