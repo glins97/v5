@@ -110,10 +110,21 @@ class Essay(models.Model):
     def save(self, *args, **kwargs):
         if self.file:
             super(Essay, self).save(*args, **kwargs)
-            if self.file.name[-4:].lower() == '.pdf':
-                destination = self.file.name.split(self.file.name[-4:])[0] + '.PNG'
-                convert_from_path(self.file.name, 300)[0].save(destination, 'PNG')
-                self.file = destination
+            
+            if '.pdf' in str(self.file).lower()[-4:]:
+                info = pdfinfo_from_path(str(self.file.file), userpw=None, poppler_path=None)
+                maxPages = info["Pages"]
+                images = []
+                for page in range(1, min(maxPages + 1, 10)) : 
+                    images.extend(convert_from_path(str(self.file.file), dpi=200, first_page=page, last_page=page))
+
+                min_shape = sorted( [(np.sum(i.size), i.size ) for i in images])[0][1]
+                imgs_comb = np.vstack( (np.asarray( i.resize(min_shape) ) for i in images ) )
+                imgs_comb = PIL.Image.fromarray(imgs_comb)
+                
+                destination = str(self.file.file).lower().replace('.pdf', '.png')
+                imgs_comb.save(str(self.file.file).lower().replace('.pdf', '.png'))
+                self.file = destination.replace('/root/v5/', '')
         super(Essay, self).save(*args, **kwargs)
 
     class Meta:
