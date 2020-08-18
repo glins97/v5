@@ -168,14 +168,15 @@ class TPSAdmin(admin.ModelAdmin):
         }
         available_buttons = []
         if TPSAnswer.objects.filter(tps=obj).count():
-            if obj.campus == 'BSB':
-                if obj.group == 'PARTICULARES':
-                    available_buttons = [all_buttons['TBL'], all_buttons['CBT'], all_buttons['DISTRATOR']]
+            if obj.separate:
+                if obj.campus == 'BSB':
+                    if obj.group == 'PARTICULARES':
+                        available_buttons = [all_buttons['TBL'], all_buttons['CBT']]
+                    else:
+                        available_buttons = [all_buttons['SCORE_Z'], all_buttons['TBL'], all_buttons['CBT']]
                 else:
-                    available_buttons = [all_buttons['SCORE_Z'], all_buttons['TBL'], all_buttons['CBT'], all_buttons['DISTRATOR']]
-            else:
-                available_buttons = [all_buttons['SCORE_Z'], all_buttons['TBL'], all_buttons['DISTRATOR']]
-
+                    available_buttons = [all_buttons['SCORE_Z'], all_buttons['TBL']]
+            available_buttons += [all_buttons['DISTRATOR']]
             return format_html(''.join(available_buttons))
         return 'Aguarde a primeira resposta'
 
