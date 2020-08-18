@@ -62,7 +62,7 @@
 			</li>
 			{% endif %}
 			{% endif %}
-			{% if user.obj|has_permission:'superuser' %}
+			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
 			<li class="nav-item {% if title == 'Gestão' %}active{%endif%}">
 				<a class="nav-link" href="/management/">
 					<i class="material-icons">history</i>

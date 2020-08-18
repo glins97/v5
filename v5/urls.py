@@ -82,6 +82,7 @@ urlpatterns = [
     path('corrections/new/<int:id>/', create_correction_endpoint),
     path('corrections/update/<int:id>/', update_correction_endpoint),
     path('api/profile/update/', update_profile_endpoint),
+    path('api/profile/access_level/<str:level>/', update_al_profile_endpoint),
     path('api/essays/mail/<int:id>/', mail_essay_endpoint),
     path('api/essays/download/<int:id>/', download_essay_endpoint),
     path('api/essays/create/', create_essay_endpoint),

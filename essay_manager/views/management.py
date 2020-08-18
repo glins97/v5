@@ -84,8 +84,6 @@ def management_view(request):
         monitor.monitor_average_correction_time = minute_format(monitor_average_correction_time)
         monitor.monitor_total_correction_time = hour_format(monitor_total_correction_time)
         
-        print(total_correction_time, total_corrections)
-
     data = {
         'title': 'Gestão',
         'user': get_user_details(request.user),

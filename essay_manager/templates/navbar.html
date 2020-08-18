@@ -31,6 +31,26 @@
                 <div class="input-group no-border"> </div>
             </form>
             <ul class="navbar-nav">
+                {% if user.obj|has_permission:'superuser' and user.obj|has_permission:'student' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="/api/profile/access_level/monitor/" style="color: inherit;" target="_self">
+                        <i class="material-icons">cached</i>
+                        <p class="d-lg-none d-md-block" style="color: white">
+                            Virar monitor
+                        </p>
+                    </a>
+                </li>
+                {% endif %}
+                {% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="/api/profile/access_level/student/" style="color: inherit;" target="_self">
+                        <i class="material-icons">cached</i>
+                        <p class="d-lg-none d-md-block" style="color: white">
+                            Virar aluno
+                        </p>
+                    </a>
+                </li>
+                {% endif %}
                 {% if user.obj|has_permission:'superuser' %}
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="/admin/" style="color: inherit;" target="_self">

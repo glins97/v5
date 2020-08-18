@@ -1,5 +1,6 @@
 from essay_manager.models import Profile
-from essay_manager.decorators import login_required
+from essay_manager.decorators import login_required, has_permission
+from django.contrib.auth.models import Group
 from django.shortcuts import redirect
 import logging
 logger = logging.getLogger()
@@ -26,3 +27,15 @@ def update_profile_endpoint(request):
     except Exception as e:
         logger.error(f'Error updating profile. Error {e}', exc_info=e)
         return redirect('/profile/?updated=False')
+
+@has_permission('superuser')
+def update_al_profile_endpoint(request, level):
+    try:
+        for level_ in ['student', 'monitor']:
+            request.user.groups.remove(Group.objects.get(name=level_))
+        request.user.groups.add(Group.objects.get(name=level))
+        request.user.save()
+        return redirect('/')
+    except Exception as e:
+        logger.error(f'Error updating profile al. Error {e}', exc_info=e)
+        return redirect('/')
