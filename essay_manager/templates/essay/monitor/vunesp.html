@@ -456,7 +456,6 @@
                 <div class="col-md-12">
                   <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Finalizar </button>
                   <form id="submitUpdateForm" class="form" method="post" action="/corrections/update/{{essay.id}}/">
-                    {% csrf_token %}
                     <input type="hidden" class="form-control" name="data" maxlength="150" required="" id="formInput">
                     <input type="hidden" class="form-control" id="status-input" name="status" maxlength="150" value="DONE">
                   </form>

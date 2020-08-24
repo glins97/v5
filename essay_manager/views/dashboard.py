@@ -42,11 +42,17 @@ def student_dashboard_view(request):
         corrected_essays_card_type = 'success'
         corrected_essays_msg = 'Busque outros temas!'
 
-    theme = Theme.objects.filter(active=True, highlighted_start_date__lt=now(), highlighted_end_date__gt=now()).first()
-    if theme:
-        theme.done = False
-        if Essay.objects.filter(user=request.user, theme=theme).count():
-            theme.done = True
+    theme_enem = Theme.objects.filter(active=True, jury='ENEM', highlighted_start_date__lt=now(), highlighted_end_date__gt=now()).first()
+    if theme_enem:
+        theme_enem.done = False
+        if Essay.objects.filter(user=request.user, theme=theme_enem).count():
+            theme_enem.done = True
+
+    theme_vunesp = Theme.objects.filter(active=True, jury='VUNESP', highlighted_start_date__lt=now(), highlighted_end_date__gt=now()).first()
+    if theme_vunesp:
+        theme_vunesp.done = False
+        if Essay.objects.filter(user=request.user, theme=theme_vunesp).count():
+            theme_vunesp.done = True
 
     notifications = Notification.objects.filter(user=request.user).order_by('-id')
     new_notifications = Notification.objects.filter(user=request.user, received=False).count()
@@ -58,7 +64,8 @@ def student_dashboard_view(request):
         'authed': request.GET.get('authed', False),   
         
         'events': Event.objects.filter(user=request.user), 
-        'theme': theme,
+        'theme_enem': theme_enem,
+        'theme_vunesp': theme_vunesp,
 
         'grades': str(grades[::-1]),
         'essays': list(essays)[-5:],

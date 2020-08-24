@@ -9,7 +9,7 @@ from datetime import date
 import subprocess
 
 from tps.auxiliary import generate_score_z, generate_tbl, generate_cbt, generate_distrator
-from .models import TPS, TPSAnswer, TPSScore, Question
+from .models import TPS, TPSAnswer, TPSScore, Question, QuestionAnswer
 
 class TPSScoreAdmin(admin.ModelAdmin):
     list_display = ('id', 'email', 'campus', 'group', 'month', 'score',)
@@ -239,6 +239,24 @@ class QuestionAdmin(admin.ModelAdmin):
     def questão(self, obj):
         return 'Questão {}'.format(obj.number)
 
+class QuestionAnswerAdmin(admin.ModelAdmin):
+    list_display = ('tps', 'answer_id', 'user', 'question', 'correct_answer', 'answer')
+    search_fields = ('tps_answer__email', )
+    list_per_page = 100
+
+    def tps(self, obj):
+        return obj.question.tps
+
+    def answer_id(self, obj):
+        return obj.tps_answer.id
+
+    def user(self, obj):
+        return obj.tps_answer.name + ' ' + obj.tps_answer.email
+
+    def correct_answer(self, obj):
+        return obj.question.correct_answer
+
+admin.site.register(QuestionAnswer, QuestionAnswerAdmin)
 # admin.site.register(Question, QuestionAdmin)
 admin.site.register(TPS, TPSAdmin)
 admin.site.register(TPSAnswer, TPSAnswerAdmin)

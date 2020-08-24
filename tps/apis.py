@@ -25,8 +25,8 @@ def save_tps_answer(request, id):
       
         tps_answer = get_or_create(TPSAnswer,
             tps=tps,
-            name = request.POST.get('name', ''),
-            email = request.POST.get('email', ''),
+            name=request.POST.get('name', ''),
+            email=request.POST.get('email', ''),
         )
         tps_answer.grade = 0
         tps_answer.save()
@@ -34,7 +34,9 @@ def save_tps_answer(request, id):
             if attr[0] == 'q':
                 number = int(attr[1:])
                 question = Question.objects.get(tps=tps, number=number)
-                get_or_create(QuestionAnswer, question=question, tps_answer=tps_answer, answer=request.POST[attr]).save()
+                question_answer = get_or_create(QuestionAnswer, question=question, tps_answer=tps_answer)
+                question_answer.answer = request.POST[attr]
+                question_answer.save()
                 if request.POST[attr][0] == question.correct_answer:
                     tps_answer.grade += 1
         
