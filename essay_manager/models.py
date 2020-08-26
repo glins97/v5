@@ -458,3 +458,12 @@ class Notification(models.Model):
     description = models.TextField(blank=True, null=True)
     href = models.CharField(max_length=255, blank=True, null=True)
     received = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'notificação'
+        verbose_name_plural = 'notificações'
+
+class Mentoring(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mentoring_student')
+    mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mentoring_mentor')
+    active = models.BooleanField(default=True)

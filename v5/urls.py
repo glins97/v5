@@ -73,6 +73,7 @@ urlpatterns = [
     path('themes/', themes_view),
     path('themes/<int:id>/', theme_view),
     path('management/', management_view),
+    path('mentoring/', mentoring_view),
     path('graphs/', graphs_view),
     path('exercises/<int:id>/', exercise_view),
     path('exercises/', exercises_view),
@@ -95,6 +96,9 @@ urlpatterns = [
     path('api/exercises/uninterest/<int:id>/', uninterest_exercise_endpoint),
     path('api/exercises/complete/<int:id>/', complete_exercise_endpoint),
     path('api/notifications/read/all/', read_all_notifications_endpoint),
+    path('api/mentoring/start/<int:id>/', start_mentoring_endpoint),
+    path('api/mentoring/finish/<int:id>/', finish_mentoring_endpoint),
+    path('api/access_as/<int:id>/', access_as_endpoint),
     path('uploads/manuals/<str:manual>/<str:url>/', manuals_file_redirect),
     path('uploads/<str:url>/', uploaded_file_redirect),
     # ---------------------
