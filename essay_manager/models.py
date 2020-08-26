@@ -108,6 +108,11 @@ class Essay(models.Model):
         return '#{} - {} {}, {} => {}'.format(self.id, self.user.first_name, self.user.last_name, self.theme, self.file)
 
     def save(self, *args, **kwargs):
+        if self.pk is None:
+            mentoring = Mentoring.objects.filter(student=self.user, active=True).first()
+            if mentoring:
+                Notification(user=mentoring.mentor, title=f'Nova redação do(a) {self.user.first_name}!', description='', href=f'/essays/{self.id}').save()
+            
         if self.file:
             super(Essay, self).save(*args, **kwargs)
             
