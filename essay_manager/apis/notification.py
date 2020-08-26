@@ -10,6 +10,7 @@ logger = logging.getLogger('django')
 @login_required
 def read_all_notifications_endpoint(request):
     try:
+        print(Notification.objects.filter(user=request.user, received=False))
         Notification.objects.filter(user=request.user, received=False).update(received=True)
         return HttpResponse(status=200)
     except Exception as e:

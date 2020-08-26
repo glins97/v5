@@ -111,11 +111,11 @@ class Essay(models.Model):
         if self.pk is None:
             mentoring = Mentoring.objects.filter(student=self.user, active=True).first()
             if mentoring:
+                super(Essay, self).save(*args, **kwargs)
                 Notification(user=mentoring.mentor, title=f'Nova redação do(a) {self.user.first_name}!', description='', href=f'/essays/{self.id}').save()
             
         if self.file:
             super(Essay, self).save(*args, **kwargs)
-            
             if '.pdf' in str(self.file).lower()[-4:]:
                 info = pdfinfo_from_path(str(self.file.file), userpw=None, poppler_path=None)
                 maxPages = info["Pages"]

@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from essay_manager.decorators import login_required
-from essay_manager.models import Essay
+from essay_manager.models import Essay, Notification
 from bauth.views import e403_view, e500_view
 
 import os.path
@@ -49,10 +49,15 @@ def get_user_details(user):
     if not full_name:
         full_name = 'Aluno'
         initials = 'A'
+        
+    notifications = Notification.objects.filter(user=user).order_by('-id')
+    new_notifications = Notification.objects.filter(user=user, received=False).count()
     return {
         'first_name': user.first_name,
         'last_name': user.last_name,
         'full_name': full_name,
         'initials': initials,
         'obj': user,
+        'notifications': notifications,
+        'new_notifications': new_notifications,
     }
