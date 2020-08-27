@@ -148,7 +148,7 @@ class TPSAdmin(admin.ModelAdmin):
             '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
             '/static/tps/js/fields.js',
         )
-    list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'end_date', 'url', 'relatórios',)
+    list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'end_date', 'url', 'arquivos', 'relatórios',)
     list_filter = ('campus', 'week',)
     search_fields = ('campus', 'subject', 'week', )
     list_per_page = 20
@@ -158,6 +158,11 @@ class TPSAdmin(admin.ModelAdmin):
     
     def respostas(self, obj):
         return '{} / {}'.format(TPSAnswer.objects.filter(tps=obj).count(), obj.max_answers)
+
+    def arquivos(self, obj):
+            return format_html(''.join(
+                [f'<a class="button" href="/{obj.original_questions if obj.original_questions else obj.questions}">CADERNO</a>&nbsp', f'<a class="button" href="/{obj.solutions}">GABARITO</a>&nbsp']
+            ))
 
     def relatórios(self, obj):
         all_buttons = {
