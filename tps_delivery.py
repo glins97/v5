@@ -263,7 +263,7 @@ def _mail_teachers():
                 reports.append(cbt.replace('xlsx', 'pdf'))
             mail_body = f'<p>Respostas para TPS {tps} concluídas. Relatórios se encontram em anexo (ou, caso não, acesse <a href="https://ppa.digital/admin/tps/tps/"> este link</a>).</p>'    
             mail_body += f'<p>Na eventualidade de problemas, responder diretamente esse email.</p>'    
-            if send_mail(tps.teacher.username, f'relatórios {tps}', mail_body, reports, True):
+            if send_mail(tps.teacher.email, f'relatórios {tps}', mail_body, reports, True):
                 tps.save()
         except Exception as e:
             logger.error(f'Error mailing TPS {tps}. Error {e}', exc_info=e)
