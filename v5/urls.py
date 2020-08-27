@@ -118,7 +118,8 @@ urlpatterns = [
     re_path(r'tps/(?P<id>[\d-]+)/.+?/.+?/.+?/', tps_view, name='id'),
 
     # - apis
-    path('tps/answer/<int:id>/', save_tps_answer)
+    path('tps/answer/<int:id>/', save_tps_answer),
+    path('tps/delivery_date/<int:id>/', get_tps_delivery_date),
     # ---------------------
 ] 
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from tps.models import TPS, TPSAnswer, Question, QuestionAnswer
 from django.utils.timezone import now
+from django.http import JsonResponse
 
 def get_or_create(class_, *args, **kwargs):
     obj = class_.objects.filter(*args, **kwargs).first()
@@ -44,3 +45,15 @@ def save_tps_answer(request, id):
         return render(request, 'feed.html', {'title': 'Salvo!', 'description': 'O trabalho duro vence o talento.'})
     return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Nenhum tps foi encontrado. Entre em contato com o responsável.'})
 
+def get_tps_delivery_date(request, id):
+    try:
+        tps = TPS.objects.get(id=id)
+        return JsonResponse({
+            'year': tps.end_date.year,
+            'month': tps.end_date.month,
+            'day': tps.end_date.day,
+            'hour': tps.end_date.hour,
+            'minute': tps.end_date.minute,
+        }, safe=False)
+    except:
+        return JsonResponse({}, status=500, safe=False)

@@ -79,7 +79,7 @@
                 <div class="card-body">
                   <div class="tab-content">
                     <div class="tab-pane active" id="questions">
-                      <a class="btn btn-outline-info pull-right" href="/{{tps.questions}}"> Baixar questões</a>
+                      <a class="btn btn-outline-info pull-right" href={% if tps.original_questions %}"/{{tps.original_questions}}"{% else %}"/{{tps.questions}}"{% endif %}> Baixar questões</a>
 									  	<i><img id="src" src="/{{tps.questions}}" width="100%"/></i>
                     </div>
                     <div class="tab-pane" id="answers">

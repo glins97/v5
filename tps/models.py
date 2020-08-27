@@ -101,7 +101,8 @@ class TPS(models.Model):
     max_questions = models.IntegerField(default=10, verbose_name='Número de questões')
     max_answers = models.IntegerField(default=40, verbose_name='Número de respostas')
 
-    questions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Caderno de questões')
+    questions = models.FileField(upload_to='uploads', verbose_name='Caderno de questões')
+    original_questions = models.FileField(blank=True, null=True, editable=False)
     solutions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Gabarito comentado')
     notify = models.BooleanField(default=True, verbose_name="Enviar ranking")
     separate = models.BooleanField(default=True, verbose_name="Separar alunos em grupos")
@@ -117,6 +118,9 @@ class TPS(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             super(TPS, self).save(*args, **kwargs)
+        
+        if self.questions and not self.original_questions:
+            self.original_questions = self.questions
         
         if self.questions and '.pdf' in str(self.questions).lower()[-4:]:
             super(TPS, self).save(*args, **kwargs)
