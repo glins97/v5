@@ -18,6 +18,7 @@ def send_templated_mail(template, to, subject, attachments=[], *args, **kwargs):
             send_mail(to, subject, src, attachments)
         except Exception as e:
             logger.error(f'mailer@send_mail::Exception thrown | {template} {to} {subject} {attachments} {args} {kwargs} {repr(e)}')
+            return False
     except Exception as e:
         logger.error(f'mailer@template_loader::Exception thrown | {template} {to} {subject} {attachments} {args} {kwargs} {repr(e)}')
         return False
