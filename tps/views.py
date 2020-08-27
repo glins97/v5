@@ -29,7 +29,7 @@ def tps_view(request, id):
                 'subject_desc': subject_desc,
                 'tps': tps,
                 'now': now(),
-                'questions': Question.objects.filter(tps=tps),
+                'questions': Question.objects.filter(tps=tps).order_by('number'),
             }
             return render(request, 'tps_questions.html', data)
         else:
@@ -49,7 +49,7 @@ def tps_view(request, id):
                     'SIM': 'Simulado',
                 }.get(tps.subject.upper()[:3], tps.subject.title()),
                 'tps': tps,
-                'questions': Question.objects.filter(tps=tps),
+                'questions': Question.objects.filter(tps=tps).order_by('number'),
             }
             return render(request, 'tps.html', data)
             

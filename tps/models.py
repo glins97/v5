@@ -64,6 +64,7 @@ answers = (
     ('C', 'C'),
     ('D', 'D'),
     ('E', 'E'),
+    ('ANULADA', 'ANULADA'),
 )
 
 months = (

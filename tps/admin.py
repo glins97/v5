@@ -54,7 +54,7 @@ class TPSAdminForm(forms.ModelForm):
             questions[question.number] = question.correct_answer
 
         for question_number in range(1, 121):
-            self.fields[f'q{question_number}'] = forms.ChoiceField(choices=[('NA', 'NA'), ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E')], initial=questions[question_number])
+            self.fields[f'q{question_number}'] = forms.ChoiceField(choices=[('NA', 'NA'), ('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('ANULADA', 'ANULADA')], initial=questions[question_number])
         
     def save(self, commit=True):
         instance = super(TPSAdminForm, self).save(commit=False)

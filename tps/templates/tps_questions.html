@@ -119,6 +119,7 @@
                                 </span>
                               </div>
                               <div class="row" style="margin-left: 31px;">
+                                {% if question.correct_answer != 'ANULADA' %}
                                 <div class="col-sm form-check">
                                   <label class="form-check-label">
                                     <input class="form-check-input" value="A" type="radio" name="q{{question.number}}"> A
@@ -159,6 +160,14 @@
                                     </span>
                                   </label>
                                 </div>
+                                {% else %}
+                                <div class="col-sm form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" value="ANULADA" type="radio" name="q{{question.number}}" hidden> 
+                                    Ponto extra!
+                                  </label>
+                                </div>
+                                {% endif %}
                               </div>
                             </div>
                           </span>
