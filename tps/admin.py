@@ -115,7 +115,7 @@ class TPSAdmin(admin.ModelAdmin):
             'fields': ('subject', 'week', 'questions', 'solutions', ),
         }),
         ('Informações', {
-            'fields': ('campus', 'group', 'teacher', 'max_answers', 'max_questions', 'separate'),
+            'fields': ('campus', 'group', 'teacher', 'max_answers', 'max_questions', 'separate', 'mailed_files'),
         }),
         ('Data', {
             'fields': ('start_date', 'end_date', ),

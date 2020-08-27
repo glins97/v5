@@ -7,6 +7,9 @@ import PIL
 from PIL import Image
 
 import os
+
+from mailer.mailer import send_templated_mail
+
 weeks = (
     ('1', '1'),
     ('2', '2'),
@@ -107,6 +110,7 @@ class TPS(models.Model):
     notify = models.BooleanField(default=True, verbose_name="Enviar ranking")
     separate = models.BooleanField(default=True, verbose_name="Separar alunos em grupos")
     mailed = models.BooleanField(default=True, verbose_name="Enviado ao professor")
+    mailed_files = models.BooleanField(default=False)
 
     def __str__(self):
         return '{} {} {}'.format(self.campus, self.subject, self.week)
@@ -121,6 +125,10 @@ class TPS(models.Model):
         
         if self.questions and not self.original_questions:
             self.original_questions = self.questions
+
+        if not self.mailed_files and self.group != 'PARTICULARES':
+            if send_templated_mail('base.html', self.teacher.email, f'Arquivos {self}', [str(self.original_questions), str(self.solutions)], title='Arquivos TPS', body="O cardeno de questões e o gabarito se encontram em anexo!<br>", footer="Atenciosamente,<br>Equipe PPA"):
+                self.mailed_files = True
         
         if self.questions and '.pdf' in str(self.questions).lower()[-4:]:
             super(TPS, self).save(*args, **kwargs)
