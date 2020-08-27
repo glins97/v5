@@ -105,7 +105,7 @@ class Essay(models.Model):
     mode = models.CharField(default='1', choices=essay_mode, max_length=255)
 
     def __str__(self):
-        return '#{} - {} {}, {} => {}'.format(self.id, self.user.first_name, self.user.last_name, self.theme, self.file)
+        return '#{}, {}'.format(self.id, self.theme)
 
     def save(self, *args, **kwargs):
         if self.pk is None:

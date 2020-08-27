@@ -8,7 +8,7 @@ from essay_manager.models import Mentoring, Essay
 def mentoring_view(request):
     students = sorted(
         [user for user in User.objects.all() if user.groups.filter(name='student').exists()],
-        key=lambda student: student.first_name + student.last_name
+        key=lambda student: student.first_name.upper() + student.last_name.upper()
     )
     for student in students:
         mentoring = Mentoring.objects.filter(student=student, active=True).first()
@@ -21,7 +21,7 @@ def mentoring_view(request):
     
     mentored_students = sorted(
         [user for user in User.objects.all() if user.groups.filter(name='student').exists() and Mentoring.objects.filter(student=user, mentor=request.user, active=True,).count()],
-        key=lambda student: student.first_name + student.last_name
+        key=lambda student: student.first_name.upper() + student.last_name.upper()
     )
     for student in mentored_students:
         mentoring = Mentoring.objects.filter(student=student, mentor=request.user, active=True,).first()

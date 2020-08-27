@@ -53,12 +53,13 @@
                                                                     Última redação
                                                                 </th>
                                                                 <th class="" style="background-color: rgb(238, 238, 238) !important">
-                                                                    Ação
+                                                                            Ação
                                                                 </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {% for student in mentored_students %}
+                                                            {% if student.first_name %}
                                                             <tr>
                                                                 <td> <a href="/access_as/{{student.id}}/"> {{student.first_name}} {{student.last_name}} </a></td>
                                                                 <td> <a href="/access_as/{{student.id}}/"> {{student.mentoring.mentor.first_name}} {{student.mentoring.mentor.last_name}}</a> </td>
@@ -70,6 +71,7 @@
                                                                     {% endif %}
                                                                 </td>
                                                             </tr>
+                                                            {% endif %}
                                                             {% endfor %}
                                                         </tbody>
                                                     </table>
@@ -106,12 +108,13 @@
                                                                     Última redação
                                                                 </th>
                                                                 <th class="" style="background-color: rgb(238, 238, 238) !important">
-                                                                    Ação
+                                                                            Ação
                                                                 </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {% for student in students %}
+                                                            {% if student.first_name %}
                                                             <tr>
                                                                 <td> <a> {{student.first_name}} {{student.last_name}} </a></td>
                                                                 {% if student.mentoring %}
@@ -129,6 +132,7 @@
                                                                     {% endif %}
                                                                 </td>
                                                             </tr>
+                                                            {% endif %}
                                                             {% endfor %}
                                                         </tbody>
                                                     </table>
