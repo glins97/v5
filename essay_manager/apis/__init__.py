@@ -8,3 +8,4 @@ from .password import *
 from .event import *
 from .exercises import *
 from .notification import *
+from .mentoring import *

@@ -5,6 +5,8 @@ from essay_manager.utils import get_user_details
 from django.contrib.auth.models import User
 from logging import getLogger
 import numpy
+from datetime import timedelta
+from django.utils.timezone import now
 
 logger = getLogger('django')
 def hour_format(minutes):
@@ -83,6 +85,16 @@ def management_view(request):
         monitor.monitor_done_corrections_count = append_results(monitor, monitor_done_corrections_count)
         monitor.monitor_average_correction_time = minute_format(monitor_average_correction_time)
         monitor.monitor_total_correction_time = hour_format(monitor_total_correction_time)
+
+        week_corrections = Correction.objects.filter(user=monitor, start_date__gte=now() - timedelta(days=7), status='DONE')
+        monitor.week_avg_grade = numpy.mean([correction.essay.grade for correction in week_corrections])
+        monitor.week_paid_corrections = sum([1 for correction in week_corrections if correction.essay.theme.description!='Solidário'])
+        monitor.week_free_corrections = sum([1 for correction in week_corrections if correction.essay.theme.description=='Solidário'])
+
+        month_corrections = Correction.objects.filter(user=monitor, start_date__gte=now() - timedelta(days=31), status='DONE')
+        monitor.month_avg_grade = numpy.mean([correction.essay.grade for correction in month_corrections])
+        monitor.month_paid_corrections = sum([1 for correction in month_corrections if correction.essay.theme.description!='Solidário'])
+        monitor.month_free_corrections = sum([1 for correction in month_corrections if correction.essay.theme.description=='Solidário'])
         
     data = {
         'title': 'Gestão',

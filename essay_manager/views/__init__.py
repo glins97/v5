@@ -8,3 +8,4 @@ from .themes import *
 from .management import *
 from .graphs import *
 from .exercises import *
+from .mentoring import *

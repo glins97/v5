@@ -54,8 +54,6 @@ def student_dashboard_view(request):
         if Essay.objects.filter(user=request.user, theme=theme_vunesp).count():
             theme_vunesp.done = True
 
-    notifications = Notification.objects.filter(user=request.user).order_by('-id')
-    new_notifications = Notification.objects.filter(user=request.user, received=False).count()
     data = {
         'title': 'Preparação',
         
@@ -81,9 +79,6 @@ def student_dashboard_view(request):
         'corrected_essays_icon': corrected_essays_icon,
         'corrected_essays_card_type': corrected_essays_card_type,
         'corrected_essays_msg': corrected_essays_msg,
-    
-        'notifications': notifications,
-        'new_notifications': new_notifications,
     }
          
     return render(request, 'dashboard/student.html', data)

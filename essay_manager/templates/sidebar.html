@@ -70,6 +70,14 @@
 				</a>
 			</li>
 			{% endif %}
+			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
+			<li class="nav-item {% if title == 'Mentoria' %}active{%endif%}">
+				<a class="nav-link" href="/mentoring/">
+					<i class="material-icons">comment</i>
+					<p>Mentoria</p>
+				</a>
+			</li>
+			{% endif %}
 			<!-- {% if user.obj|has_permission:'monitor' %}
 			<li class="nav-item {% if title == 'Correções' %}active{%endif%}">
 				<a class="nav-link" href="/corrections/">

@@ -110,6 +110,12 @@ class ErrorClassificationAdmin(admin.ModelAdmin):
     def nota(self, obj):
         return '{}'.format(200 - obj.weight * 40)
 
+class MentoringAdmin(admin.ModelAdmin):
+    list_display = ('student', 'mentor', 'active')
+    list_filter = ('mentor', 'active')
+    search_fields = ('student', 'mentor', 'active')
+    list_per_page = 100
+
 admin.site.register(Theme, ThemeAdmin)
 admin.site.register(Essay, EssayAdmin)
 # admin.site.register(Profile)
@@ -117,5 +123,6 @@ admin.site.register(Correction, CorrectionAdmin)
 admin.site.register(ErrorClassification, ErrorClassificationAdmin)
 admin.site.register(GenericErrorClassification, GenericErrorClassificationAdmin)
 # admin.site.register(Event)
-admin.site.register(ExerciseList)
-admin.site.register(Notification)
+# admin.site.register(ExerciseList)
+# admin.site.register(Notification)
+admin.site.register(Mentoring, MentoringAdmin)

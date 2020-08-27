@@ -108,9 +108,14 @@ class Essay(models.Model):
         return '#{} - {} {}, {} => {}'.format(self.id, self.user.first_name, self.user.last_name, self.theme, self.file)
 
     def save(self, *args, **kwargs):
+        if self.pk is None:
+            mentoring = Mentoring.objects.filter(student=self.user, active=True).first()
+            if mentoring:
+                super(Essay, self).save(*args, **kwargs)
+                Notification(user=mentoring.mentor, title=f'Nova redação do(a) {self.user.first_name}!', description='', href=f'/essays/{self.id}').save()
+            
         if self.file:
             super(Essay, self).save(*args, **kwargs)
-            
             if '.pdf' in str(self.file).lower()[-4:]:
                 info = pdfinfo_from_path(str(self.file.file), userpw=None, poppler_path=None)
                 maxPages = info["Pages"]
@@ -458,3 +463,12 @@ class Notification(models.Model):
     description = models.TextField(blank=True, null=True)
     href = models.CharField(max_length=255, blank=True, null=True)
     received = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'notificação'
+        verbose_name_plural = 'notificações'
+
+class Mentoring(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mentoring_student')
+    mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mentoring_mentor')
+    active = models.BooleanField(default=True)

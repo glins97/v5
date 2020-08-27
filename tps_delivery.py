@@ -12,18 +12,20 @@ from tps.auxiliary import separate_students, generate_cbt, generate_tbl, generat
 
 import subprocess
 
+from mailer.mailer import send_templated_mail
+
 def get_question_html(question, question_answer):
     answer = ''
     if question_answer:
         answer = question_answer.answer
     return f"""
             <tr style="height:21px">
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);text-align:right;border:1px solid rgb(204,204,204)">{question.number}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'A' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'A' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'B' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'B' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'C' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'C' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'D' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'D' else '<br>'}</td>
-                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:rgb(182,215,168)' if question.correct_answer == 'E' else ''};border:1px solid rgb(204,204,204)">{'X' if answer == 'E' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;text-align:right;border:1px solid #eeeeee">{question.number}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:#bff8ff' if question.correct_answer == 'A' else ''};border:1px solid #eeeeee">{'X' if answer == 'A' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:#bff8ff' if question.correct_answer == 'B' else ''};border:1px solid #eeeeee">{'X' if answer == 'B' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:#bff8ff' if question.correct_answer == 'C' else ''};border:1px solid #eeeeee">{'X' if answer == 'C' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:#bff8ff' if question.correct_answer == 'D' else ''};border:1px solid #eeeeee">{'X' if answer == 'D' else '<br>'}</td>
+                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;{'background-color:#bff8ff' if question.correct_answer == 'E' else ''};border:1px solid #eeeeee">{'X' if answer == 'E' else '<br>'}</td>
             </tr> 
             """
 
@@ -71,15 +73,15 @@ def _mail_answers_goi():
                         </colgroup>
                         <tbody>
                             <tr style="height:21px">
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(67,67,67);color:rgb(255,255,255);text-align:center;border:1px solid rgb(204,204,204)" rowspan="1" colspan="6">Cartão de respostas</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:#555555;color:rgb(255,255,255);text-align:center;border:1px solid rgb(204,204,204)" rowspan="1" colspan="6">Cartão de respostas</td>
                             </tr>
                             <tr style="height:21px">
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">Questão</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">A</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">B</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">C</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">D</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">E</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">Questão</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">A</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">B</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">C</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">D</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">E</td>
                             </tr>
                             {questions_rows}
                         </tbody>
@@ -107,9 +109,9 @@ def _mail_answers_goi():
             if tps_answer.tps.solutions:
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
 
-            mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
+            mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em azul, o gabarito oficial.<br><p>{table}'
             mail_body += f'<p>Na eventualidade de problemas ou sugestões, responder diretamente esse email. </p>'    
-            if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else ''):
+            if send_templated_mail('base.html', tps_answer.email, f'Respostas {tps_answer.tps}', str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else '', title='Respostas TPS', body=mail_body, footer="Equipe PPA"):
                 tps_answer.mailed_results = True
                 tps_answer.mailed_answers = True
                 tps_answer.save()
@@ -150,8 +152,8 @@ def _mail_results(campus):
                         if current_score: 
                             mail_body += '<p>Pontuação total neste mês: {}</p>'.format(current_score.score)   
 
-            mail_body += f'<p>As soluções comentadas (e seu caderno de respostas) serão enviadas por e-mail às 18:00!</p>'  
-            if send_mail(tps_answer.email, f'resultado {tps_answer.tps}', mail_body):
+            mail_body += f'<p>As soluções comentadas serão enviadas por e-mail às 18:00!</p>'  
+            if send_templated_mail('base.html', tps_answer.email, f'Resultado {tps_answer.tps}', title='Resultado TPS', body=mail_body, footer="Equipe PPA"):
                 tps_answer.mailed_results = True
                 tps_answer.save()
         except Exception as e:
@@ -188,15 +190,15 @@ def _mail_answers(campus):
                         </colgroup>
                         <tbody>
                             <tr style="height:21px">
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(67,67,67);color:rgb(255,255,255);text-align:center;border:1px solid rgb(204,204,204)" rowspan="1" colspan="6">Cartão de respostas</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:#555555;color:#ffffff;text-align:center;border:1px solid #eeeeee" rowspan="1" colspan="6">Cartão de respostas</td>
                             </tr>
                             <tr style="height:21px">
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">Questão</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">A</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">B</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">C</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">D</td>
-                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;background-color:rgb(183,183,183);color:rgb(255,255,255);border:1px solid rgb(204,204,204)">E</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee"></td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">A</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">B</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">C</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">D</td>
+                                <td style="overflow:hidden;padding:2px 3px;vertical-align:bottom;color:#555555;border:1px solid #eeeeee">E</td>
                             </tr>
                             {questions_rows}
                         </tbody>
@@ -207,9 +209,9 @@ def _mail_answers(campus):
             if tps_answer.tps.solutions:
                 mail_body += f'<p>As soluções comentadas se encotram em anexo (ou, caso não, acesse <a href="https://ppa.digital/{tps_answer.tps.solutions}"> este link</a> pelo computador).</p>'    
 
-            mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em verde, o gabarito oficial.<br><p>{table}'
+            mail_body += f'<p>Seu cartão de respostas se encontra abaixo. Células marcadas com um \'X\' indicam suas respostas. Células em azul, o gabarito oficial.<br><p>{table}'
             mail_body += f'<p>Na eventualidade de problemas ou sugestões, responder diretamente esse email. </p>'    
-            if send_mail(tps_answer.email, f'respostas {tps_answer.tps}', mail_body, str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else ''):
+            if send_templated_mail('base.html', tps_answer.email, f'Respostas {tps_answer.tps}', str(tps_answer.tps.solutions.file) if tps_answer.tps.solutions else '', title='Resultado TPS', body=mail_body, footer="Equipe PPA"):
                 tps_answer.mailed_answers = True
                 tps_answer.save()
         except Exception as e:
@@ -225,8 +227,8 @@ def _mail_teachers():
         logger.info(f'Mailing TPS {tps}')
         try:
             tps.mailed = True
+            tps.save()
             if not tps.teacher:
-                tps.save()
                 continue
             
             reports = []
@@ -263,7 +265,7 @@ def _mail_teachers():
                 reports.append(cbt.replace('xlsx', 'pdf'))
             mail_body = f'<p>Respostas para TPS {tps} concluídas. Relatórios se encontram em anexo (ou, caso não, acesse <a href="https://ppa.digital/admin/tps/tps/"> este link</a>).</p>'    
             mail_body += f'<p>Na eventualidade de problemas, responder diretamente esse email.</p>'    
-            if send_mail(tps.teacher.email, f'relatórios {tps}', mail_body, reports, True):
+            if send_templated_mail('base.html', tps.teacher.email, f'relatórios {tps}', mail_body, reports):
                 tps.save()
         except Exception as e:
             logger.error(f'Error mailing TPS {tps}. Error {e}', exc_info=e)
@@ -276,39 +278,6 @@ def main():
     _mail_answers('JUA')
     _mail_results('JUA')
     _mail_answers_goi()
-            
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
-from email.encoders import encode_base64
-import codecs
-from threading import _start_new_thread
 
-def send_mail(email, subject, message, attachments='', multiple_attachments=False):
-    msg = MIMEMultipart()
-    password = 'campusppa'
-    msg['To'] = email
-    msg['From'] = 'adm.ppa.digital@gmail.com'
-    msg['Subject'] = 'PPA Digital: ' + subject
-    
-    if not multiple_attachments:
-        attachments = [attachments]
-
-    for attachment in attachments:
-        if not attachment: continue
-        openedfile = None
-        with open(attachment, 'rb') as opened:
-            openedfile = opened.read()
-        attachedfile = MIMEApplication(openedfile, _subtype = "pdf", _encoder=encode_base64)
-        attachedfile.add_header('content-disposition', 'attachment', filename=attachment.split('/')[-1])
-        msg.attach(attachedfile)
-    msg.attach(MIMEText(message, 'html'))
-    with smtplib.SMTP('smtp.gmail.com: 587') as server:
-        server.starttls()
-        server.login(msg['From'], password)
-        server.sendmail(msg['From'], msg['To'], msg.as_string())
-    return True
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
