@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.http import FileResponse
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.admin import SimpleListFilter
 
 from datetime import date
 import subprocess
@@ -40,6 +41,50 @@ def create_or_update(class_, **kwargs):
     obj = class_(**kwargs)
     obj.save()
     return obj
+
+class SubjectFilter(SimpleListFilter):
+    title = 'matéria'
+    parameter_name = 'matéria'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('BIO', 'BIO'),
+            ('FIS', 'FIS'),
+            ('GEO', 'GEO'),
+            ('HIST', 'HIST'),
+            ('MAT', 'MAT'),
+            ('QUI', 'QUI'),
+        ]
+
+    def queryset(self, request, queryset):
+        objs = []
+        if self.value() == 'BIO':
+            for obj in queryset:
+                if 'bio' in obj.subject.lower():
+                    objs.append(obj.id)
+        if self.value() == 'FIS':
+            for obj in queryset:
+                if 'fis' in obj.subject.lower() or 'fís' in obj.subject.lower():
+                    objs.append(obj.id)
+        if self.value() == 'GEO':
+            for obj in queryset:
+                if 'geo' in obj.subject.lower():
+                    objs.append(obj.id)
+        if self.value() == 'HIST':
+            for obj in queryset:
+                if 'hist' in obj.subject.lower():
+                    objs.append(obj.id)
+        if self.value() == 'MAT':
+            for obj in queryset:
+                if 'mat' in obj.subject.lower():
+                    objs.append(obj.id)
+        if self.value() == 'QUI':
+            for obj in queryset:
+                if 'qui' in obj.subject.lower() or 'quí' in obj.subject.lower():
+                    objs.append(obj.id)
+        if self.value():
+            return TPS.objects.filter(id__in=objs)
+        return TPS.objects.all()
 
 class TPSAdminForm(forms.ModelForm):
     class Meta:
@@ -115,7 +160,7 @@ class TPSAdmin(admin.ModelAdmin):
             'fields': ('subject', 'week', 'questions', 'solutions', ),
         }),
         ('Informações', {
-            'fields': ('campus', 'group', 'teacher', 'max_answers', 'max_questions', 'separate', 'mailed_files'),
+            'fields': ('campus', 'group', 'teacher', 'max_answers', 'max_questions', 'separate',),
         }),
         ('Data', {
             'fields': ('start_date', 'end_date', ),
@@ -149,7 +194,7 @@ class TPSAdmin(admin.ModelAdmin):
             '/static/tps/js/fields.js',
         )
     list_display = ('id', 'campus', 'subject', 'week', 'respostas', 'end_date', 'url', 'arquivos', 'relatórios',)
-    list_filter = ('campus', 'week',)
+    list_filter = ('campus', 'end_date', SubjectFilter)
     search_fields = ('campus', 'subject', 'week', )
     list_per_page = 20
 

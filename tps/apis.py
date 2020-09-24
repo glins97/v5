@@ -43,7 +43,7 @@ def save_tps_answer(request, id):
                 if request.POST[attr][0] == question.correct_answer or question.correct_answer == 'ANULADA':
                     tps_answer.grade += 1
         
-        send_templated_mail('base.html', request.POST.get('email', ''), 'Resposta submetida', title=tps_answer.tps.subject, body='O trabalho duro vence o talento!<br><br>Seu reultado será entregue em {}.<br><br>Sinta-se livre para submeter suas respostas novamente caso ache necessário.<br><br>'.format(tps.end_date.strftime("%d/%n/%Y às %H:%M:%S")), footer='Equipe PPA')
+        send_templated_mail('base.html', request.POST.get('email', ''), 'Resposta submetida', title=tps_answer.tps.subject, body='O trabalho duro vence o talento!<br><br>Seu reultado será entregue em {}.<br><br>Sinta-se livre para submeter suas respostas novamente caso ache necessário.<br><br>'.format(tps.end_date.strftime("%d/%m/%Y às %H:%M:%S")), footer='Equipe PPA')
         tps_answer.save()
         return render(request, 'feed.html', {'header': str(tps_answer.tps.subject), 'title': 'Salvo!', 'description': mark_safe('O trabalho duro vence o talento.<br>Resultados chegarão no email "{}".'.format(request.POST.get('email', '')))})
     return render(request, 'feed.html', {'title': 'Opa!', 'description': 'Nenhum tps foi encontrado. Entre em contato com o responsável.'})

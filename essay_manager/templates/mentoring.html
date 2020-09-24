@@ -61,9 +61,9 @@
                                                             {% for student in mentored_students %}
                                                             {% if student.first_name %}
                                                             <tr>
-                                                                <td> <a href="/access_as/{{student.id}}/"> {{student.first_name}} {{student.last_name}} </a></td>
-                                                                <td> <a href="/access_as/{{student.id}}/"> {{student.mentoring.mentor.first_name}} {{student.mentoring.mentor.last_name}}</a> </td>
-                                                                <td> <a href="/access_as/{{student.id}}/"> {{student.last_essay}} </a></td>
+                                                                <td> <a> {{student.first_name}} {{student.last_name}} </a> </td>
+                                                                <td> <a> {{student.mentoring.mentor.first_name}} {{student.mentoring.mentor.last_name}}</a> </td>
+                                                                <td> <a href="/essays/{{student.last_essay.id}}/"> {{student.last_essay}} </a> </td>
                                                                 <td style="height: 75px;">
                                                                     <a class="btn btn-link btn-info" style="display: inline;" href="/api/access_as/{{student.id}}/">Acessar como</a>
                                                                     {% if student.mentoring %}

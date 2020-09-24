@@ -359,6 +359,9 @@ function loadColorSelectionButtons() {
 function mouseDownEvent(e) {
     var canvasPlaceholder = document.getElementById("canvasPlaceholder");
     
+    document.getElementById("recordedAudio").controls = true; 
+    document.getElementById("recordedAudio").autoplay = false; 
+    document.getElementById("audioControls").hidden = false; 
     if (editModeActive && hoveringObjectIndex >= 0) {
         var object = objects[hoveringObjectIndex];
         if (object['mode'] == 'COMM'){

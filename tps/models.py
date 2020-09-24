@@ -105,7 +105,7 @@ class TPS(models.Model):
     max_questions = models.IntegerField(default=10, verbose_name='Número de questões')
     max_answers = models.IntegerField(default=40, verbose_name='Número de respostas')
 
-    questions = models.FileField(upload_to='uploads', verbose_name='Caderno de questões')
+    questions = models.FileField(blank=True, null=True, upload_to='uploads', verbose_name='Caderno de questões')
     original_questions = models.FileField(blank=True, null=True, editable=False)
     solutions = models.FileField(upload_to='uploads', blank=True, null=True, verbose_name='Gabarito comentado')
     notify = models.BooleanField(default=True, verbose_name="Enviar ranking")
@@ -127,7 +127,7 @@ class TPS(models.Model):
         if self.questions and not self.original_questions:
             self.original_questions = self.questions
 
-        if not self.mailed_files and self.group != 'PARTICULARES':
+        if self.questions and self.solutions and self.teacher and not self.mailed_files and self.group != 'PARTICULARES':
             if send_templated_mail('base.html', self.teacher.email, f'Arquivos {self}', [str(self.original_questions), str(self.solutions)], title='Arquivos TPS', body="O cardeno de questões e o gabarito se encontram em anexo!<br>", footer="Atenciosamente,<br>Equipe PPA"):
                 self.mailed_files = True
         

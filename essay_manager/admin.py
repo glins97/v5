@@ -77,7 +77,7 @@ class CorrectionAdmin(admin.ModelAdmin):
         return o.essay.grade
 
 class GenericErrorClassificationAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'jury', 'name', 'pai', 'nota', )
+    list_display = ('codigo', 'jury', 'name', 'description', 'pai', 'nota', )
     list_filter = ('competency', 'jury')
     search_fields = ('name', 'competency', 'jury')
     list_per_page = 100
@@ -96,7 +96,7 @@ class GenericErrorClassificationAdmin(admin.ModelAdmin):
         return '-'
 
 class ErrorClassificationAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'jury', 'name', 'pai', 'nota', )
+    list_display = ('codigo', 'jury', 'name', 'description', 'pai', 'nota', )
     list_filter = ('competency', 'jury')
     search_fields = ('name', 'competency', 'jury')
     list_per_page = 100
