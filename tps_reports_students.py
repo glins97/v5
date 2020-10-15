@@ -30,15 +30,27 @@ def add_images(document, images, width):
         run = paragraph.add_run()
         run.add_picture(image, width=width)
     
-START_DATE = datetime.datetime.strptime('01/08/2020', '%d/%m/%Y')
-END_DATE = datetime.datetime.strptime('31/08/2020', '%d/%m/%Y')
+START_DATE = datetime.datetime.strptime('01/09/2020', '%d/%m/%Y')
+END_DATE = datetime.datetime.strptime('30/09/2020', '%d/%m/%Y')
 CAMPUS = 'BSB'
-GROUP = 'ENEM_ANUAL'
+GROUP = 'PARTICULARES'
     
 students = {
     tps_answer.email: 
-    TPSAnswer.objects.filter(submission_date__gte=START_DATE, submission_date__lte=END_DATE, email=tps_answer.email, tps__campus=CAMPUS, tps__group=GROUP) for tps_answer in TPSAnswer.objects.filter(submission_date__gte=START_DATE, submission_date__lte=END_DATE, tps__campus=CAMPUS, tps__group=GROUP)
+    TPSAnswer.objects.filter(tps__start_date__gte=START_DATE, tps__end_date__lte=END_DATE, email=tps_answer.email, tps__campus=CAMPUS, tps__group=GROUP) for tps_answer in TPSAnswer.objects.filter(tps__start_date__gte=START_DATE, tps__end_date__lte=END_DATE, tps__campus=CAMPUS, tps__group=GROUP)
 }
+
+def get_subject(subject):
+    subject = subject.lower()
+    if 'bio' in subject:
+        return 'Biologia'
+    if 'mat' in subject:
+        return 'Matemática'
+    if 'fis' in subject or 'fís' in subject:
+        return 'Física'
+    if 'qui' in subject or 'quí' in subject:
+        return 'Química'
+    return 'Outros'
 
 def fix(s):
     s = str(s)
@@ -48,11 +60,7 @@ def fix(s):
 
 scores = [obj.email for obj in TPSScore.objects.filter(month=START_DATE.month, campus=CAMPUS, group=GROUP).order_by('-score')]
 
-skip = True
 for student in students:
-    if student == 'mlfjx12@gmail.com':
-        skip = False
-    if skip: continue
     try:
         document = Document('RPA_students.docx')
         table = document.tables[1]
@@ -75,7 +83,7 @@ for student in students:
         for answer in students[student]:
             if not answer.grade_group:
                 continue
-            add_data(table, '                         ' + fix(answer.tps.subject.split()[0]), str(answer.grade), fix(answer.grade_group), fix(answer.rank), fix(answer.submission_date.strftime('%d de %B')))
+            add_data(table, '                         ' + get_subject(answer.tps.subject), str(answer.grade), fix(answer.grade_group), fix(answer.rank), fix(answer.submission_date.strftime('%d de %B')))
             grades['all'].append(answer.grade)
             # groups[answer.grade_group] += 1
             if 'bio' in answer.tps.subject.lower():
@@ -166,10 +174,10 @@ for student in students:
         if len(graphs) == 1:
             add_images(document, graphs, Inches(3.9))
 
-        document.save(f'reports/docx/27-08-2020/{student}.docx')
-        subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', f'reports/docx/27-08-2020/{student}.docx', '--outdir', f'reports/pdf/27-08-2020/'])
+        document.save(f'reports/docx/01-10-2020/{student}.docx')
+        subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', f'reports/docx/01-10-2020/{student}.docx', '--outdir', f'reports/pdf/01-10-2020/'])
         from mailer.mailer import send_templated_mail
-        send_templated_mail('base.html', student, f'Relatório de Performance', f'reports/pdf/27-08-2020/{student}.pdf', title='Agosto de 2020', body=f'{answer.name.split()[0]}, confira seu desempenho neste mês, no relatório em anexo.<br>Lembre-se: o trabalho duro vence o talento.', footer="Equipe PPA")
+        send_templated_mail('base.html', student, f'Relatório de Performance', f'reports/pdf/01-10-2020/{student}.pdf', title='Setembro de 2020', body=f'{answer.name.split()[0]}, confira seu desempenho neste mês, no relatório em anexo.<br>Lembre-se: o trabalho duro vence o talento.', footer="Equipe PPA")
     except Exception as e:
         print(repr(e))
         pass
