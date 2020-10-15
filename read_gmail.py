@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from essay_manager.models import Essay, Theme
 
 import datetime
+from dateutil import parser
 from time import time
 
 SCOPES = [
@@ -20,6 +21,8 @@ SCOPES = [
     'https://www.googleapis.com/auth/gmail.settings.basic',
     'https://www.googleapis.com/auth/gmail.settings.sharing',
 ]
+
+START_DATE = datetime.datetime(year=2020, month=10, day=12, tzinfo=datetime.timezone.utc) 
 
 import base64
 from apiclient import errors
@@ -76,7 +79,7 @@ def main():
     service = build('gmail', 'v1', credentials=creds)
     results = service.users().messages().list(userId='me', labelIds=['INBOX']).execute()
     messages = results.get('messages', [])
-    for message in messages:
+    for message in messages[-50::-1]:
         msg = service.users().messages().get(userId='me', id=message['id']).execute()
         subject_ = ''
         from_email = ''
@@ -84,6 +87,7 @@ def main():
         attachment = None
         message_id = message['id']
 
+        skip = False
         for header in msg['payload']['headers']:
             if header['name'] == 'From':
                 if len(header['value'].split('<')) >= 2:
@@ -95,10 +99,14 @@ def main():
                     from_email = header['value'].replace('<', '').replace('>', '')
             if header['name'] == 'Subject':
                 subject_ = header['value'].lower()
+            
+            if header['name'] == 'Date' and parser.parse(header['value']) < START_DATE:
+                skip = True
+
         from_name = from_name.replace('"', '').replace("'", '')
         
-        blocks = ['GOOGLE']
-        skip = False
+        blocks = ['GOOGLE', 'MAIL DELIVERY']
+        skip = skip or False
         for block in blocks:
             if block in from_name:
                 skip = True
