@@ -43,10 +43,10 @@
 												<div class="tab-content">
 													<div class="tab-pane active" id="theme">
 														<div class="form-group">
-															<label for="i1" class="info-text card-title" style="width: 100%; font-size: 1.0625rem;">Caso o tema não esteja em nossa lista, adicione-o selecionando a opção "Outro".</label>
+															<label for="i1" class="info-text card-title" style="width: 100%; font-size: 1.0625rem;">Identifique o tema da sua redação.</label>
 															<input type="text" class="form-control text-center" id="i1" name="theme_id" required style="opacity: 0">
 														</div>
-														<p class="text-center" style="margin-top: -15px;">Caso escolha subir um tema próprio, a foto descritiva do tema é obrigatória.</p>
+														<p class="text-center" style="margin-top: -15px;">Caso o tema não esteja em nossa lista, adicione-o selecionando a opção "Outro".</p>
 														<div class="row justify-content-center">
 															<div class="col-lg-10">
 																<div class="row" style="height: 40px;">
@@ -57,18 +57,25 @@
 																		</div>
 																	</div>
 																</div>
-																<div id="newTheme" class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput" hidden=true>
-																	<div class="form-group" style="margin-top: 35px;">
+																<div id="newTheme" class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput" hidden>
+																	<div class="form-group" style="margin-top: 50px">
 																		<label class="bmd-label-floating">Nome do tema</label>
-																		<input type="text" name="theme_name" class="form-control" value="">
+																		<input type="text" class="form-control" id="i2" name="theme_name" required>
 																	</div>
-																	<div class="fileinput-new thumbnail">
+																	<div class="form-group bmd-form-group is-filled" style="margin-top: 30px">
+																		<label class="bmd-label-floating">Banca avaliadora</label>
+																		<select name="theme_jury" class="selectpicker" style="font-size: 14px important;" data-size="2" data-style="select-with-transition">
+																			<option value="ENEM">ENEM</option>
+																			<option value="VUNESP">VUNESP</option>
+																		</select>
+																	</div>
+																	<div class="fileinput-new thumbnail" style="margin-top: 40px">
 																		<img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
 																	</div>
 																	<div class="fileinput-preview fileinput-exists thumbnail"></div>
 																	<div>
 																		<span class="btn btn-info btn-file">
-																			<span class="fileinput-new">Selecionar tema</span>
+																			<span class="fileinput-new">Selecionar arquivo</span>
 																			<span class="fileinput-exists">Mudar arquivo</span>
 																			<input type="file" name="theme_file" accept="image/x-png,image/jpeg,application/pdf" required>
 																		</span>
@@ -113,7 +120,7 @@
 																	<div class="fileinput-preview fileinput-exists thumbnail"></div>
 																	<div>
 																		<span class="btn btn-info btn-file">
-																			<span class="fileinput-new">Selecionar redação</span>
+																			<span class="fileinput-new">Selecionar arquivo</span>
 																			<span class="fileinput-exists">Mudar arquivo</span>
 																			<input type="file" id="essay_file" name="file" accept="image/x-png,image/jpeg,application/pdf" required>
 																		</span>

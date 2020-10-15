@@ -29,10 +29,10 @@ def create_essay_endpoint(request):
                 f.write(obj_theme.file.read())
             theme = Theme(
                 description=request.POST['theme_name'], 
-                jury='ENEM',
+                jury=request.POST['theme_jury'],
                 axis='De outros alunos',
                 file=fn_theme,
-                type='FREE',
+                type='PAID',
             )
             theme.save()
         else:
