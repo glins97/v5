@@ -90,7 +90,7 @@ def get_corrections_data(user, start_date, end_date):
     return data
 
 @has_permission('superuser')
-def management_view(request):
+def management_monitors_view(request):
     monitors = User.objects.filter(groups__name='monitor')
     
     now_ = now()
@@ -108,66 +108,7 @@ def management_view(request):
             month_data.month = get_month_verbose(current_time.month)
             monitor.months.append(month_data)
             current_time -= relativedelta(months=1)
-        # # calculations -----------
-        # # ------------------------
-        # monitor_done_corrections = Correction.objects.filter(user=monitor, status='DONE')
-        # monitor_average_grade = avg([
-        #     correction.essay.grade for correction in monitor_done_corrections
-        # ])
-
-        # monitor_total_correction_time = 0
-        # monitor_done_corrections_count = 0
-        # monitor_valid_corrections_count = 0
-        # monitor_average_correction_time = 0
-        # for correction in monitor_done_corrections:
-        #     total_corrections += 1
-        #     monitor_done_corrections_count += 1
-        #     total_grade += correction.essay.grade
-        #     td = min(abs((correction.end_date - correction.start_date).seconds), abs((correction.start_date - correction.end_date).seconds)) / 60
-        #     if td >= 2 and td < 120: # min is 2 minutes, max is 2 hours, else something mustve went wrong
-        #         total_correction_time += td 
-        #         monitor_valid_corrections_count += 1
-        #         total_valid_corrections += 1
-        #         monitor_total_correction_time += td
-        
-        # if monitor_valid_corrections_count > 0:
-        #     monitor_average_correction_time = monitor_total_correction_time / monitor_valid_corrections_count
-        # # ------------------------
-
-        # # legibility changes -----
-        # # ------------------------
-        # if numpy.isnan(monitor_average_grade):
-        #     monitor_average_grade = '-'
-        # else:
-        #     monitor_average_grade = '{:.0f}'.format(monitor_average_grade)
-
-        # if monitor_done_corrections_count == 0:
-        #     monitor_done_corrections_count = '-'
-
-        # if monitor_average_correction_time == 0:
-        #     monitor_average_correction_time = '-'
-        
-        # if monitor_total_correction_time == 0:
-        #     monitor_total_correction_time = '-'
-        # # ------------------------
-
-        # monitor.monitor_average_grade = monitor_average_grade
-        # monitor.monitor_done_corrections_count = append_results(monitor, monitor_done_corrections_count)
-        # monitor.monitor_average_correction_time = minute_format(monitor_average_correction_time)
-        # monitor.monitor_total_correction_time = hour_format(monitor_total_correction_time)
-
-        # week_corrections = Correction.objects.filter(user=monitor, start_date__gte=now() - timedelta(days=7), status='DONE')
-        # monitor.week_avg_grade = avg([correction.essay.grade for correction in week_corrections])
-        # monitor.week_avg_grade = int(monitor.week_avg_grade) if monitor.week_avg_grade == monitor.week_avg_grade else '-' # nan check
-        # monitor.week_paid_corrections = sum([1 for correction in week_corrections if correction.essay.theme.description!='Solidário'])
-        # monitor.week_free_corrections = sum([1 for correction in week_corrections if correction.essay.theme.description=='Solidário'])
-
-        # month_corrections = Correction.objects.filter(user=monitor, start_date__gte=now() - timedelta(days=31), status='DONE')
-        # monitor.month_avg_grade = avg([correction.essay.grade for correction in month_corrections])
-        # monitor.month_avg_grade = int(monitor.month_avg_grade) if monitor.month_avg_grade == monitor.month_avg_grade else '-' # nan check
-        # monitor.month_paid_corrections = sum([1 for correction in month_corrections if correction.essay.theme.description!='Solidário'])
-        # monitor.month_free_corrections = sum([1 for correction in month_corrections if correction.essay.theme.description=='Solidário'])
-    
+            
     print([monitor.alltime_data.average_correction_time for monitor in monitors if monitor.alltime_data.total_corrections > 0])
     data = {
         'title': 'Gestão',
@@ -176,4 +117,12 @@ def management_view(request):
         'average_grade': '{:.0f}'.format(avg([monitor.alltime_data.average_grade for monitor in monitors if monitor.alltime_data.total_corrections > 0 and monitor.alltime_data.average_grade == monitor.alltime_data.average_grade])),
         'average_correction_time': minute_format(avg([monitor.alltime_data.average_correction_time for monitor in monitors if monitor.alltime_data.total_corrections > 0 and monitor.alltime_data.average_correction_time == monitor.alltime_data.average_correction_time])), 
     }
-    return render(request, 'management.html', data)
+    return render(request, 'management/monitors.html', data)
+
+@has_permission('superuser')
+def management_students_view(request):
+    data = {
+        'title': 'Gestão',
+        'user': get_user_details(request.user),
+    }
+    return render(request, 'management/students.html', data)

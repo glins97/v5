@@ -64,11 +64,29 @@
 			{% endif %}
 			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
 			<li class="nav-item {% if title == 'Gestão' %}active{%endif%}">
-				<a class="nav-link" href="/management/">
-					<i class="material-icons">history</i>
-					<p>Gestão</p>
+				<a class="nav-link" data-toggle="collapse" href="#management">
+				  <i class="material-icons">schedule</i>
+				  <p> Gestão
+					<b class="caret"></b>
+				  </p>
 				</a>
-			</li>
+				<div class="collapse" id="management">
+				  <ul class="nav">
+					<li class="nav-item ">
+					  <a class="nav-link" href="/management/monitors/">
+						<span class="sidebar-mini"> M </span>
+						<span class="sidebar-normal"> Monitores </span>
+					  </a>
+					</li>
+					<li class="nav-item ">
+					  <a class="nav-link"href="/management/students/">
+						<span class="sidebar-mini"> A </span>
+						<span class="sidebar-normal"> Alunos </span>
+					  </a>
+					</li>
+				  </ul>
+				</div>
+			  </li>
 			{% endif %}
 			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
 			<li class="nav-item {% if title == 'Mentoria' %}active{%endif%}">
