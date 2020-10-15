@@ -49,10 +49,10 @@ def get_month(m):
         12: 'Dezembro',
     }.get(m, '').upper()
 
-START_DATE = datetime.datetime.strptime('01-08-2020', '%d-%m-%Y')
-END_DATE = datetime.datetime.strptime('31-08-2020', '%d-%m-%Y')
+START_DATE = datetime.datetime.strptime('01-09-2020', '%d-%m-%Y')
+END_DATE = datetime.datetime.strptime('30-09-2020', '%d-%m-%Y')
 CAMPUS = 'BSB'
-GROUP = 'ENEM_ANUAL'
+GROUP = 'PARTICULARES'
     
 scores = TPSScore.objects.filter(campus=CAMPUS, group=GROUP, month=START_DATE.month).order_by('-score')
 max_tps_answers = TPS.objects.filter(start_date__gte=START_DATE, end_date__lte=END_DATE, campus=CAMPUS, group=GROUP).count()
@@ -64,7 +64,7 @@ for score in scores:
         scores_count -= 1
         continue
     student_name = TPSAnswer.objects.filter(email=score.email).first().name
-    student_answer_count = TPSAnswer.objects.filter(submission_date__gte=START_DATE, submission_date__lte=END_DATE, email=score.email, tps__campus=CAMPUS, tps__group=GROUP).count()
+    student_answer_count = TPSAnswer.objects.filter(tps__start_date__gte=START_DATE, tps__end_date__lte=END_DATE, email=score.email, tps__campus=CAMPUS, tps__group=GROUP).count()
     add_data(table, '                         ' + student_name, str(score.score), '{} ({:.0f}%)'.format(student_answer_count, student_answer_count * 100.0 / max_tps_answers))
 
 table2 = document.tables[0]
@@ -74,6 +74,6 @@ add_data(table2, '', 'Mês: ', f'{get_month(START_DATE.month)}', color="FFFFFF")
 add_data(table2, '', 'TPS Disponíveis: ', f'{max_tps_answers}', color="FFFFFF")
 add_data(table2, '', 'Alunos: ', f'{scores_count}', color="FFFFFF")
 
-document.save(f'reports/docx/27-08-2020/REL-ALUNOS-{CAMPUS}-{GROUP}-{get_month(START_DATE.month)}.docx')
-subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', f'reports/docx/27-08-2020/REL-ALUNOS-{CAMPUS}-{GROUP}-{get_month(START_DATE.month)}.docx', '--outdir', f'reports/pdf/27-08-2020/'])
+document.save(f'reports/docx/01-10-2020/REL-ALUNOS-{CAMPUS}-{GROUP}-{get_month(START_DATE.month)}.docx')
+subprocess.call(['libreoffice', '--headless', '--convert-to',  'pdf', f'reports/docx/01-10-2020/REL-ALUNOS-{CAMPUS}-{GROUP}-{get_month(START_DATE.month)}.docx', '--outdir', f'reports/pdf/01-10-2020/'])
     
