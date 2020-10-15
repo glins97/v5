@@ -61,7 +61,7 @@
                       <div class="card-icon">
                         <i class="material-icons">assignment</i>
                       </div>
-                      <h4 class="card-title">Redações do ppa</h4>
+                      <h4 class="card-title">Redações PPA - <small> {{essays_paid|length}}</small></h4>
                     </div>
                     <div class="card-body has-info">
                       <div class="toolbar">
@@ -73,6 +73,7 @@
                               <th>ID</th>
                               <th>Aluno</th>
                               <th>Jornada</th>
+                              <th>Banca</th>
                               <th>Tema</th>
                               <th>Data de Submissão</th>
                             </tr>
@@ -82,6 +83,7 @@
                               <th>ID</th>
                               <th>Aluno</th>
                               <th>Jornada</th>
+                              <th>Banca</th>
                               <th>Tema</th>
                               <th>Data de Submissão</th>
                             </tr>
@@ -92,6 +94,7 @@
                               <td><a href='/essays/{{essay.id}}/'>{{ essay.id }}</a></td>
                               <td><a href='/essays/{{essay.id}}/'> {{ essay.user.first_name }}{{ " " }}{{ essay.user.last_name }} </a></td>
                               <td><a href='/essays/{{essay.id}}/'> {{ essay.verbose_mode }} </a></td>
+                              <td><a href='/essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
                               <td><a href='/essays/{{essay.id}}/'> {{ essay.theme }} </a></td>
                               <td><div style="height: 40px !important; display: table-cell; vertical-align: middle;"><a href='/essays/{{essay.id}}/'> {{ essay.upload_date }} </a></div></td>
                             </tr>
@@ -114,7 +117,7 @@
                       <div class="card-icon">
                         <i class="material-icons">assignment</i>
                       </div>
-                      <h4 class="card-title">Redações solidárias</h4>
+                      <h4 class="card-title">Redações solidárias - <small> {{essays_free|length}}</small></h4>
                     </div>
                     <div class="card-body has-info">
                       <div class="toolbar">
