@@ -136,7 +136,7 @@ class TPS(models.Model):
             info = pdfinfo_from_path(str(self.questions.file), userpw=None, poppler_path=None)
             maxPages = info["Pages"]
             images = []
-            for page in range(1, min(maxPages + 1, 10)) : 
+            for page in range(1, maxPages + 1) : 
                 images.extend(convert_from_path(str(self.questions.file), dpi=200, first_page=page, last_page=page))
 
             min_shape = sorted( [(np.sum(i.size), i.size ) for i in images])[0][1]
