@@ -32,12 +32,17 @@ def get_verbose_mode(mode):
 @login_required
 def _monitor_essays_view(request):
     essays = Essay.objects.filter().order_by('id')
-    uncorrected_essays = []
+    uncorrected_essays_free = []
+    uncorrected_essays_paid = []
     for essay in essays:
         essay.verbose_mode = get_verbose_mode(essay.mode)
         if not Correction.objects.filter(essay=essay).count():
-            uncorrected_essays.append(essay)
-    uncorrected_essays_count = len(uncorrected_essays)
+            if essay.theme.description == 'Solidário':
+                uncorrected_essays_free.append(essay)
+            else:
+                uncorrected_essays_paid.append(essay)
+
+    uncorrected_essays_count = len(uncorrected_essays_free) + len(uncorrected_essays_paid) 
 
     active_correction_essays = [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay, status='ACTIVE')]
     for index, essay in enumerate(active_correction_essays):
@@ -57,7 +62,8 @@ def _monitor_essays_view(request):
         'title': 'Redações',
         'added': request.GET.get('added', 'None'),
         'mailed': request.GET.get('mailed', 'None'),
-        'essays': uncorrected_essays,
+        'essays_free': uncorrected_essays_free,
+        'essays_paid': uncorrected_essays_paid,
         'active_correction_essays': active_correction_essays,
         'done_correction_essays': done_correction_essays,
 
