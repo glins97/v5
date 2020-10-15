@@ -47,12 +47,17 @@
 							<ul class="nav nav-pills nav-pills-success nav-pills-icons" role="tablist">
 								<li class="nav-item">
 									<a class="nav-link active" data-toggle="tab" href="#week" role="tablist">
-										Nessa semana
+										Últimos 7 dias
 									</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" data-toggle="tab" href="#month" role="tablist">
-										Nesse mês
+										Últimos 30 dias
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#months" role="tablist">
+										Mês a mês
 									</a>
 								</li>
 								<li class="nav-item">
@@ -79,9 +84,9 @@
                                                                 {% for user in monitors %}
                                                                 <tr>
                                                                     <td>{{ user.first_name }}{{ " " }}{{ user.last_name }} </a></td>
-                                                                    <td>{{ user.week_avg_grade }} </a></td>
-                                                                    <td>{{ user.week_paid_corrections }}</a></td>
-                                                                    <td>{{ user.week_free_corrections }}</a></td>
+                                                                    <td>{{ user.week_data.average_grade }} </a></td>
+                                                                    <td>{{ user.week_data.paid_corrections }}</a></td>
+                                                                    <td>{{ user.week_data.free_corrections }}</a></td>
                                                                 </tr>
                                                                 {% endfor %}
                                                             </tbody>
@@ -109,9 +114,9 @@
                                                                 {% for user in monitors %}
                                                                 <tr>
                                                                     <td>{{ user.first_name }}{{ " " }}{{ user.last_name }} </a></td>
-                                                                    <td>{{ user.month_avg_grade }} </a></td>
-                                                                    <td>{{ user.month_paid_corrections }}</a></td>
-                                                                    <td>{{ user.month_free_corrections }}</a></td>
+                                                                    <td>{{ user.month_data.average_grade }} </a></td>
+                                                                    <td>{{ user.month_data.paid_corrections }}</a></td>
+                                                                    <td>{{ user.month_data.free_corrections }}</a></td>
                                                                 </tr>
                                                                 {% endfor %}
                                                             </tbody>
@@ -121,6 +126,39 @@
                                             </div>
                                         </div>
                                     </div>
+								</div>
+								<div class="tab-pane" id="months">
+                                    {% for user in monitors %}
+                                    <h5>{{ user.first_name }}{{ " " }}{{ user.last_name }} </h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card card-plain mt-0 ml-3">
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead class="text-bold">
+                                                                <th> Mês </th>
+                                                                <th> Nota média </th>
+                                                                <th> Correções PPA </th>
+                                                                <th> Correções Solidárias </th>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for month_data in user.months %}
+                                                                <tr>
+                                                                    <td>{{ month_data.month }}</a></td>
+                                                                    <td>{{ month_data.average_grade }} </a></td>
+                                                                    <td>{{ month_data.paid_corrections }}</a></td>
+                                                                    <td>{{ month_data.free_corrections }}</a></td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
 								</div>
 								<div class="tab-pane" id="all">
                                     <div class="row">
@@ -140,10 +178,10 @@
                                                                 {% for user in monitors %}
                                                                 <tr>
                                                                     <td>{{ user.first_name }}{{ " " }}{{ user.last_name }} </a></td>
-                                                                    <td>{{ user.monitor_average_grade }} </a></td>
-                                                                    <td>{{ user.monitor_total_correction_time }} </a></td>
-                                                                    <td>{{ user.monitor_average_correction_time }} </a></td>
-                                                                    <td>{{ user.monitor_done_corrections_count }}</a></td>
+                                                                    <td>{{ user.alltime_data.average_grade }} </a></td>
+                                                                    <td>{{ user.alltime_data.total_correction_time_str }} </a></td>
+                                                                    <td>{{ user.alltime_data.average_correction_time_str }} </a></td>
+                                                                    <td>{{ user.alltime_data.total_corrections }}</a></td>
                                                                 </tr>
                                                                 {% endfor %}
                                                             </tbody>
