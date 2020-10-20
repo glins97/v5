@@ -11,7 +11,6 @@
             <div class="content">
                 <div class="content">
                     <div class="container-fluid">
-                        <h4>Produtividade</h4>
 						<div class="page-categories">
 							<ul class="nav nav-pills nav-pills-success nav-pills-icons" role="tablist">
 								<li class="nav-item">
@@ -39,9 +38,16 @@
 							<div class="tab-content tab-space tab-subcategories">
 								<div class="tab-pane active" id="week">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="card card-plain mt-0">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações ENEM </h4>
+                                                </div>
                                                 <div class="card-body">
+                                                    {% if week_data_enem %}
                                                     <div class="table-responsive">
                                                         <table class="table">
                                                             <thead class="text-bold">
@@ -51,17 +57,58 @@
                                                                 <th> </th>
                                                             </thead>
                                                             <tbody>
-                                                                {% for student_data in week_data %}
+                                                                {% for student_data in week_data_enem %}
                                                                 <tr>
                                                                     <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
                                                                     <td>{{ student_data.count }} </td>
                                                                     <td>{{ student_data.average_grade }}</td>
-                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER PERFIL</a></td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
                                                                 </tr>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações VUNESP </h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    {% if week_data_vunesp %}
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead class="text-bold">
+                                                                <th> Aluno </th>
+                                                                <th> Redações </th>
+                                                                <th> Nota média </th>
+                                                                <th> </th>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for student_data in week_data_vunesp %}
+                                                                <tr>
+                                                                    <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
+                                                                    <td>{{ student_data.count }} </td>
+                                                                    <td>{{ student_data.average_grade }}</td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -69,9 +116,16 @@
 								</div>
 								<div class="tab-pane" id="biweek">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="card card-plain mt-0">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações ENEM </h4>
+                                                </div>
                                                 <div class="card-body">
+                                                    {% if biweek_data_enem %}
                                                     <div class="table-responsive">
                                                         <table class="table">
                                                             <thead class="text-bold">
@@ -81,17 +135,58 @@
                                                                 <th> </th>
                                                             </thead>
                                                             <tbody>
-                                                                {% for student_data in biweek_data %}
+                                                                {% for student_data in biweek_data_enem %}
                                                                 <tr>
                                                                     <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
                                                                     <td>{{ student_data.count }} </td>
                                                                     <td>{{ student_data.average_grade }}</td>
-                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER PERFIL</a></td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
                                                                 </tr>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações VUNESP </h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    {% if biweek_data_vunesp %}
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead class="text-bold">
+                                                                <th> Aluno </th>
+                                                                <th> Redações </th>
+                                                                <th> Nota média </th>
+                                                                <th> </th>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for student_data in biweek_data_vunesp %}
+                                                                <tr>
+                                                                    <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
+                                                                    <td>{{ student_data.count }} </td>
+                                                                    <td>{{ student_data.average_grade }}</td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -99,9 +194,16 @@
 								</div>
 								<div class="tab-pane" id="month">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="card card-plain mt-0">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações ENEM </h4>
+                                                </div>
                                                 <div class="card-body">
+                                                    {% if month_data_enem %}
                                                     <div class="table-responsive">
                                                         <table class="table">
                                                             <thead class="text-bold">
@@ -111,17 +213,58 @@
                                                                 <th> </th>
                                                             </thead>
                                                             <tbody>
-                                                                {% for student_data in month_data %}
+                                                                {% for student_data in month_data_enem %}
                                                                 <tr>
                                                                     <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
                                                                     <td>{{ student_data.count }} </td>
                                                                     <td>{{ student_data.average_grade }}</td>
-                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER PERFIL</a></td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
                                                                 </tr>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações VUNESP </h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    {% if month_data_vunesp %}
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead class="text-bold">
+                                                                <th> Aluno </th>
+                                                                <th> Redações </th>
+                                                                <th> Nota média </th>
+                                                                <th> </th>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for student_data in month_data_vunesp %}
+                                                                <tr>
+                                                                    <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
+                                                                    <td>{{ student_data.count }} </td>
+                                                                    <td>{{ student_data.average_grade }}</td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -129,9 +272,16 @@
 								</div>
 								<div class="tab-pane" id="all">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="card card-plain mt-0">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações ENEM </h4>
+                                                </div>
                                                 <div class="card-body">
+                                                    {% if all_data_enem %}
                                                     <div class="table-responsive">
                                                         <table class="table">
                                                             <thead class="text-bold">
@@ -141,17 +291,58 @@
                                                                 <th> </th>
                                                             </thead>
                                                             <tbody>
-                                                                {% for student_data in all_data %}
+                                                                {% for student_data in all_data_enem %}
                                                                 <tr>
                                                                     <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
                                                                     <td>{{ student_data.count }} </td>
                                                                     <td>{{ student_data.average_grade }}</td>
-                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER PERFIL</a></td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
                                                                 </tr>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 ml-3">
+                                            <div class="card">
+                                                <div class="card-header card-header-icon card-header-success">
+                                                    <div class="card-icon">
+                                                        <i class="material-icons">assignment</i>
+                                                    </div>
+                                                    <h4 class="card-title"> Redações VUNESP </h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    {% if all_data_vunesp %}
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead class="text-bold">
+                                                                <th> Aluno </th>
+                                                                <th> Redações </th>
+                                                                <th> Nota média </th>
+                                                                <th> </th>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for student_data in all_data_vunesp %}
+                                                                <tr>
+                                                                    <td>{{ student_data.student.first_name }}{{ " " }}{{ student_data.student.last_name }} </td>
+                                                                    <td>{{ student_data.count }} </td>
+                                                                    <td>{{ student_data.average_grade }}</td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/management/students/{{student_data.student.id}}/">VER MAIS</a></td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    {% else %}
+                                                    <p>Sem produções para este período.</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>

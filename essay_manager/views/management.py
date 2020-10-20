@@ -47,34 +47,27 @@ def minute_format(minutes):
         return '{:.0f}m'.format(minutes)
     return minutes
 
-def append_results(user, value):
-    return (value if value != '-' else 0)  + {
-        'felipemartins': 80,
-        'riemma': 75,
-        'naragomes': 58,
-        'belaelaine': 40,
-        'nadiasuelen': 34,
-        'iasmincruz': 8,
-    }.get(user.username, 0)
-
 class DataObject():
     def __init__(self, **kwargs):
         for kw in kwargs:
             setattr(self, kw, kwargs[kw])
 
 def get_student_data(start_date, end_date, student, jury):
-    essays = Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, user=student, theme__jury=jury, grade__gt=0)
+    essays = Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, user=student, theme__jury=jury).order_by('-id')
+    for essay in essays:
+        essay.get_correction_status()
+
     if essays:
         return DataObject(
             essays=essays,
             count=essays.count(),
-            avgerage_grade=int(numpy.mean([essay.grade for essay in essays])),
+            avgerage_grade=int(avg([essay.grade for essay in essays if essay.correction_status == 'DONE'])),
         )
 
-def get_students_data(start_date, end_date):
+def get_students_data(start_date, end_date, jury):
     students_essays = {
-        student: Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, user=student, grade__gt=0).exclude(theme__description='Solidário')
-        for student in list(set([essay.user for essay in Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, grade__gt=0).exclude(theme__description='Solidário')]))
+        student: [essay for essay in Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, user=student, theme__jury=jury).exclude(theme__description='Solidário') if essay.has_correction()]
+        for student in list(set([essay.user for essay in Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, theme__jury=jury).exclude(theme__description='Solidário') if essay.has_correction()]))
     }
 
     student_data = []
@@ -82,7 +75,7 @@ def get_students_data(start_date, end_date):
         student_data.append(DataObject(
             student=student,
             count=len(students_essays[student]),
-            average_grade=int(numpy.mean([essay.grade for essay in students_essays[student]]))
+            average_grade=int(avg([essay.grade for essay in students_essays[student]]))
         ))
         
     return sorted(student_data, key=lambda obj: -obj.count)
@@ -132,7 +125,6 @@ def management_monitors_view(request):
             monitor.months.append(month_data)
             current_time -= relativedelta(months=1)
             
-    print([monitor.alltime_data.average_correction_time for monitor in monitors if monitor.alltime_data.total_corrections > 0])
     data = {
         'title': 'Gestão',
         'user': get_user_details(request.user),
@@ -149,10 +141,15 @@ def management_students_view(request):
     data = {
         'title': 'Gestão',
         'user': get_user_details(request.user),
-        'week_data': get_students_data(now_ - relativedelta(days=7), now_),
-        'biweek_data': get_students_data(now_ - relativedelta(days=14), now_),
-        'month_data': get_students_data(now_ - relativedelta(days=30), now_),
-        'all_data': get_students_data(now_ - relativedelta(days=365 * 99), now_),
+        'week_data_enem': get_students_data(now_ - relativedelta(days=7), now_, 'ENEM'),
+        'biweek_data_enem': get_students_data(now_ - relativedelta(days=14), now_, 'ENEM'),
+        'month_data_enem': get_students_data(now_ - relativedelta(days=30), now_, 'ENEM'),
+        'all_data_enem': get_students_data(now_ - relativedelta(days=365 * 99), now_, 'ENEM'),
+        
+        'week_data_vunesp': get_students_data(now_ - relativedelta(days=7), now_, 'VUNESP'),
+        'biweek_data_vunesp': get_students_data(now_ - relativedelta(days=14), now_, 'VUNESP'),
+        'month_data_vunesp': get_students_data(now_ - relativedelta(days=30), now_, 'VUNESP'),
+        'all_data_vunesp': get_students_data(now_ - relativedelta(days=365 * 99), now_, 'VUNESP'),
     }
     return render(request, 'management/students.html', data)
 

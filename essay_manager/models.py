@@ -107,6 +107,17 @@ class Essay(models.Model):
     def __str__(self):
         return '#{}, {}'.format(self.id, self.theme)
 
+    def has_correction(self, status='DONE'):
+        return Correction.objects.filter(essay=self, status=status).count() > 0
+
+    def get_correction_status(self):
+        self.correction_status = 'HOLD'
+        if self.has_correction('DONE'):
+            self.correction_status = 'DONE'
+        elif self.has_correction('ACTIVE'):
+            self.correction_status = 'ACTIVE'
+        return self.correction_status
+
     def save(self, *args, **kwargs):
         if self.pk is None:
             mentoring = Mentoring.objects.filter(student=self.user, active=True).first()
