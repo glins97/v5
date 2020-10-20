@@ -9,7 +9,7 @@ from datetime import timedelta, datetime
 from django.utils.timezone import now
 from dateutil.relativedelta import relativedelta
 
-from essay_manager.views.graphs import get_user_grades_enem
+from essay_manager.views.graphs import get_user_grades_enem, get_user_grades_vunesp
 
 logger = getLogger('django')
 def avg(l):
@@ -166,5 +166,6 @@ def management_student_view(request, id):
         'enem_data': get_student_data(now_ - relativedelta(days=365 * 99), now_, student, 'ENEM'),
         'vunesp_data': get_student_data(now_ - relativedelta(days=365 * 99), now_, student, 'VUNESP'),
         **get_user_grades_enem(student),
+        **get_user_grades_vunesp(student),
     }
     return render(request, 'management/student.html', data)

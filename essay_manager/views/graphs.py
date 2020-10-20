@@ -24,8 +24,7 @@ def get_user_grades_enem(user):
             gradesc5.append(int(comp['a5']))
 
     return {
-        'title': 'Performance',
-        'grades': str(grades[::-1]),
+        'grades_enem': str(grades[::-1]),
         'gradesc1': str(gradesc1[::-1]),
         'gradesc2': str(gradesc2[::-1]),
         'gradesc3': str(gradesc3[::-1]),
@@ -38,6 +37,31 @@ def get_user_grades_enem(user):
         'avg_gradesc5': '{:.0f}'.format((sum(gradesc5) / len(gradesc5)) if gradesc5 else 0),
     }
 
+def get_user_grades_vunesp(user):
+    essays = Essay.objects.filter(user=user, theme__jury='VUNESP').order_by('-id')
+
+    grades = []
+    gradesa = []
+    gradesb = []
+    gradesc = []
+    for essay in essays:
+        if essay.has_correction():
+            grades.append(essay.grade)
+            comp = json.loads(Correction.objects.get(essay=essay).data)['competencies']['grades']
+            gradesa.append(int(comp['a']))
+            gradesb.append(int(comp['b']))
+            gradesc.append(int(comp['c']))
+
+    return {
+        'grades_vunesp': str(grades[::-1]),
+        'gradesa': str(gradesa[::-1]),
+        'gradesb': str(gradesb[::-1]),
+        'gradesc': str(gradesc[::-1]),
+        'avg_gradesa': '{:.0f}'.format((sum(gradesa) / len(gradesa)) if gradesa else 0),
+        'avg_gradesb': '{:.0f}'.format((sum(gradesb) / len(gradesb)) if gradesb else 0),
+        'avg_gradesc': '{:.0f}'.format((sum(gradesc) / len(gradesc)) if gradesc else 0),
+    }
+
 
 @has_permission('student')
 def graphs_view(request):
@@ -46,4 +70,4 @@ def graphs_view(request):
         'user': get_user_details(request.user), 
     }
 
-    return render(request, 'graphs.html', { **data, **get_user_grades_enem(request.user) })
+    return render(request, 'graphs.html', { **data, **get_user_grades_enem(request.user), **get_user_grades_vunesp(request.user) })

@@ -146,6 +146,21 @@
                                 {% if vunesp_data.essays %}
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <div class="card card-plain">
+                                            <div class="card-header card-header-icon card-header-success">
+                                                <div class="card-icon">
+                                                    <i class="material-icons">content_paste</i>
+                                                </div>
+                                                <h4 class="card-title">Últimas notas</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="gradesChart" class="ct-chart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="card mt-5">
                                             <div class="card-header card-header-icon card-header-success">
                                                 <div class="card-icon">
@@ -190,6 +205,47 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card card-plain">
+                                            <div class="card-header card-header-icon card-header-success">
+                                                <div class="card-icon">
+                                                    <i class="material-icons">timeline</i>
+                                                </div>
+                                                <h4 class="card-title">Critérios <small> - com o passar do tempo</small></h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="grades2Chart" class="ct-chart"></div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <p class='text-info'>Critério A</p>
+                                                <p class='text-danger'>Critério B</p>
+                                                <p class='text-warning'>Critério C</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card card-plain">
+                                            <div class="card-header card-header-icon card-header-success">
+                                                <div class="card-icon">
+                                                    <i class="material-icons">timeline</i>
+                                                </div>
+                                                <h4 class="card-title">Critérios<small> - média geral</small></h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="grades3Chart" class="ct-chart"></div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <p class='text-info'>Critério A</p>
+                                                <p class='text-danger'>Critério B</p>
+                                                <p class='text-warning'>Critério C</p>
                                             </div>
                                         </div>
                                     </div>
@@ -243,10 +299,11 @@
           seq = 0;
         };
   
+        {% if enem_data.essays %}
         $(document).ready(function() {
           datagradesChart = {
             series: [
-              {{grades}},
+              {{grades_enem}},
             ]
           };
   
@@ -293,7 +350,69 @@
           startAnimationForLineChart(grades2Chart);
           startAnimationForLineChart(grades3Chart);
         });
+        {% endif %}
+        {% if vunesp_data.essays %}
+        $(document).ready(function() {
+          datagradesChart = {
+            series: [
+              {{grades_vunesp}},
+            ]
+          };
   
+          optionsgradesChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+          }
+  
+          datagrades2Chart = {
+            series: [
+              {{gradesa}},
+              {{gradesb}},
+              {{gradesc}},
+            ]
+          };
+          optionsgrades2Chart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+          }
+  
+          datagrades3Chart = {
+            series: [
+              {{avg_gradesa}},
+              {{avg_gradesb}},
+              {{avg_gradesc}},
+            ]
+          };
+          optionsgrades3Chart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+          }
+          
+          var gradesChart = new Chartist.Line('#gradesChart', datagradesChart, optionsgradesChart);
+          var grades2Chart = new Chartist.Bar('#grades2Chart', datagrades2Chart, optionsgrades2Chart);
+          var grades3Chart = new Chartist.Pie('#grades3Chart', datagrades3Chart, optionsgrades3Chart);
+          startAnimationForLineChart(gradesChart);
+          startAnimationForLineChart(grades2Chart);
+          startAnimationForLineChart(grades3Chart);
+          
+        });
+        {% endif %}  
+      </script>
+      <script>
+        $(document).ready(function() {
+            $('.nav-link').click(function (){
+                var simulateWindowResize = setInterval(function() {
+                    window.dispatchEvent(new Event('resize'));
+                }, 100);
+                
+                setTimeout(function() {
+                    clearInterval(simulateWindowResize);
+                }, 1000); 
+            });
+        });
       </script>
 </body>
 
