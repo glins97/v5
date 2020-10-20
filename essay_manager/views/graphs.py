@@ -25,6 +25,7 @@ def get_user_grades_enem(user):
 
     return {
         'grades_enem': str(grades[::-1]),
+        'enem_count': len(grades),
         'gradesc1': str(gradesc1[::-1]),
         'gradesc2': str(gradesc2[::-1]),
         'gradesc3': str(gradesc3[::-1]),
@@ -54,6 +55,7 @@ def get_user_grades_vunesp(user):
 
     return {
         'grades_vunesp': str(grades[::-1]),
+        'vunesp_count': len(grades),
         'gradesa': str(gradesa[::-1]),
         'gradesb': str(gradesb[::-1]),
         'gradesc': str(gradesc[::-1]),
