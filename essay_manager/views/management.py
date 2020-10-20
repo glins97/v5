@@ -57,15 +57,31 @@ def append_results(user, value):
         'iasmincruz': 8,
     }.get(user.username, 0)
 
+class DataObject():
+    def __init__(self, **kwargs):
+        for kw in kwargs:
+            setattr(self, kw, kwargs[kw])
+
+def get_students_data(start_date, end_date):
+    students_essays = {
+        student: Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, user=student, grade__gt=0).exclude(theme__description='Solidário')
+        for student in list(set([essay.user for essay in Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, grade__gt=0).exclude(theme__description='Solidário')]))
+    }
+
+    student_data = []
+    for student in students_essays:
+        student_data.append(DataObject(
+            student=student,
+            count=len(students_essays[student]),
+            jury=students_essays[student][0].theme.jury,
+            average_grade=int(numpy.mean([essay.grade for essay in students_essays[student]]))
+        ))
+        
+    return sorted(student_data, key=lambda obj: -obj.count)
+
 def get_corrections_data(user, start_date, end_date):
-
-    class CorrectionData():
-        def __init__(self, **kwargs):
-            for kw in kwargs:
-                setattr(self, kw, kwargs[kw])
-
     corrections = Correction.objects.filter(start_date__gte=start_date, end_date__lte=end_date, user=user, status='DONE')
-    data = CorrectionData(
+    data = DataObject(
         start_date=start_date,
         end_date=end_date,
         average_grade=0,
@@ -84,7 +100,6 @@ def get_corrections_data(user, start_date, end_date):
     data.average_correction_time = avg([(correction.end_date - correction.start_date).seconds / 60 for correction in corrections if (correction.end_date - correction.start_date).seconds < 3600])
     data.total_correction_time_str = hour_format(data.total_correction_time)
     data.average_correction_time_str = minute_format(data.average_correction_time)
-    print(user, [correction.essay.theme.description for correction in corrections])
     data.free_corrections = len([correction for correction in corrections if correction.essay.theme.description=='Solidário'])
     data.paid_corrections = len([correction for correction in corrections if correction.essay.theme.description!='Solidário'])
     return data
@@ -121,8 +136,15 @@ def management_monitors_view(request):
 
 @has_permission('superuser')
 def management_students_view(request):
+    now_ = now()
+    print('dsadadsads')
+
     data = {
         'title': 'Gestão',
         'user': get_user_details(request.user),
+        'week_data': get_students_data(now_ - relativedelta(days=7), now_),
+        'biweek_data': get_students_data(now_ - relativedelta(days=14), now_),
+        'month_data': get_students_data(now_ - relativedelta(days=30), now_),
+        'all_data': get_students_data(now_ - relativedelta(days=365 * 99), now_),
     }
     return render(request, 'management/students.html', data)
