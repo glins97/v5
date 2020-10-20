@@ -1,0 +1,114 @@
+{% load permissions %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% include "head.html" %}
+<body class="">
+    <div class="wrapper ">
+        {% include "sidebar.html" %}
+        <div class="main-panel">
+            {% include "navbar.html" %}
+            <div class="content">
+                <div class="content">
+                    <div class="container-fluid">
+                        <h3>Performance do Aluno</h3>
+                        <h4>{{student.first_name}} {{student.last_name}}</h4>
+                        {% if enem_data.essays %}
+						<div class="row">
+                            <div class="col-md-12">
+                                <div class="card mt-5">
+                                    <div class="card-header card-header-icon card-header-info">
+                                        <div class="card-icon">
+                                            <i class="material-icons">assignment</i>
+                                        </div>
+                                        <h4 class="card-title"> Redações ENEM </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead class="text-bold">
+                                                    <th> ID </th>
+                                                    <th> Tema </th>
+                                                    <th> Data de Submissão </th>
+                                                    <th> Nota </th>
+                                                    <th> Status </th>
+                                                    <th> </th>
+                                                </thead>
+                                                <tbody>
+                                                    {% for essay in enem_data.essays %}
+                                                    <tr>
+                                                        <td>#{{essay.id}}</td>
+                                                        <td>{{essay.theme.description}}</td>
+                                                        <td>{{essay.upload_date}}</td>
+                                                        {% if essay.grade == 0 %}
+                                                        <td>-</td>
+                                                        <td>AGUARDANDO CORREÇÃO</td>
+                                                        <td><a class="btn btn-link btn-success" style="display: inline;" href="/essays/{{essay.id}}/">CORRIGIR</a></td>
+                                                        {% else %}
+                                                        <td>{{essay.grade}}</td>
+                                                        <td>CORRIGIDO</td>
+                                                        <td><a class="btn btn-link btn-info" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if vunesp_data.essays %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card mt-5">
+                                    <div class="card-header card-header-icon card-header-info">
+                                        <div class="card-icon">
+                                            <i class="material-icons">assignment</i>
+                                        </div>
+                                        <h4 class="card-title"> Redações VUNESP </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead class="text-bold">
+                                                    <th> Redação </th>
+                                                    <th> Tema </th>
+                                                    <th> Data de Submissão </th>
+                                                    <th> Nota </th>
+                                                    <th> </th>
+                                                </thead>
+                                                <tbody>
+                                                    {% for essay in vunesp_data.essays %}
+                                                    <tr>
+                                                        <td>{{essay.id}}</td>
+                                                        <td>{{essay.id}}</td>
+                                                        <td>{{essay.id}}</td>
+                                                        <td>{{essay.id}}</td>
+                                                        <td><a class="btn btn-link btn-info" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% include "footer.html" %}
+        </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="/static/essay_manager/js/core/jquery.min.js"></script>
+    <script src="/static/essay_manager/js/core/popper.min.js"></script>
+    <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
+    <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+</body>
+
+</html>

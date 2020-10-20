@@ -74,6 +74,7 @@ urlpatterns = [
     path('themes/<int:id>/', theme_view),
     path('management/monitors/', management_monitors_view),
     path('management/students/', management_students_view),
+    path('management/students/<int:id>/', management_student_view),
     path('mentoring/', mentoring_view),
     path('graphs/', graphs_view),
     path('exercises/<int:id>/', exercise_view),

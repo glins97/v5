@@ -62,6 +62,15 @@ class DataObject():
         for kw in kwargs:
             setattr(self, kw, kwargs[kw])
 
+def get_student_data(start_date, end_date, student, jury):
+    essays = Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, user=student, theme__jury=jury, grade__gt=0)
+    if essays:
+        return DataObject(
+            essays=essays,
+            count=essays.count(),
+            avgerage_grade=int(numpy.mean([essay.grade for essay in essays])),
+        )
+
 def get_students_data(start_date, end_date):
     students_essays = {
         student: Essay.objects.filter(upload_date__gte=start_date, upload_date__lte=end_date, user=student, grade__gt=0).exclude(theme__description='Solidário')
@@ -73,7 +82,6 @@ def get_students_data(start_date, end_date):
         student_data.append(DataObject(
             student=student,
             count=len(students_essays[student]),
-            jury=students_essays[student][0].theme.jury,
             average_grade=int(numpy.mean([essay.grade for essay in students_essays[student]]))
         ))
         
@@ -137,7 +145,6 @@ def management_monitors_view(request):
 @has_permission('superuser')
 def management_students_view(request):
     now_ = now()
-    print('dsadadsads')
 
     data = {
         'title': 'Gestão',
@@ -148,3 +155,16 @@ def management_students_view(request):
         'all_data': get_students_data(now_ - relativedelta(days=365 * 99), now_),
     }
     return render(request, 'management/students.html', data)
+
+@has_permission('superuser')
+def management_student_view(request, id):
+    now_ = now()
+    student = User.objects.get(id=id)
+    data = {
+        'title': 'Gestão',
+        'user': get_user_details(request.user),
+        'student': student,
+        'enem_data': get_student_data(now_ - relativedelta(days=365 * 99), now_, student, 'ENEM'),
+        'vunesp_data': get_student_data(now_ - relativedelta(days=365 * 99), now_, student, 'VUNESP'),
+    }
+    return render(request, 'management/student.html', data)
