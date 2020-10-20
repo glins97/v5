@@ -11,112 +11,194 @@
             <div class="content">
                 <div class="content">
                     <div class="container-fluid">
-                        <h3>Performance do Aluno</h3>
+                        <h3>Produtividade do Aluno</h3>
                         <h4>{{student.first_name}} {{student.last_name}}</h4>
-                        {% if enem_data.essays %}
-						<div class="row">
-                            <div class="col-md-12">
-                                <div class="card mt-5">
-                                    <div class="card-header card-header-icon card-header-success">
-                                        <div class="card-icon">
-                                            <i class="material-icons">assignment</i>
-                                        </div>
-                                        <h4 class="card-title"> Redações ENEM </h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead class="text-bold">
-                                                    <th> ID </th>
-                                                    <th> Tema </th>
-                                                    <th> Data de Submissão </th>
-                                                    <th> Nota </th>
-                                                    <th> Correção </th>
-                                                    <th> </th>
-                                                </thead>
-                                                <tbody>
-                                                    {% for essay in enem_data.essays %}
-                                                    <tr>
-                                                        <td>#{{essay.id}}</td>
-                                                        <td>{{essay.theme.description}}</td>
-                                                        <td>{{essay.upload_date}}</td>
-                                                        {% if essay.correction_status == 'HOLD' %}
-                                                        <td>-</td>
-                                                        <td>EM ESPERA</td>
-                                                        <td><a class="btn btn-link btn-danger" style="display: inline;" href="/essays/{{essay.id}}/">CORRIGIR</a></td>
-                                                        {% else %}
-                                                            {% if essay.correction_status == 'ACTIVE' %}
-                                                            <td>-</td>
-                                                            <td>EM PROGRESSO</td>
-                                                            <td><a class="btn btn-link btn-warning" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
-                                                            {% else %}
-                                                            <td>{{essay.grade}}</td>
-                                                            <td>FINALIZADA</td>
-                                                            <td><a class="btn btn-link btn-info" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
+
+                        <ul class="nav nav-pills nav-pills-success nav-pills-icons mt-4" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#enem" role="tablist">
+                                    ENEM
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#vunesp" role="tablist">
+                                    VUNESP
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content tab-space tab-subcategories">
+                            <div class="tab-pane ml-3 active" id="enem">
+                                {% if enem_data.essays %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card card-plain">
+                                            <div class="card-header card-header-icon card-header-success">
+                                            <div class="card-icon">
+                                                <i class="material-icons">content_paste</i>
+                                            </div>
+                                            <h4 class="card-title">Últimas notas</h4>
+                                            </div>
+                                            <div class="card-body">
+                                            <div id="gradesChart" class="ct-chart"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% if vunesp_data.essays %}
-						<div class="row">
-                            <div class="col-md-12">
-                                <div class="card mt-5">
-                                    <div class="card-header card-header-icon card-header-success">
-                                        <div class="card-icon">
-                                            <i class="material-icons">assignment</i>
-                                        </div>
-                                        <h4 class="card-title"> Redações VUNESP </h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead class="text-bold">
-                                                    <th> ID </th>
-                                                    <th> Tema </th>
-                                                    <th> Data de Submissão </th>
-                                                    <th> Nota </th>
-                                                    <th> Correção </th>
-                                                    <th> </th>
-                                                </thead>
-                                                <tbody>
-                                                    {% for essay in vunesp_data.essays %}
-                                                    <tr>
-                                                        <td>#{{essay.id}}</td>
-                                                        <td>{{essay.theme.description}}</td>
-                                                        <td>{{essay.upload_date}}</td>
-                                                        {% if essay.correction_status == 'HOLD' %}
-                                                        <td>-</td>
-                                                        <td>EM ESPERA</td>
-                                                        <td><a class="btn btn-link btn-danger" style="display: inline;" href="/essays/{{essay.id}}/">CORRIGIR</a></td>
-                                                        {% else %}
-                                                            {% if essay.correction_status == 'ACTIVE' %}
-                                                            <td>-</td>
-                                                            <td>EM PROGRESSO</td>
-                                                            <td><a class="btn btn-link btn-warning" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
-                                                            {% else %}
-                                                            <td>{{essay.grade}}</td>
-                                                            <td>FINALIZADA</td>
-                                                            <td><a class="btn btn-link btn-info" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card card-plain">
+                                            <div class="card-header card-header-icon card-header-success">
+                                                <div class="card-icon">
+                                                    <i class="material-icons">assignment</i>
+                                                </div>
+                                                <h4 class="card-title"> Redações entregues </h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead class="text-bold">
+                                                            <th> ID </th>
+                                                            <th> Tema </th>
+                                                            <th> Data de Submissão </th>
+                                                            <th> Nota </th>
+                                                            <th> Correção </th>
+                                                            <th> </th>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for essay in enem_data.essays %}
+                                                            <tr>
+                                                                <td>#{{essay.id}}</td>
+                                                                <td>{{essay.theme.description}}</td>
+                                                                <td>{{essay.upload_date}}</td>
+                                                                {% if essay.correction_status == 'HOLD' %}
+                                                                <td>-</td>
+                                                                <td>EM ESPERA</td>
+                                                                <td><a class="btn btn-link btn-danger" style="display: inline;" href="/essays/{{essay.id}}/">CORRIGIR</a></td>
+                                                                {% else %}
+                                                                    {% if essay.correction_status == 'ACTIVE' %}
+                                                                    <td>-</td>
+                                                                    <td>EM PROGRESSO</td>
+                                                                    <td><a class="btn btn-link btn-warning" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
+                                                                    {% else %}
+                                                                    <td>{{essay.grade}}</td>
+                                                                    <td>FINALIZADA</td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card card-plain">
+                                            <div class="card-header card-header-icon card-header-success">
+                                            <div class="card-icon">
+                                                <i class="material-icons">timeline</i>
+                                            </div>
+                                            <h4 class="card-title">Competências <small> - com o passar do tempo</small></h4>
+                                            </div>
+                                            <div class="card-body">
+                                            <div id="grades2Chart" class="ct-chart"></div>
+                                            </div>
+                                            <div class="card-footer">
+                                            <p class='text-info'>Competência 1</p>
+                                            <p class='text-danger'>Competência 2</p>
+                                            <p class='text-warning'>Competência 3</p>
+                                            <p style="color: #d17905">Competência 4</p>
+                                            <p style="color: #453d3f">Competência 5</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card card-plain">
+                                            <div class="card-header card-header-icon card-header-success">
+                                            <div class="card-icon">
+                                                <i class="material-icons">timeline</i>
+                                            </div>
+                                            <h4 class="card-title">Competências <small> - média geral</small></h4>
+                                            </div>
+                                            <div class="card-body">
+                                            <div id="grades3Chart" class="ct-chart"></div>
+                                            </div>
+                                            <div class="card-footer">
+                                            <p class='text-info'>Competência 1</p>
+                                            <p class='text-danger'>Competência 2</p>
+                                            <p class='text-warning'>Competência 3</p>
+                                            <p style="color: #d17905">Competência 4</p>
+                                            <p style="color: #453d3f">Competência 5</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <h5 class="ml-5"><i>Sem produções para a banca selecionada.</i></h5>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane" id="vunesp">
+                                {% if vunesp_data.essays %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card mt-5">
+                                            <div class="card-header card-header-icon card-header-success">
+                                                <div class="card-icon">
+                                                    <i class="material-icons">assignment</i>
+                                                </div>
+                                                <h4 class="card-title"> Redações VUNESP </h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead class="text-bold">
+                                                            <th> ID </th>
+                                                            <th> Tema </th>
+                                                            <th> Data de Submissão </th>
+                                                            <th> Nota </th>
+                                                            <th> Correção </th>
+                                                            <th> </th>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for essay in vunesp_data.essays %}
+                                                            <tr>
+                                                                <td>#{{essay.id}}</td>
+                                                                <td>{{essay.theme.description}}</td>
+                                                                <td>{{essay.upload_date}}</td>
+                                                                {% if essay.correction_status == 'HOLD' %}
+                                                                <td>-</td>
+                                                                <td>EM ESPERA</td>
+                                                                <td><a class="btn btn-link btn-danger" style="display: inline;" href="/essays/{{essay.id}}/">CORRIGIR</a></td>
+                                                                {% else %}
+                                                                    {% if essay.correction_status == 'ACTIVE' %}
+                                                                    <td>-</td>
+                                                                    <td>EM PROGRESSO</td>
+                                                                    <td><a class="btn btn-link btn-warning" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
+                                                                    {% else %}
+                                                                    <td>{{essay.grade}}</td>
+                                                                    <td>FINALIZADA</td>
+                                                                    <td><a class="btn btn-link btn-info" style="display: inline;" href="/essays/{{essay.id}}/">VISUALIZAR</a></td>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <h5 class="ml-5"><i>Sem produções para a banca selecionada.</i></h5>
+                                {% endif %}
                             </div>
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -129,6 +211,90 @@
     <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
     <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.10.1/chartist.min.css" />
+    <script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
+    <script>
+        startAnimationForLineChart = function(chart) {
+          chart.on('draw', function(data) {
+            if (data.type === 'line' || data.type === 'area') {
+              data.element.animate({
+                d: {
+                  begin: 600,
+                  dur: 700,
+                  from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+                  to: data.path.clone().stringify(),
+                  easing: Chartist.Svg.Easing.easeOutQuint
+                }
+              });
+            } else if (data.type === 'point') {
+              seq++;
+              data.element.animate({
+                opacity: {
+                  begin: seq * delays,
+                  dur: durations,
+                  from: 0,
+                  to: 1,
+                  easing: 'ease'
+                }
+              });
+            }
+          });
+  
+          seq = 0;
+        };
+  
+        $(document).ready(function() {
+          datagradesChart = {
+            series: [
+              {{grades}},
+            ]
+          };
+  
+          optionsgradesChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+          }
+  
+          datagrades2Chart = {
+            series: [
+              {{gradesc1}},
+              {{gradesc2}},
+              {{gradesc3}},
+              {{gradesc4}},
+              {{gradesc5}},
+            ]
+          };
+          optionsgrades2Chart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+          }
+  
+          datagrades3Chart = {
+            series: [
+              {{avg_gradesc1}},
+              {{avg_gradesc2}},
+              {{avg_gradesc3}},
+              {{avg_gradesc4}},
+              {{avg_gradesc5}},
+            ]
+          };
+          optionsgrades3Chart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+          }
+          
+          var gradesChart = new Chartist.Line('#gradesChart', datagradesChart, optionsgradesChart);
+          var grades2Chart = new Chartist.Bar('#grades2Chart', datagrades2Chart, optionsgrades2Chart);
+          var grades3Chart = new Chartist.Pie('#grades3Chart', datagrades3Chart, optionsgrades3Chart);
+          startAnimationForLineChart(gradesChart);
+          startAnimationForLineChart(grades2Chart);
+          startAnimationForLineChart(grades3Chart);
+        });
+  
+      </script>
 </body>
 
 </html>

@@ -4,9 +4,8 @@ from essay_manager.models import Essay, Correction
 from essay_manager.utils import get_user_details
 import json
 
-@has_permission('student')
-def graphs_view(request):
-    essays = Essay.objects.filter(user=request.user).order_by('-id')
+def get_user_grades_enem(user):
+    essays = Essay.objects.filter(user=user, theme__jury='ENEM').order_by('-id')
 
     grades = []
     gradesc1 = []
@@ -15,18 +14,16 @@ def graphs_view(request):
     gradesc4 = []
     gradesc5 = []
     for essay in essays:
-        has_correction = False
-        for correction in Correction.objects.filter(essay=essay):
-            if correction.status == 'DONE':
-                grades.append(essay.grade)
-                comp = json.loads(correction.data)['competencies']['grades']
-                gradesc1.append(int(comp['a1']))
-                gradesc2.append(int(comp['a2']))
-                gradesc3.append(int(comp['a3']))
-                gradesc4.append(int(comp['a4']))
-                gradesc5.append(int(comp['a5']))
+        if essay.has_correction():
+            grades.append(essay.grade)
+            comp = json.loads(Correction.objects.get(essay=essay).data)['competencies']['grades']
+            gradesc1.append(int(comp['a1']))
+            gradesc2.append(int(comp['a2']))
+            gradesc3.append(int(comp['a3']))
+            gradesc4.append(int(comp['a4']))
+            gradesc5.append(int(comp['a5']))
 
-    data = {
+    return {
         'title': 'Performance',
         'grades': str(grades[::-1]),
         'gradesc1': str(gradesc1[::-1]),
@@ -39,7 +36,14 @@ def graphs_view(request):
         'avg_gradesc3': '{:.0f}'.format((sum(gradesc3) / len(gradesc3)) if gradesc3 else 0),
         'avg_gradesc4': '{:.0f}'.format((sum(gradesc4) / len(gradesc4)) if gradesc4 else 0),
         'avg_gradesc5': '{:.0f}'.format((sum(gradesc5) / len(gradesc5)) if gradesc5 else 0),
+    }
+
+
+@has_permission('student')
+def graphs_view(request):
+    data = {
+        'title': 'Performance',
         'user': get_user_details(request.user), 
     }
 
-    return render(request, 'graphs.html', data)
+    return render(request, 'graphs.html', { **data, **get_user_grades_enem(request.user) })
