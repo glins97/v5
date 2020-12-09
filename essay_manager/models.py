@@ -98,7 +98,7 @@ class Essay(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE)
     file = models.FileField(upload_to='uploads/')
-    upload_date = models.DateField(auto_now_add=True)
+    upload_date = models.DateField(blank=True, null=True)
     grade = models.IntegerField(default=0)
     mailed = models.BooleanField(default=False)
     nullified = models.BooleanField(default=False)
@@ -119,6 +119,9 @@ class Essay(models.Model):
         return self.correction_status
 
     def save(self, *args, **kwargs):
+        if not self.upload_date:
+            self.upload_date = now()
+            
         if self.pk is None:
             mentoring = Mentoring.objects.filter(student=self.user, active=True).first()
             if mentoring:
@@ -249,7 +252,7 @@ class ErrorClassification(models.Model):
             </label>
         </div>
         """.format(
-            code=self.get_verbose_code().replace('.', '-'),
+            code=self.id,
             target=self.target,
             desc=self.description if self.description else '',
             name='{}'.format(self.name),
@@ -261,8 +264,8 @@ class ErrorClassification(models.Model):
         return mark_safe("""
         <div class="form-check col-sm">
             <label class="form-check-label">
-                <input class="form-check-input" name="competencyError" type="" value="" data-toggle="" data-target="#innerCheckboxes{code}"> {name}
-                <div id="innerCheckboxes{code}" class="container">
+                <input class="form-check-input" name="competencyError" type="" value="" data-toggle="" data-target="#ec-innerCheckboxes{code}"> {name}
+                <div id="ec-innerCheckboxes{code}" class="container">
                     {children}
                 </div>
                 <span class="card-icon">
@@ -271,10 +274,10 @@ class ErrorClassification(models.Model):
             </label>
         </div>
         """.format(
-            code=self.get_verbose_code().replace('.', '-'),
+            code=self.id,
             desc=self.description if self.description else '',
             name='{}'.format(self.name),
-            children='\n'.join([self.encapsulate_row(child.get_html()) for child in ErrorClassification.objects.filter(parent=self)])))
+            children='\n'.join([self.encapsulate_row(child.get_html()) for child in ErrorClassification.objects.filter(parent=self).order_by('weight')])))
 
     def get_html(self):
         if not self.has_children:
@@ -356,7 +359,7 @@ class GenericErrorClassification(models.Model):
             </label>
         </div>
         """.format(
-            code=self.get_verbose_code().replace('.', '-'),
+            code=self.id,
             target=self.target,
             desc=self.description if self.description else '',
             name='({}) {}'.format(200 - self.weight * 40, self.name) if self.jury == 'ENEM' else '({}) {}'.format(self.weight, self.name),
@@ -368,8 +371,8 @@ class GenericErrorClassification(models.Model):
         return mark_safe("""
         <div class="form-check col-sm">
             <label class="form-check-label">
-                <input class="form-check-input" name="competencyError" type="" value="" data-toggle="collapse" data-target="#innerCheckboxes{code}"> {name}
-                <div id="innerCheckboxes{code}" class="container collapse">
+                <input class="form-check-input" name="competencyError" type="" value="" data-toggle="collapse" data-target="#gec-innerCheckboxes{code}"> {name}
+                <div id="gec-innerCheckboxes{code}" class="container collapse">
                     {children}
                 </div>
                 <span class="card-icon">
@@ -378,10 +381,10 @@ class GenericErrorClassification(models.Model):
             </label>
         </div>
         """.format(
-            code=self.get_verbose_code().replace('.', '-'),
+            code=self.id,
             desc=self.description if self.description else '',
             name='{}'.format(self.name),
-            children='\n'.join([self.encapsulate_row(child.get_html()) for child in GenericErrorClassification.objects.filter(parent=self)])))
+            children='\n'.join([self.encapsulate_row(child.get_html()) for child in GenericErrorClassification.objects.filter(parent=self).order_by('weight')])))
 
     def get_html(self):
         if not self.has_children:

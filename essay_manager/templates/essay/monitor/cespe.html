@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
+{% include "head.html" %}
+{% load chunks %}
+<style type="text/css">
+  .tg  {border-collapse:collapse;border-spacing:0;width:100%;}
+  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:'Montserrat';font-size:14px;
+    overflow:hidden;padding:10px 4px;width:33%;word-break:normal;}
+  .tg th{border-color:black;border-style:solid;border-width:0px;font-family:'Montserrat';font-size:14px;
+    font-weight:normal;overflow:hidden;padding:10px 4px;width:33%;word-break:normal;}
+  .tg .tg-ly6r{border-color:#efefef;text-align:left;vertical-align:top}
+  .tg .tg-ly6r2{border-width:0px; border-right-width: 1px;border-color:#efefef;text-align:left;vertical-align:top}
+  
+  .error-selection {
+    cursor: pointer;
+  }
+  .error-selection-active {
+    background-color: tomato;
+  }
+
+</style>
+<body class="">
+  <div class="wrapper ">
+    {% include "sidebar.html" %}
+    <div class="main-panel">
+      <!-- Navbar -->
+      {% include "navbar.html" %}
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row sticky-top" id="btns">
+              <div class="col-md-auto ml-auto mr-auto" style="max-width: 80vw; min-width: 650px;">
+                <div class="card card-chart text-center">
+                  <div class="card-body text-center">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn shadow-none btn-outline-danger" id="selectColorDanger">
+                        <input type="radio" name="options" id="option4" aria-pressed="false">        c1
+                      </label>
+                      <label class="btn shadow-none btn-outline-primary" id="selectColorPrimary" style="margin-left: -1px;">
+                        <input type="radio" name="options" id="option1" aria-pressed="false">        c2
+                      </label>
+                      <label class="btn shadow-none btn-outline-info" id="selectColorInfo" style="margin-left: -1px;"> 
+                        <input type="radio" name="options" id="option6" aria-pressed="false" class="text-center">        c3
+                      </label>
+                    <label class="btn shadow-none btn-outline-warning" id="selectColorWarning">
+                      <input type="radio" name="options" id="option5" aria-pressed="false">        c4
+                    </label>
+                    <label class="btn shadow-none btn-outline-success" id="selectColorSuccess">
+                      <input type="radio" name="options" id="option3" aria-pressed="false">        c5
+                    </label>
+                    <label class="btn shadow-none btn-outline-dark" id="selectColorGrey" style="margin-left: -2px; border: 1px !important; border-color: #333333 !important; border-style: solid !important;
+                      border-width: 1px !important; ">
+                      <input type="radio" name="options" id="option2" aria-pressed="false"> Tese
+                    </label>
+                  </div>
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn shadow-none btn-outline-info" style="margin-left: 20px; margin-right: -1px;" id="selectModeLine">
+                      <input type="radio" name="selectModeLine" style="box-shadow:none !important;"  aria-pressed="false"> MARCAÇÃO
+                    </label>
+                    <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="selectModeComment">
+                      <input type="radio" name="selectModeComment" style="box-shadow:none !important;"  aria-pressed="false"> COMENTÁRIO
+                    </label>
+                    <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="selectModeAudio">
+                      <input type="radio" name="selectModeAudio" style="box-shadow:none !important;"  aria-pressed="false"> ÁUDIO
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal has-info show" id="manualModal" role="dialog" aria-labelledby="manualModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
+              <div class="modal-content ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
+                <div class="modal-header">
+                  <h4 class="modal-title">Manual do avaliador</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img src="/uploads/manuals/vunesp/MANUAL_AVALIADOR-1.jpg" width="100%"/>
+                  <img src="/uploads/manuals/vunesp/MANUAL_AVALIADOR-2.jpg" width="100%"/>
+                  <img src="/uploads/manuals/vunesp/MANUAL_AVALIADOR-3.jpg" width="100%"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal has-info show" id="themeModal" role="dialog" aria-labelledby="themeModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog ml-auto mr-auto" style="width: 90% !important; max-width: 90% !important;">
+              <div class="modal-content ml-auto mr-auto" style="width: 90% !important; max-width: 90% !important;">
+                <div class="modal-header">
+                  <h4 class="modal-title">Tema do Aluno</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img src="/{{essay.theme.file}}" width="100%"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <button data-toggle="modal" id="openAudioModal" data-target="#audioModal" hidden="true"></button>
+          <div class="modal has-info show" id="audioModal" role="dialog" aria-labelledby="audioModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Adicionar áudio para {{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="container cc-center">
+                    <div class="video-container">
+                      <div class="w-embed">
+                        <audio id="recordedAudio" class="js-player" hidden="true">
+                          <source/>
+                        </audio>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="audioControls">
+                    <button class="btn btn-info btn-link" id="record">Começar gravação</button>
+                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="saveAudio();">Salvar</button>
+                    <button class="btn btn-danger btn-link float-right pull-right" id="cancel" data-dismiss="modal">Cancelar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row" id="card-essay">
+            <div class="col-sm-12 col-md-9">
+              <div class="card card-chart">
+                <div class="card-body">
+                  <h3 class="card-title text-center">Redação #{{essay.id}}</h3>
+                  <h5 class="card-title text-center">{{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h5>
+                  <h4 class="card-title text-center">{{essay.upload_date}}</h4>
+                </div>
+                <div class="card-footer">
+                  <i> <img id="src" class="src" src="/{{essay.file}}" width="100%"/> </i> 
+                </div>
+                <canvas id="canvas" class="src" style="cursor: default;"></canvas>
+                <canvas id="canvasPlaceholder" class="src" style="cursor: default;"></canvas>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-3">
+              <div class="card card-chart">
+                <div class="card-body">
+                  <p>Assinale os erros e suas posições:</p>
+                  <table class="tg">
+                    <thead>
+                      <tr>
+                        <th class="tg-ly6r"></th>
+                        <th class="tg-ly6r">Grafia</th>
+                        <th class="tg-ly6r">Morfo.</th>
+                        <th class="tg-ly6r">Vocab.</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="tg-ly6r2">1</td>
+                        <td class="tg-ly6r error-selection" id="err1-1" onclick="toggleError(1, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err1-2" onclick="toggleError(1, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err1-3" onclick="toggleError(1, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">2</td>
+                        <td class="tg-ly6r error-selection" id="err2-1" onclick="toggleError(2, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err2-2" onclick="toggleError(2, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err2-3" onclick="toggleError(2, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">3</td>
+                        <td class="tg-ly6r error-selection" id="err3-1" onclick="toggleError(3, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err3-2" onclick="toggleError(3, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err3-3" onclick="toggleError(3, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">4</td>
+                        <td class="tg-ly6r error-selection" id="err4-1" onclick="toggleError(4, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err4-2" onclick="toggleError(4, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err4-3" onclick="toggleError(4, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">5</td>
+                        <td class="tg-ly6r error-selection" id="err5-1" onclick="toggleError(5, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err5-2" onclick="toggleError(5, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err5-3" onclick="toggleError(5, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">6</td>
+                        <td class="tg-ly6r error-selection" id="err6-1" onclick="toggleError(6, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err6-2" onclick="toggleError(6, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err6-3" onclick="toggleError(6, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">7</td>
+                        <td class="tg-ly6r error-selection" id="err7-1" onclick="toggleError(7, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err7-2" onclick="toggleError(7, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err7-3" onclick="toggleError(7, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">8</td>
+                        <td class="tg-ly6r error-selection" id="err8-1" onclick="toggleError(8, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err8-2" onclick="toggleError(8, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err8-3" onclick="toggleError(8, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">9</td>
+                        <td class="tg-ly6r error-selection" id="err9-1" onclick="toggleError(9, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err9-2" onclick="toggleError(9, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err9-3" onclick="toggleError(9, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">10</td>
+                        <td class="tg-ly6r error-selection" id="err10-1" onclick="toggleError(10, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err10-2" onclick="toggleError(10, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err10-3" onclick="toggleError(10, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">11</td>
+                        <td class="tg-ly6r error-selection" id="err11-1" onclick="toggleError(11, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err11-2" onclick="toggleError(11, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err11-3" onclick="toggleError(11, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">12</td>
+                        <td class="tg-ly6r error-selection" id="err12-1" onclick="toggleError(12, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err12-2" onclick="toggleError(12, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err12-3" onclick="toggleError(12, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">13</td>
+                        <td class="tg-ly6r error-selection" id="err13-1" onclick="toggleError(13, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err13-2" onclick="toggleError(13, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err13-3" onclick="toggleError(13, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">14</td>
+                        <td class="tg-ly6r error-selection" id="err14-1" onclick="toggleError(14, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err14-2" onclick="toggleError(14, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err14-3" onclick="toggleError(14, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">15</td>
+                        <td class="tg-ly6r error-selection" id="err15-1" onclick="toggleError(15, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err15-2" onclick="toggleError(15, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err15-3" onclick="toggleError(15, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">16</td>
+                        <td class="tg-ly6r error-selection" id="err16-1" onclick="toggleError(16, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err16-2" onclick="toggleError(16, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err16-3" onclick="toggleError(16, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">17</td>
+                        <td class="tg-ly6r error-selection" id="err17-1" onclick="toggleError(17, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err17-2" onclick="toggleError(17, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err17-3" onclick="toggleError(17, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">18</td>
+                        <td class="tg-ly6r error-selection" id="err18-1" onclick="toggleError(18, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err18-2" onclick="toggleError(18, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err18-3" onclick="toggleError(18, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">19</td>
+                        <td class="tg-ly6r error-selection" id="err19-1" onclick="toggleError(19, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err19-2" onclick="toggleError(19, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err19-3" onclick="toggleError(19, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">20</td>
+                        <td class="tg-ly6r error-selection" id="err20-1" onclick="toggleError(20, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err20-2" onclick="toggleError(20, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err20-3" onclick="toggleError(20, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">21</td>
+                        <td class="tg-ly6r error-selection" id="err21-1" onclick="toggleError(21, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err21-2" onclick="toggleError(21, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err21-3" onclick="toggleError(21, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">22</td>
+                        <td class="tg-ly6r error-selection" id="err22-1" onclick="toggleError(22, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err22-2" onclick="toggleError(22, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err22-3" onclick="toggleError(22, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">23</td>
+                        <td class="tg-ly6r error-selection" id="err23-1" onclick="toggleError(23, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err23-2" onclick="toggleError(23, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err23-3" onclick="toggleError(23, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">24</td>
+                        <td class="tg-ly6r error-selection" id="err24-1" onclick="toggleError(24, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err24-2" onclick="toggleError(24, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err24-3" onclick="toggleError(24, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">25</td>
+                        <td class="tg-ly6r error-selection" id="err25-1" onclick="toggleError(25, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err25-2" onclick="toggleError(25, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err25-3" onclick="toggleError(25, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">26</td>
+                        <td class="tg-ly6r error-selection" id="err26-1" onclick="toggleError(26, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err26-2" onclick="toggleError(26, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err26-3" onclick="toggleError(26, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">27</td>
+                        <td class="tg-ly6r error-selection" id="err27-1" onclick="toggleError(27, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err27-2" onclick="toggleError(27, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err27-3" onclick="toggleError(27, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">28</td>
+                        <td class="tg-ly6r error-selection" id="err28-1" onclick="toggleError(28, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err28-2" onclick="toggleError(28, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err28-3" onclick="toggleError(28, 3)"></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-ly6r2">29</td>
+                        <td class="tg-ly6r error-selection" id="err29-1" onclick="toggleError(29, 1)"></td>
+                        <td class="tg-ly6r error-selection" id="err29-2" onclick="toggleError(29, 2)"></td>
+                        <td class="tg-ly6r error-selection" id="err29-3" onclick="toggleError(29, 3)"></td>
+                      </tr>
+                    </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-auto ml-auto mr-auto">
+              <button hidden="true" id="openCommentModal" class="btn btn-primary btn-round" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
+                <div class="ripple-container"></div>
+              </button>
+                <div class="modal has-info show" id="myModal" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                  <div class="modal-dialog" style="width:900px !important; max-width:900px !important;">
+                    <div class="modal-content" style="width:900px !important;">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Adicionar comentário para {{essay.user.first_name}}{{ " " }}{{ essay.user.last_name }}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" style="margin-top: -10px; !important">
+                        <div class="row" hidden=true>
+                          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn shadow-none btn-outline-info" style="margin-left: 45px; margin-right: -1px;" id="modalC1" onclick="showCompetencyErrors('errorsC1');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 1
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -2px;" id="modalC2" onclick="showCompetencyErrors('errorsC2');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 2
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="modalC3" onclick="showCompetencyErrors('errorsC3');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 3
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="modalC4" onclick="showCompetencyErrors('errorsC4');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 4
+                            </label>
+                            <label class="btn shadow-none btn-outline-info" style="margin-right: -1px;" id="modalC5" onclick="showCompetencyErrors('errorsC5');">
+                              <input type="radio" style="box-shadow:none !important;"  aria-pressed="false"> Competência 5
+                            </label>
+                          </div>
+                        </div>
+                        <div class="container collapse" id="errorsC1">
+                          {% for chunk in error_classifications_c1|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC2">
+                          {% for chunk in error_classifications_c2|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC3">
+                          {% for chunk in error_classifications_c3|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC4">
+                          {% for chunk in error_classifications_c4|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="container collapse" id="errorsC5">
+                          {% for chunk in error_classifications_c5|chunks:3 %}
+                          <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                            {% for error_classification_html in chunk %}
+                            {{ error_classification_html }}
+                            {% endfor %}
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="row" style="margin-left: 20px; margin-top: 10px;">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="comment-text">Comentários</label>
+                              <textarea class="form-control" id="comment-text" rows="5" style="width:90% !important;"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-link" data-dismiss="modal" onclick="saveComment();">Salvar
+                          <div class="ripple-container"><div class="ripple-decorator ripple-on ripple-out" style="left: 36.0833px; top: 14px; background-color: rgb(244, 67, 54); transform: scale(8.51041);"></div></div></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card has-info card-chart">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Apresentação textual</h3>
+                      <br>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option2" type="radio" name="inlineRadioOptions" id="inlineRadioOptionsc1-2" checked> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option1" type="radio" name="inlineRadioOptions" id="inlineRadioOptionsc1-1"> 0.5
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option0" type="radio" name="inlineRadioOptions" id="inlineRadioOptionsc1-0"> 1
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="formTextareac1">Comentários técnicos</label>
+                              <textarea class="form-control" id="formTextareac1" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac1', 'c1')"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6">
+                  <div class="card has-info card-chart">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Adequação ao tipo textual</h3>
+                      <br>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option2" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionsc2-2" checked> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option1" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionsc2-1"> 0.5
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option0" type="radio" name="inlineRadioOptions2" id="inlineRadioOptionsc2-0"> 1
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="formTextareac2">Comentários técnicos</label>
+                              <textarea class="form-control" id="formTextareac2" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac2', 'c2')"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <div class="card has-info card-chart">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Argumentação</h3>
+                      <br>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option3" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionsc3-3" checked> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option2" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionsc3-2"> 1.25
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option1" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionsc3-1"> 2.25
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option0" type="radio" name="inlineRadioOptions3" id="inlineRadioOptionsc3-0"> 3.5
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="formTextareac3">Comentários técnicos</label>
+                              <textarea class="form-control" id="formTextareac3" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac3', 'c3')"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card has-info card-chart">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Coesão</h3>
+                      <br>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option3" type="radio" name="inlineRadioOptions4" id="inlineRadioOptionsc4-3" checked> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option2" type="radio" name="inlineRadioOptions4" id="inlineRadioOptionsc4-2"> 1
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option1" type="radio" name="inlineRadioOptions4" id="inlineRadioOptionsc4-1"> 1.5
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option0" type="radio" name="inlineRadioOptions4" id="inlineRadioOptionsc4-0"> 2
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="formTextareac4">Comentários técnicos</label>
+                              <textarea class="form-control" id="formTextareac4" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac4', 'c4')"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card has-info card-chart">
+                    <div class="card-body">
+                      <h3 class="card-title text-center">Progressividade</h3>
+                      <br>
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option3" type="radio" name="inlineRadioOptions5" id="inlineRadioOptionsc5-3" checked> 0
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option2" type="radio" name="inlineRadioOptions5" id="inlineRadioOptionsc5-2"> 0.5
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option1" type="radio" name="inlineRadioOptions5" id="inlineRadioOptionsc5-1"> 1
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="col-sm form-check">
+                            <label class="form-check-label">
+                              <input autocomplete="off" class="form-check-input" value="option0" type="radio" name="inlineRadioOptions5" id="inlineRadioOptionsc5-0"> 1.5
+                              <span class="circle">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm form-check">
+                            <div class="form-group">
+                              <label for="formTextareac5">Comentários técnicos</label>
+                              <textarea class="form-control" id="formTextareac5" rows="5" style="width:90% !important;" onchange="updateTextfield('formTextareac5', 'c5')"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              
+              <div class="row">
+                <div class="col-md-12">
+                    <p id="contentGrade">Nota no conteúdo: 0</p>
+                    <div class='d-flex'>
+                      <p class="mt-1">Número total de linhas: </p>
+                      <input autocomplete='off' class="form-control ml-2 " id="total-lines" name="total-lines" maxlength="2" value="29" onkeyup="updateGrades()">
+                    </div>
+                    <p id="errorCount">Número de erros: 0</p>
+                    <p id="finalGrade">Nota final: 0</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Finalizar </button>
+                  <form id="submitUpdateForm" class="form" method="post" action="/corrections/update/{{essay.id}}/">
+                    <input type="hidden" class="form-control" name="data" maxlength="150" required="" id="formInput">
+                    <input type="hidden" class="form-control" id="status-input" name="status" maxlength="150" value="DONE">
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% include "footer.html" %}
+          </div>
+        </div>
+        <script src="/static/essay_manager/js/core/jquery.min.js"></script>
+        <script src="/static/essay_manager/js/core/popper.min.js"></script>
+        <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
+        <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+        <script src="/static/essay_manager/js/redactor-monitor-cespe.js?{% now 'U' %}"></script>
+        <script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
+        <script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
+        <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+        <script type="text/javascript">
+           $('.w-dropdown').hover(function(evt)
+           {
+           evt.preventDefault();
+           
+           var openClass = 'w--open';
+           var $view = $(this);
+           if (evt.type == 'mouseenter')
+           
+           { $view.find('.w-dropdown-toggle').addClass(openClass); $view.find('.w-dropdown-list').addClass(openClass); }
+           else if (evt.type == 'mouseleave')
+           
+           { $view.find('.w-dropdown-toggle').removeClass(openClass); $view.find('.w-dropdown-list').removeClass(openClass); }
+           });
+        </script><script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+        <script>
+           document.addEventListener('DOMContentLoaded', () => {
+               const player = Plyr.setup('.js-player', {
+                 'invertTime': false,
+               });
+           });
+        </script>
+        <script>
+          $(document).ready(function() {
+            $().ready(function() {
+              setUsername('{{username}}');
+              importCorrectionData({{data}});
+              
+              {% if created == 'True' %}
+              md.showNotification('top', 'center', 'Correção iniciada.', 'success');
+              {% elif created == 'False' %}
+              md.showNotification('top', 'center', 'Falha ao iniciar correção. Contate o administrador e corrija outra redação.', 'danger');
+              {% endif %}
+              $sidebar = $('.sidebar');
+              
+              $sidebar_img_container = $sidebar.find('.sidebar-background');
+              
+              $full_page = $('.full-page');
+              
+              $sidebar_responsive = $('body> .navbar-collapse');
+              
+              window_width = $(window).width();
+              
+              fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+              
+              if (window_width> 767 && fixed_plugin_open == 'Dashboard') {
+                if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
+                  $('.fixed-plugin .dropdown').addClass('open');
+                }
+                
+              }
+              
+              $('.fixed-plugin a').click(function(event) {
+                // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+                if ($(this).hasClass('switch-trigger')) {
+                  if (event.stopPropagation) {
+                    event.stopPropagation();
+                  } else if (window.event) {
+                    window.event.cancelBubble = true;
+                  }
+                }
+              });
+              
+              $('.fixed-plugin .active-color span').click(function() {
+                $full_page_background = $('.full-page-background');
+                
+                $(this).siblings().removeClass('active');
+                $(this).addClass('active');
+                
+                var new_color = $(this).data('color');
+                
+                if ($sidebar.length != 0) {
+                  $sidebar.attr('data-color', new_color);
+                }
+                
+                if ($full_page.length != 0) {
+                  $full_page.attr('filter-color', new_color);
+                }
+                
+                if ($sidebar_responsive.length != 0) {
+                  $sidebar_responsive.attr('data-color', new_color);
+                }
+              });
+              
+              $('.fixed-plugin .background-color .badge').click(function() {
+                $(this).siblings().removeClass('active');
+                $(this).addClass('active');
+                
+                var new_color = $(this).data('background-color');
+                
+                if ($sidebar.length != 0) {
+                  $sidebar.attr('data-background-color', new_color);
+                }
+              });
+              
+              $('.fixed-plugin .img-holder').click(function() {
+                $full_page_background = $('.full-page-background');
+                
+                $(this).parent('li').siblings().removeClass('active');
+                $(this).parent('li').addClass('active');
+                
+                
+                var new_image = $(this).find("img").attr('src');
+                
+                if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+                  $sidebar_img_container.fadeOut('fast', function() {
+                    $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+                    $sidebar_img_container.fadeIn('fast');
+                  });
+                }
+                
+                if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+                  var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+                  
+                  $full_page_background.fadeOut('fast', function() {
+                    $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                    $full_page_background.fadeIn('fast');
+                  });
+                }
+                
+                if ($('.switch-sidebar-image input:checked').length == 0) {
+                  var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
+                  var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+                  
+                  $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+                  $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                }
+                
+                if ($sidebar_responsive.length != 0) {
+                  $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+                }
+              });
+              
+              $('.switch-sidebar-image input').change(function() {
+                $full_page_background = $('.full-page-background');
+                
+                $input = $(this);
+                
+                if ($input.is(':checked')) {
+                  if ($sidebar_img_container.length != 0) {
+                    $sidebar_img_container.fadeIn('fast');
+                    $sidebar.attr('data-image', '#');
+                  }
+                  
+                  if ($full_page_background.length != 0) {
+                    $full_page_background.fadeIn('fast');
+                    $full_page.attr('data-image', '#');
+                  }
+                  
+                  background_image = true;
+                } else {
+                  if ($sidebar_img_container.length != 0) {
+                    $sidebar.removeAttr('data-image');
+                    $sidebar_img_container.fadeOut('fast');
+                  }
+                  
+                  if ($full_page_background.length != 0) {
+                    $full_page.removeAttr('data-image', '#');
+                    $full_page_background.fadeOut('fast');
+                  }
+                  
+                  background_image = false;
+                }
+              });
+              
+              $('.switch-sidebar-mini input').change(function() {
+                $body = $('body');
+                
+                $input = $(this);
+                
+                if (md.misc.sidebar_mini_active == true) {
+                  $('body').removeClass('sidebar-mini');
+                  md.misc.sidebar_mini_active = false;
+                  
+                  $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
+                  
+                } else {
+                  
+                  $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
+                  
+                  setTimeout(function() {
+                    $('body').addClass('sidebar-mini');
+                    
+                    md.misc.sidebar_mini_active = true;
+                  }, 300);
+                }
+                
+                // we simulate the window Resize so the charts will get updated in realtime.
+                var simulateWindowResize = setInterval(function() {
+                  window.dispatchEvent(new Event('resize'));
+                }, 180);
+                
+                // we stop the simulation of Window Resize after the animations are completed
+                setTimeout(function() {
+                  clearInterval(simulateWindowResize);
+                }, 1000);
+                
+              });
+            });
+          });
+        </script>
+        <script>
+          $(document).ready(function() {
+            var allCheckboxes = document.querySelectorAll('input[type=checkbox]');
+            [].forEach.call(allCheckboxes, function (checkbox) {
+              checkbox.checked = checkbox.defaultChecked;
+            });
+          });
+        </script>
+        
+      </body>
+      
+      </html>
+      

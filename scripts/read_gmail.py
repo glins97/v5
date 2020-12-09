@@ -77,9 +77,15 @@ def main():
             pickle.dump(creds, token)
 
     service = build('gmail', 'v1', credentials=creds)
-    results = service.users().messages().list(userId='me', labelIds=['INBOX']).execute()
+    results = service.users().messages().list(userId='me', labelIds=['INBOX'], maxResults=200).execute()
     messages = results.get('messages', [])
-    for message in messages[-50::-1]:
+
+    # results = service.users().messages().list(userId='me', labelIds=['INBOX'], page).execute()
+    print(len(messages))
+    print(results.keys())
+
+    for index, message in enumerate(messages[-90::-1]):
+        print(index)
         msg = service.users().messages().get(userId='me', id=message['id']).execute()
         subject_ = ''
         from_email = ''
@@ -88,6 +94,7 @@ def main():
         message_id = message['id']
 
         skip = False
+        date = None
         for header in msg['payload']['headers']:
             if header['name'] == 'From':
                 if len(header['value'].split('<')) >= 2:
@@ -100,18 +107,21 @@ def main():
             if header['name'] == 'Subject':
                 subject_ = header['value'].lower()
             
-            if header['name'] == 'Date' and parser.parse(header['value']) < START_DATE:
-                skip = True
+            if header['name'] == 'Date':
+                date = parser.parse(header['value'])
+                if date < START_DATE:
+                    skip = True
 
         from_name = from_name.replace('"', '').replace("'", '')
         
-        blocks = ['GOOGLE', 'MAIL DELIVERY']
+        blocks = ['GOOGLE', 'MAIL DELIVERY', 'acesso', 'teste']
         skip = skip or False
         for block in blocks:
-            if block in from_name:
+            if block in from_name or block in subject_:
                 skip = True
+        # print('{} {} {} (Y/N) '.format(from_name, date, subject_))
         if skip: continue
-        choice = input('{} {} (Y/N) '.format(from_name, subject_))
+        choice = input('{} {} {} (Y/N) '.format(from_name, date, subject_))
         if choice.lower() == 'y':
             first_name = ''
             last_name = ''
@@ -122,7 +132,7 @@ def main():
             theme = Theme.objects.get(description='Solidário')
             attachment = get_attachments(service, message_id, student)
             if attachment:
-                essay = get_bd_obj(Essay, theme=theme, user=student, file=attachment)
+                essay = Essay(theme=theme, user=student, file=attachment, upload_date=date)
                 essay.save()
 
 if __name__ == '__main__':

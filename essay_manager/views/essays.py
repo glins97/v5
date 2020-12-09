@@ -156,6 +156,16 @@ def _monitor_essay_view(request, id):
 
         data['error_classifications_g0'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='0', jury='VUNESP')), key=lambda e: int(e.code)) if o.parent is None])
         return render(request, 'essay/monitor/vunesp.html', data)
+    
+    elif essay.theme.jury == 'CESPE':
+        data['error_classifications_c1'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='1')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c2'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='2')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c3'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='3')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c4'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='4')), key=lambda e: int(e.code)) if o.parent is None])
+        data['error_classifications_c5'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='5')), key=lambda e: int(e.code)) if o.parent is None])
+
+        return render(request, 'essay/monitor/cespe.html', data)
+    
     return redirect('/essays/')
 
 def essays_view(request):

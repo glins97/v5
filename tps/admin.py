@@ -84,7 +84,7 @@ class SubjectFilter(SimpleListFilter):
                     objs.append(obj.id)
         if self.value():
             return TPS.objects.filter(id__in=objs)
-        return TPS.objects.all()
+        return queryset
 
 class TPSAdminForm(forms.ModelForm):
     class Meta:
