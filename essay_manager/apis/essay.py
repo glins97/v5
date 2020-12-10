@@ -89,7 +89,10 @@ def mail_essay_endpoint(request, id):
     try:
         essay = Essay.objects.get(id=id)
         final_destination = create_correction_pdf(request, id)
-        mail_body = '<p>Sua redação corrigida se encontra em anexo! (ou, caso não, clique <a href="{}"> aqui</a>)<br>Para uma boa visualização, recomendamos abrir o arquivo com o Adobe Reader em um computador.</p>'.format('http://dev.ppa.digital/{}'.format(final_destination))
+        if not final_destination:
+            return redirect('/essays/?mailed=False')
+
+        mail_body = '<p>Sua redação corrigida se encontra em anexo! (ou, caso não, clique <a href="{}"> aqui</a>)<br>Para uma boa visualização, recomendamos abrir o arquivo com o Adobe Reader em um computador.</p>'.format('http://ppa.digital/{}'.format(final_destination))
         if send_mail(str(essay.user.username), 'redação corrigida!', mail_body, final_destination):
             essay.mailed = True
             essay.save()
