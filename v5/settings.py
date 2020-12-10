@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'bauth', 
     'bauth.templatetags.permissions', 
     'tps',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
