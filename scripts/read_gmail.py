@@ -1,7 +1,7 @@
 
-import os, django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "v5.settings")
-django.setup()
+# import os, django
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "v5.settings")
+# django.setup()
 
 import pickle
 import os.path
@@ -22,7 +22,7 @@ SCOPES = [
     'https://www.googleapis.com/auth/gmail.settings.sharing',
 ]
 
-START_DATE = datetime.datetime(year=2020, month=10, day=12, tzinfo=datetime.timezone.utc) 
+START_DATE = datetime.datetime(year=2020, month=12, day=9, tzinfo=datetime.timezone.utc) 
 
 import base64
 from apiclient import errors
@@ -59,7 +59,7 @@ def get_attachments(service, msg_id, student):
         print(repr(error))
         return None
 
-def main():
+def run():
     creds = None
     if os.path.exists('credentials/token'):
         with open('credentials/token', 'rb') as token:
@@ -135,5 +135,3 @@ def main():
                 essay = Essay(theme=theme, user=student, file=attachment, upload_date=date)
                 essay.save()
 
-if __name__ == '__main__':
-    main()
