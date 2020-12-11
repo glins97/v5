@@ -68,7 +68,6 @@ urlpatterns = [
     path('essays/', essays_view),
     path('essays/<int:id>/', essay_view),
     path('essays/new/', create_essay_view),
-    path('corrections/', corrections_view),
     path('profile/', profile_view),
     path('themes/', themes_view),
     path('themes/<int:id>/', theme_view),

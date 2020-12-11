@@ -1,363 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-{% include "head.html" %}
-<body class="">
-	<div class="wrapper ">
-		{% include "sidebar.html" %}
-		<div class="main-panel">
-			<!-- Navbar -->
-			{% include "navbar.html" %}
-			<!-- End Navbar -->
-			<div class="content">
-				<div class="content">
-					<div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xl-10 col-lg-12 col-md-12 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header card-header-icon card-header-info">
-                                        <div class="card-icon">
-                                            <i class="material-icons">perm_identity</i>
-                                        </div>
-                                        <h4 class="card-title">Perfil</h4>
-                                    </div>
-                                    <div class="card-body has-info">
-                                        <form method="post" action="/api/profile/update/">
-                                            {% csrf_token %}
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Colégio / Curso</label>
-                                                        <input type="text" class="form-control" value="{% firstof profile.school not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">E-mail</label>
-                                                        <input type="email" name="email" class="form-control" value="{% firstof profile.email not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Nome</label>
-                                                        <input type="text" name="user__first_name" class="form-control" value="{% firstof user.first_name not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Sobrenome</label>
-                                                        <input type="text" name="user__last_name" class="form-control" value="{% firstof user.last_name not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Faculdade (desejada)</label>
-                                                        <input type="text" name="faculty" class="form-control" value="{% firstof profile.faculty not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Curso (desejado)</label>
-                                                        <input type="text" name="course" class="form-control" value="{% firstof profile.course not_specified %}" required>
-                                                    </div>
-												</div>
-											</div>
-                                            <div class="row">
-												<div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
-                                                        <label class="bmd-label-floating" style="margin-top: 4px;">Meta de produção</label>
-														<select name="target_production" id="target_production" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="4" data-style="select-with-transition">
-															<option value="2 por mês">2 por mês</option>
-															<option value="1 por semana">1 por semana</option>
-															<option value="2 por semana">2 por semana</option>
-															<option value="3 por semana">3 por semana</option>
-														</select>
-                                                    </div>
-												</div>
-												<div class="col-lg-6 col-md-6 col-sm-12">
-                                                    <div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
-                                                        <label class="bmd-label-floating" style="margin-top: 4px;">Meta de nota</label>
-														<select name="target_grade" id="target_grade" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="3" data-style="select-with-transition">
-															<option value="800">800 - 900</option>
-															<option value="900">900 - 1000</option>
-															<option value="1000">1000</option>
-														</select>
-                                                    </div>
-												</div>
-											</div>
-                                            <div class="row">
-                                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Cidade</label>
-                                                        <input type="text" name="city" class="form-control" value="{% firstof profile.city not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Estado</label>
-                                                        <input type="text" name="state" class="form-control" value="{% firstof profile.state not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Telefone</label>
-                                                        <input type="text" name="phone" class="form-control" value="{% firstof profile.phone not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Endereço</label>
-                                                        <input type="text" name="address" class="form-control" value="{% firstof profile.address not_specified %}" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href='/password/change/' class="btn btn-info pull-left">Alterar senha</a>
-                                            <button type="submit" class="btn btn-info pull-right">Salvar alterações</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-					</div>
-				</div>
-			</div>
-			{% include "footer.html" %}
-		</div>
-		<!--   Core JS Files   -->
-		<script src="/static/essay_manager/js/core/jquery.min.js"></script>
-		<script src="/static/essay_manager/js/core/popper.min.js"></script>
-		<script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
-		<script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-		<!-- Plugin for the momentJs  -->
-		<script src="/static/essay_manager/js/plugins/moment.min.js"></script>
-		<!--  Plugin for Sweet Alert -->
-		<script src="/static/essay_manager/js/plugins/sweetalert2.js"></script>
-		<!-- Forms Validations Plugin -->
-		<script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
-		<!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-		<script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
-		<!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-		<script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
-		<!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-		<script src="/static/essay_manager/js/plugins/bootstrap-datetimepicker.min.js"></script>
-		<!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-		<script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
-		<!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-		<script src="/static/essay_manager/js/plugins/bootstrap-tagsinput.js"></script>
-		<!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-		<script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
-		<!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-		<script src="/static/essay_manager/js/plugins/fullcalendar.min.js"></script>
-		<!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-		<script src="/static/essay_manager/js/plugins/jquery-jvectormap.js"></script>
-		<!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-		<script src="/static/essay_manager/js/plugins/nouislider.min.js"></script>
-		<!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-		<!-- Library for adding dinamically elements -->
-		<script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
-		<!--  Google Maps Plugin    -->
-		<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-		<!-- Chartist JS -->
-		<script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
-		<!--  Notifications Plugin    -->
-		<script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
-		<!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-		<script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
-		<!-- Material Dashboard DEMO methods, don't include it in your project! -->
-		<script src="/static/essay_manager/demo/demo.js"></script>
-		<script>
-			$(document).ready(function() {
-				$().ready(function() {
-					$('#target_production').selectpicker('val', '{% firstof profile.target_production "1 por semana" %}');
-					$('#target_grade').selectpicker('val', {% firstof profile.target_grade not_specified %});
+{% extends "base/page.html" %}
 
-                    {% if updated == 'True' %}
-                        md.showNotification('top', 'center', 'Perfil atualizado com sucesso!', 'success');
-                    {% elif updated == 'False' %}
-                        md.showNotification('top', 'center', 'Falha ao atualizar perfil', 'danger');
-                    {% endif %}
-					$sidebar = $('.sidebar');
-					
-					$sidebar_img_container = $sidebar.find('.sidebar-background');
-					
-					$full_page = $('.full-page');
-					
-					$sidebar_responsive = $('body > .navbar-collapse');
-					
-					window_width = $(window).width();
-					
-					fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
-					
-					if (window_width > 767 && fixed_plugin_open == 'Dashboard') {
-						if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
-							$('.fixed-plugin .dropdown').addClass('open');
-						}
-						
-					}
-					
-					$('.fixed-plugin a').click(function(event) {
-						// Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
-						if ($(this).hasClass('switch-trigger')) {
-							if (event.stopPropagation) {
-								event.stopPropagation();
-							} else if (window.event) {
-								window.event.cancelBubble = true;
-							}
-						}
-					});
-					
-					$('.fixed-plugin .active-color span').click(function() {
-						$full_page_background = $('.full-page-background');
-						
-						$(this).siblings().removeClass('active');
-						$(this).addClass('active');
-						
-						var new_color = $(this).data('color');
-						
-						if ($sidebar.length != 0) {
-							$sidebar.attr('data-color', new_color);
-						}
-						
-						if ($full_page.length != 0) {
-							$full_page.attr('filter-color', new_color);
-						}
-						
-						if ($sidebar_responsive.length != 0) {
-							$sidebar_responsive.attr('data-color', new_color);
-						}
-					});
-					
-					$('.fixed-plugin .background-color .badge').click(function() {
-						$(this).siblings().removeClass('active');
-						$(this).addClass('active');
-						
-						var new_color = $(this).data('background-color');
-						
-						if ($sidebar.length != 0) {
-							$sidebar.attr('data-background-color', new_color);
-						}
-					});
-					
-					$('.fixed-plugin .img-holder').click(function() {
-						$full_page_background = $('.full-page-background');
-						
-						$(this).parent('li').siblings().removeClass('active');
-						$(this).parent('li').addClass('active');
-						
-						
-						var new_image = $(this).find("img").attr('src');
-						
-						if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-							$sidebar_img_container.fadeOut('fast', function() {
-								$sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-								$sidebar_img_container.fadeIn('fast');
-							});
-						}
-						
-						if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-							var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-							
-							$full_page_background.fadeOut('fast', function() {
-								$full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-								$full_page_background.fadeIn('fast');
-							});
-						}
-						
-						if ($('.switch-sidebar-image input:checked').length == 0) {
-							var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
-							var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-							
-							$sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-							$full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-						}
-						
-						if ($sidebar_responsive.length != 0) {
-							$sidebar_responsive.css('background-image', 'url("' + new_image + '")');
-						}
-					});
-					
-					$('.switch-sidebar-image input').change(function() {
-						$full_page_background = $('.full-page-background');
-						
-						$input = $(this);
-						
-						if ($input.is(':checked')) {
-							if ($sidebar_img_container.length != 0) {
-								$sidebar_img_container.fadeIn('fast');
-								$sidebar.attr('data-image', '#');
-							}
-							
-							if ($full_page_background.length != 0) {
-								$full_page_background.fadeIn('fast');
-								$full_page.attr('data-image', '#');
-							}
-							
-							background_image = true;
-						} else {
-							if ($sidebar_img_container.length != 0) {
-								$sidebar.removeAttr('data-image');
-								$sidebar_img_container.fadeOut('fast');
-							}
-							
-							if ($full_page_background.length != 0) {
-								$full_page.removeAttr('data-image', '#');
-								$full_page_background.fadeOut('fast');
-							}
-							
-							background_image = false;
-						}
-					});
-					
-					$('.switch-sidebar-mini input').change(function() {
-						$body = $('body');
-						
-						$input = $(this);
-						
-						if (md.misc.sidebar_mini_active == true) {
-							$('body').removeClass('sidebar-mini');
-							md.misc.sidebar_mini_active = false;
-							
-							$('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
-							
-						} else {
-							
-							$('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
-							
-							setTimeout(function() {
-								$('body').addClass('sidebar-mini');
-								
-								md.misc.sidebar_mini_active = true;
-							}, 300);
-						}
-						
-						// we simulate the window Resize so the charts will get updated in realtime.
-						var simulateWindowResize = setInterval(function() {
-							window.dispatchEvent(new Event('resize'));
-						}, 180);
-						
-						// we stop the simulation of Window Resize after the animations are completed
-						setTimeout(function() {
-							clearInterval(simulateWindowResize);
-						}, 1000);
-						
-					});
-				});
-			});
-		</script>
-		<script>
-			$(document).ready(function() {
-				// Javascript method's body can be found in assets/js/demos.js
-				md.initDashboardPageCharts();
-				
-				md.initVectorMap();
-				
-			});
-		</script>
-	</body>
-</html>
+{% block page %}
+<script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
+<div class="row">
+	<div class="col-xl-10 col-lg-12 col-md-12 col-sm-12">
+		<div class="card">
+			<div class="card-header card-header-icon card-header-info">
+				<div class="card-icon">
+					<i class="material-icons">perm_identity</i>
+				</div>
+				<h4 class="card-title">Perfil</h4>
+			</div>
+			<div class="card-body has-info">
+				<form method="post" action="/api/profile/update/">
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Colégio / Curso</label>
+								<input type="text" class="form-control" value="{% firstof profile.school not_specified %}" required>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">E-mail</label>
+								<input type="email" name="email" class="form-control" value="{% firstof profile.email not_specified %}" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Nome</label>
+								<input type="text" name="user__first_name" class="form-control" value="{% firstof user.first_name not_specified %}" required>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Sobrenome</label>
+								<input type="text" name="user__last_name" class="form-control" value="{% firstof user.last_name not_specified %}" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Faculdade (desejada)</label>
+								<input type="text" name="faculty" class="form-control" value="{% firstof profile.faculty not_specified %}" required>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Curso (desejado)</label>
+								<input type="text" name="course" class="form-control" value="{% firstof profile.course not_specified %}" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
+								<label class="bmd-label-floating" style="margin-top: 4px;">Meta de produção</label>
+								<select name="target_production" id="target_production" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="4" data-style="select-with-transition">
+									<option value="2 por mês">2 por mês</option>
+									<option value="1 por semana">1 por semana</option>
+									<option value="2 por semana">2 por semana</option>
+									<option value="3 por semana">3 por semana</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
+								<label class="bmd-label-floating" style="margin-top: 4px;">Meta de nota</label>
+								<select name="target_grade" id="target_grade" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="3" data-style="select-with-transition">
+									<option value="800">800 - 900</option>
+									<option value="900">900 - 1000</option>
+									<option value="1000">1000</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Cidade</label>
+								<input type="text" name="city" class="form-control" value="{% firstof profile.city not_specified %}" required>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Estado</label>
+								<input type="text" name="state" class="form-control" value="{% firstof profile.state not_specified %}" required>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Telefone</label>
+								<input type="text" name="phone" class="form-control" value="{% firstof profile.phone not_specified %}" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="bmd-label-floating">Endereço</label>
+								<input type="text" name="address" class="form-control" value="{% firstof profile.address not_specified %}" required>
+							</div>
+						</div>
+					</div>
+					<a href='/password/change/' class="btn btn-info pull-left">Alterar senha</a>
+					<button type="submit" class="btn btn-info pull-right">Salvar alterações</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

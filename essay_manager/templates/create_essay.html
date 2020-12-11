@@ -1,436 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-{% include "head.html" %}
-{% load chunks %}
-<body class="">
-	<div class="wrapper ">
-		{% include "sidebar.html" %}
-		<div class="main-panel">
-			<!-- Navbar -->
-			{% include "navbar.html" %}
-			<!-- End Navbar -->
-			<div class="content">
-				<div class="content">
-					<div class="container-fluid">
-						<div class="row">
-							
-							<div class="col-md-12 col-lg-12 col-xl-10 mr-auto ml-auto">
-								<div class="wizard-container">
-									<div class="card card-wizard" data-color="blue" id="wizardProfile">
-										<form enctype="multipart/form-data" method="post" action="/api/essays/create/" onkeydown="return event.key != 'Enter';">
-											{% csrf_token %}
-											<div class="card-header text-center">
-												<h3 class="card-title">
-													Cadastrar nova redação
-												</h3>
-												<h5 class="info-text"> Preencha as informações à seguir.</h5>
-											</div>
-											<div class="wizard-navigation">
-												<ul class="nav nav-pills">
-													<li class="nav-item">
-														<a class="nav-link active" href="#theme" data-toggle="tab" role="tab">
-															Tema
-														</a>
-													</li>
-													<li class="nav-item">
-														<a class="nav-link" href="#file" data-toggle="tab" role="tab" id="essayFile">
-															Redação escaneada
-														</a>
-													</li>
-												</ul>
-											</div>
-											<div class="card-body has-info">
-												<div class="tab-content">
-													<div class="tab-pane active" id="theme">
-														<div class="form-group">
-															<label for="i1" class="info-text card-title" style="width: 100%; font-size: 1.0625rem;">Identifique o tema da sua redação.</label>
-															<input type="text" class="form-control text-center" id="i1" name="theme_id" required style="opacity: 0">
-														</div>
-														<p class="text-center" style="margin-top: -15px;">Caso o tema não esteja em nossa lista, adicione-o selecionando a opção "Outro".</p>
-														<div class="row justify-content-center">
-															<div class="col-lg-10">
-																<div class="row" style="height: 40px;">
-																	<div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden = false; document.getElementById('i1').value=-1;">
-																		<input type="radio" name="theme_id" value=-1>
-																		<div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
-																			<p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    Outro</p>
-																		</div>
-																	</div>
-																</div>
-																<div id="newTheme" class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput" hidden>
-																	<div class="form-group" style="margin-top: 50px">
-																		<label class="bmd-label-floating">Nome do tema</label>
-																		<input type="text" class="form-control" id="i2" name="theme_name" required>
-																	</div>
-																	<div class="form-group bmd-form-group is-filled" style="margin-top: 30px">
-																		<label class="bmd-label-floating">Banca avaliadora</label>
-																		<select name="theme_jury" class="selectpicker" style="font-size: 14px important;" data-size="2" data-style="select-with-transition">
-																			<option value="ENEM">ENEM</option>
-																			<option value="VUNESP">VUNESP</option>
-																		</select>
-																	</div>
-																	<div class="fileinput-new thumbnail" style="margin-top: 40px">
-																		<img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
-																	</div>
-																	<div class="fileinput-preview fileinput-exists thumbnail"></div>
-																	<div>
-																		<span class="btn btn-info btn-file">
-																			<span class="fileinput-new">Selecionar arquivo</span>
-																			<span class="fileinput-exists">Mudar arquivo</span>
-																			<input type="file" name="theme_file" accept="image/x-png,image/jpeg,application/pdf" required>
-																		</span>
-																		<a class="btn btn-danger fileinput-exists" style="color: white" data-dismiss="fileinput">Cancelar</a>
-																	</div>
-																</div>
-																{% for theme in themes %}
-																<div class="row" style="height: 40px;">
-																	<div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden=true; document.getElementById('i1').value={{theme.id}};">
-																		<input type="radio" value={{theme.id}}>
-																		<div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
-																			<p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    {{theme.description}}</p>
-																		</div>
-																	</div>
-																</div>
-																{% endfor %}
-															</div>
-														</div>
-														<div class="card-footer">
-															<div class="ml-auto">
-																<input type="button" class="btn btn-fill btn-info" value="Próximo" onclick="document.getElementById('essayFile').click()">
-															</div>
-														</div>
-													</div>
-													<div class="tab-pane" id="file">
-														<div class="row justify-content-center">
-															<div class="col-lg-10 mt-3">
-																<label for="essay_file" id="header" class="info-text card-title" style="width: 100%; font-size: 1.0625rem;">A foto descritiva da redação é obrigatória.</label>
-																<div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
-																	<label class="bmd-label-floating" style="margin-top: 4px;">Tipo de Jornada</label>
-																	<select name="mode" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="3" data-style="select-with-transition">
-																		<option value="1">Jornada 1<small> - devolutiva comentada.</small></option>
-																		<option value="2">Jornada 2<small> - devolutiva comentada e encontro com corretor.</small></option>
-																		<option value="3">Jornada 3<small> - correção ao vivo com o corretor.</small></option>
-																	</select>
-																</div>
-																<h4 class="title text-center">Imagem escaneada (pdf, png, ou jpeg)</h4>
-																<div class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput">
-																	<div class="fileinput-new thumbnail">
-																		<img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
-																	</div>
-																	<div class="fileinput-preview fileinput-exists thumbnail"></div>
-																	<div>
-																		<span class="btn btn-info btn-file">
-																			<span class="fileinput-new">Selecionar arquivo</span>
-																			<span class="fileinput-exists">Mudar arquivo</span>
-																			<input type="file" id="essay_file" name="file" accept="image/x-png,image/jpeg,application/pdf" required>
-																		</span>
-																		<a class="btn btn-danger fileinput-exists" style="color: white" data-dismiss="fileinput">Cancelar</a>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="card-footer">
-														<div class="ml-auto">
-															<input type="submit" class="btn btn-finish btn-fill btn-success btn-wd" name="finish" value="Finalizar" style="display: none;" onclick="if (document.getElementById('essay_file').files.length == 0) document.getElementById('header').style.color='#FF0000';">
-														</div>
-													</div>
+{% extends "base/page.html" %}
+
+{% block page %}
+
+<script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
+<script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
+<script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
+<script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
+<script src="/static/essay_manager/demo/demo.js"></script>
+<script>
+	$(document).ready(function() {
+		demo.initMaterialWizard();
+		setTimeout(function() {
+			$('.card.card-wizard').addClass('active');
+		}, 600);
+	});
+</script>
+<div class="row">
+	<div class="col-md-12 col-lg-12 col-xl-10 mr-auto ml-auto">
+		<div class="wizard-container">
+			<div class="card card-wizard" data-color="blue" id="wizardProfile">
+				<form enctype="multipart/form-data" method="post" action="/api/essays/create/" onkeydown="return event.key != 'Enter';">
+					{% csrf_token %}
+					<div class="card-header text-center">
+						<h3 class="card-title">
+							Cadastrar nova redação
+						</h3>
+						<h5 class="info-text"> Preencha as informações à seguir.</h5>
+					</div>
+					<div class="wizard-navigation">
+						<ul class="nav nav-pills">
+							<li class="nav-item">
+								<a class="nav-link active" href="#theme" data-toggle="tab" role="tab">
+									Tema
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#file" data-toggle="tab" role="tab" id="essayFile">
+									Redação escaneada
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="card-body has-info">
+						<div class="tab-content">
+							<div class="tab-pane active" id="theme">
+								<div class="form-group">
+									<label for="i1" class="info-text card-title" style="width: 100%; font-size: 1.0625rem;">Identifique o tema da sua redação.</label>
+									<input type="text" class="form-control text-center" id="i1" name="theme_id" required style="opacity: 0">
+								</div>
+								<p class="text-center" style="margin-top: -15px;">Caso o tema não esteja em nossa lista, adicione-o selecionando a opção "Outro".</p>
+								<div class="row justify-content-center">
+									<div class="col-lg-10">
+										<div class="row" style="height: 40px;">
+											<div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden = false; document.getElementById('i1').value=-1;">
+												<input type="radio" name="theme_id" value=-1>
+												<div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
+													<p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    Outro</p>
 												</div>
 											</div>
-										</form>
+										</div>
+										<div id="newTheme" class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput" hidden>
+											<div class="form-group" style="margin-top: 50px">
+												<label class="bmd-label-floating">Nome do tema</label>
+												<input type="text" class="form-control" id="i2" name="theme_name" required>
+											</div>
+											<div class="form-group bmd-form-group is-filled" style="margin-top: 30px">
+												<label class="bmd-label-floating">Banca avaliadora</label>
+												<select name="theme_jury" class="selectpicker" style="font-size: 14px important;" data-size="2" data-style="select-with-transition">
+													<option value="ENEM">ENEM</option>
+													<option value="VUNESP">VUNESP</option>
+												</select>
+											</div>
+											<div class="fileinput-new thumbnail" style="margin-top: 40px">
+												<img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
+											</div>
+											<div class="fileinput-preview fileinput-exists thumbnail"></div>
+											<div>
+												<span class="btn btn-info btn-file">
+													<span class="fileinput-new">Selecionar arquivo</span>
+													<span class="fileinput-exists">Mudar arquivo</span>
+													<input type="file" name="theme_file" accept="image/x-png,image/jpeg,application/pdf" required>
+												</span>
+												<a class="btn btn-danger fileinput-exists" style="color: white" data-dismiss="fileinput">Cancelar</a>
+											</div>
+										</div>
+										{% for theme in themes %}
+										<div class="row" style="height: 40px;">
+											<div class="choice" data-toggle="wizard-radio" onclick="document.getElementById('newTheme').hidden=true; document.getElementById('i1').value={{theme.id}};">
+												<input type="radio" value={{theme.id}}>
+												<div class="icon" style="width: 100%; height: 30px; border-radius: 0px; border-top: 5px; border-right: 5px; border-bottom: 5px;">
+													<p style="height: 25px; text-align: left; overflow: hidden; text-overflow: ellipsis;">    {{theme.description}}</p>
+												</div>
+											</div>
+										</div>
+										{% endfor %}
 									</div>
 								</div>
-								<!-- wizard container -->
+								<div class="card-footer">
+									<div class="ml-auto">
+										<input type="button" class="btn btn-fill btn-info" value="Próximo" onclick="document.getElementById('essayFile').click()">
+									</div>
+								</div>
 							</div>
-							<!-- <div class="col-lg-12 col-md-12 col-sm-12">
-								<div class="card">
-									<div class="card-header card-header-icon card-header-info">
-										<div class="card-icon">
-											<i class="material-icons">assignment</i>
+							<div class="tab-pane" id="file">
+								<div class="row justify-content-center">
+									<div class="col-lg-10 mt-3">
+										<label for="essay_file" id="header" class="info-text card-title" style="width: 100%; font-size: 1.0625rem;">A foto descritiva da redação é obrigatória.</label>
+										<div class="form-group bmd-form-group is-filled" style="width: 100%; margin-top: 5px;">
+											<label class="bmd-label-floating" style="margin-top: 4px;">Tipo de Jornada</label>
+											<select name="mode" class="selectpicker" style="width: 100% important; font-size: 14px important;" data-size="3" data-style="select-with-transition">
+												<option value="1">Jornada 1<small> - devolutiva comentada.</small></option>
+												<option value="2">Jornada 2<small> - devolutiva comentada e encontro com corretor.</small></option>
+												<option value="3">Jornada 3<small> - correção ao vivo com o corretor.</small></option>
+											</select>
 										</div>
-										<h4 class="card-title">Nova redação</h4>
-									</div>
-									<div class="card-body has-info">
-										<form enctype="multipart/form-data" method="post" action="/api/essays/create/">
-											{% csrf_token %}
-											<div class="row">
-												<div class="col-md-12">
-													<div class="dropdown">
-														<button class="dropdown-toggle btn btn-info btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-															Escolha um tema
-															<div class="ripple-container"></div></button>
-															<div class="dropdown-menu has-info" aria-labelledby="dropdownMenuButton" x-placement="top-start" style="position: absolute; top: -165px; left: 1px; will-change: top, left;">
-																<h6 class="dropdown-header">Temas disponíveis</h6>
-																{% for theme in themes%}
-																<a class="dropdown-item" href="#" onclick="document.getElementById('dropdownMenuButton').innerHTML='{{theme}}';document.getElementById('theme').value='{{theme}}'">{{theme}}</a>
-																{% endfor %}
-															</div>
-														</div>
-													</div>
-												</div>
-												<input type="text" name="theme" id="theme" hidden=true>
-												<div class="row">
-													<div class="col-lg-4 col-md-4 col-sm-4"></div>
-													<div class="col-lg-6 col-md-6 col-sm-12">
-														<h4 class="title">Imagem scaneada (png, jpeg, ou pdf)</h4>
-														<div class="fileinput fileinput-new text-center" data-provides="fileinput">
-															<div class="fileinput-new thumbnail">
-																<img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
-															</div>
-															<div class="fileinput-preview fileinput-exists thumbnail"></div>
-															<div>
-																<span class="btn btn-info btn-file">
-																	<span class="fileinput-new">Selecionar redação</span>
-																	<span class="fileinput-exists">Mudar arquivo</span>
-																	<input type="file" name="file" accept="image/x-png,image/jpeg,application/pdf">
-																</span>
-																<a class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Cancelar</a>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-lg-12 col-md-12 col-sm-12">
-														<button type="submit" class="btn btn-success" style="width: 100%;">Adicionar</a>
-														</div>
-													</div>
-												</form>
+										<h4 class="title text-center">Imagem escaneada (pdf, png, ou jpeg)</h4>
+										<div class="fileinput fileinput-new text-center" style='width: 100%;' data-provides="fileinput">
+											<div class="fileinput-new thumbnail">
+												<img src="/static/essay_manager/img/image_placeholder.jpg" alt="...">
+											</div>
+											<div class="fileinput-preview fileinput-exists thumbnail"></div>
+											<div>
+												<span class="btn btn-info btn-file">
+													<span class="fileinput-new">Selecionar arquivo</span>
+													<span class="fileinput-exists">Mudar arquivo</span>
+													<input type="file" id="essay_file" name="file" accept="image/x-png,image/jpeg,application/pdf" required>
+												</span>
+												<a class="btn btn-danger fileinput-exists" style="color: white" data-dismiss="fileinput">Cancelar</a>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div> -->
+							</div>
+							<div class="card-footer">
+								<div class="ml-auto">
+									<input type="submit" class="btn btn-finish btn-fill btn-success btn-wd" name="finish" value="Finalizar" style="display: none;" onclick="if (document.getElementById('essay_file').files.length == 0) document.getElementById('header').style.color='#FF0000';">
+								</div>
+							</div>
 						</div>
 					</div>
-					{% include "footer.html" %}
-				</div>
-				<!--   Core JS Files   -->
-				<script src="/static/essay_manager/js/core/jquery.min.js"></script>
-				<script src="/static/essay_manager/js/core/popper.min.js"></script>
-				<script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
-				<script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-				<!-- Plugin for the momentJs  -->
-				<script src="/static/essay_manager/js/plugins/moment.min.js"></script>
-				<!--  Plugin for Sweet Alert -->
-				<script src="/static/essay_manager/js/plugins/sweetalert2.js"></script>
-				<!-- Forms Validations Plugin -->
-				<script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
-				<!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-				<script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
-				<!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-				<script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
-				<!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-				<script src="/static/essay_manager/js/plugins/bootstrap-datetimepicker.min.js"></script>
-				<!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-				<script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
-				<!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-				<script src="/static/essay_manager/js/plugins/bootstrap-tagsinput.js"></script>
-				<!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-				<script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
-				<!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-				<script src="/static/essay_manager/js/plugins/fullcalendar.min.js"></script>
-				<!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-				<script src="/static/essay_manager/js/plugins/jquery-jvectormap.js"></script>
-				<!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-				<script src="/static/essay_manager/js/plugins/nouislider.min.js"></script>
-				<!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-				<!-- Library for adding dinamically elements -->
-				<script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
-				<!--  Google Maps Plugin    -->
-				<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-				<!-- Chartist JS -->
-				<script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
-				<!--  Notifications Plugin    -->
-				<script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
-				<!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-				<script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
-				<!-- Material Dashboard DEMO methods, don't include it in your project! -->
-				<script src="/static/essay_manager/demo/demo.js"></script>
-				<script>
-					$(document).ready(function() {
-						$().ready(function() {
-							{% if added == 'True' %}
-							md.showNotification('top', 'center', 'Redação adicionada com sucesso!', 'success');
-							{% elif added == 'False' %}
-							md.showNotification('top', 'center', 'Falha ao adicionar redação', 'danger');
-							{% endif %}
-							$sidebar = $('.sidebar');
-							
-							$sidebar_img_container = $sidebar.find('.sidebar-background');
-							
-							$full_page = $('.full-page');
-							
-							$sidebar_responsive = $('body > .navbar-collapse');
-							
-							window_width = $(window).width();
-							
-							fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
-							
-							if (window_width > 767 && fixed_plugin_open == 'Dashboard') {
-								if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
-									$('.fixed-plugin .dropdown').addClass('open');
-								}
-								
-							}
-							
-							$('.fixed-plugin a').click(function(event) {
-								// Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
-								if ($(this).hasClass('switch-trigger')) {
-									if (event.stopPropagation) {
-										event.stopPropagation();
-									} else if (window.event) {
-										window.event.cancelBubble = true;
-									}
-								}
-							});
-							
-							$('.fixed-plugin .active-color span').click(function() {
-								$full_page_background = $('.full-page-background');
-								
-								$(this).siblings().removeClass('active');
-								$(this).addClass('active');
-								
-								var new_color = $(this).data('color');
-								
-								if ($sidebar.length != 0) {
-									$sidebar.attr('data-color', new_color);
-								}
-								
-								if ($full_page.length != 0) {
-									$full_page.attr('filter-color', new_color);
-								}
-								
-								if ($sidebar_responsive.length != 0) {
-									$sidebar_responsive.attr('data-color', new_color);
-								}
-							});
-							
-							$('.fixed-plugin .background-color .badge').click(function() {
-								$(this).siblings().removeClass('active');
-								$(this).addClass('active');
-								
-								var new_color = $(this).data('background-color');
-								
-								if ($sidebar.length != 0) {
-									$sidebar.attr('data-background-color', new_color);
-								}
-							});
-							
-							$('.fixed-plugin .img-holder').click(function() {
-								$full_page_background = $('.full-page-background');
-								
-								$(this).parent('li').siblings().removeClass('active');
-								$(this).parent('li').addClass('active');
-								
-								
-								var new_image = $(this).find("img").attr('src');
-								
-								if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-									$sidebar_img_container.fadeOut('fast', function() {
-										$sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-										$sidebar_img_container.fadeIn('fast');
-									});
-								}
-								
-								if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-									var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-									
-									$full_page_background.fadeOut('fast', function() {
-										$full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-										$full_page_background.fadeIn('fast');
-									});
-								}
-								
-								if ($('.switch-sidebar-image input:checked').length == 0) {
-									var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
-									var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-									
-									$sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-									$full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-								}
-								
-								if ($sidebar_responsive.length != 0) {
-									$sidebar_responsive.css('background-image', 'url("' + new_image + '")');
-								}
-							});
-							
-							$('.switch-sidebar-image input').change(function() {
-								$full_page_background = $('.full-page-background');
-								
-								$input = $(this);
-								
-								if ($input.is(':checked')) {
-									if ($sidebar_img_container.length != 0) {
-										$sidebar_img_container.fadeIn('fast');
-										$sidebar.attr('data-image', '#');
-									}
-									
-									if ($full_page_background.length != 0) {
-										$full_page_background.fadeIn('fast');
-										$full_page.attr('data-image', '#');
-									}
-									
-									background_image = true;
-								} else {
-									if ($sidebar_img_container.length != 0) {
-										$sidebar.removeAttr('data-image');
-										$sidebar_img_container.fadeOut('fast');
-									}
-									
-									if ($full_page_background.length != 0) {
-										$full_page.removeAttr('data-image', '#');
-										$full_page_background.fadeOut('fast');
-									}
-									
-									background_image = false;
-								}
-							});
-							
-							$('.switch-sidebar-mini input').change(function() {
-								$body = $('body');
-								
-								$input = $(this);
-								
-								if (md.misc.sidebar_mini_active == true) {
-									$('body').removeClass('sidebar-mini');
-									md.misc.sidebar_mini_active = false;
-									
-									$('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
-									
-								} else {
-									
-									$('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
-									
-									setTimeout(function() {
-										$('body').addClass('sidebar-mini');
-										
-										md.misc.sidebar_mini_active = true;
-									}, 300);
-								}
-								
-								// we simulate the window Resize so the charts will get updated in realtime.
-								var simulateWindowResize = setInterval(function() {
-									window.dispatchEvent(new Event('resize'));
-								}, 180);
-								
-								// we stop the simulation of Window Resize after the animations are completed
-								setTimeout(function() {
-									clearInterval(simulateWindowResize);
-								}, 1000);
-								
-							});
-						});
-					});
-				</script>
-				<script>
-					$(document).ready(function() {
-						// Initialise the wizard
-						demo.initMaterialWizard();
-						setTimeout(function() {
-							$('.card.card-wizard').addClass('active');
-						}, 600);
-					});
-				</script>
-			</body>
-			</html>
+				</form>
+			</div>
+		</div>
+		<!-- wizard container -->
+	</div>
+</div>
+
+{% endblock page %}

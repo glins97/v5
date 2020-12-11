@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "base/head.html" %}
+
+<body class="">
+	<div class="wrapper ">
+		{% include "base/sidebar.html" %}
+		<div class="main-panel">
+			{% include "base/navbar.html" %}
+			<div class="content">
+				<div class="container-fluid">
+                    {% block page %}
+                    {% endblock %}
+				</div>
+				{% include "base/footer.html" %}
+			</div>
+		</div>
+	</div>
+</body>
+</html>

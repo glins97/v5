@@ -1,434 +1,52 @@
-<!DOCTYPE html>
-  <html lang="en">
-    {% include "head.html" %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.10.1/chartist.min.css" />
-  <body class="">
-    <div class="wrapper ">
-      {% include "sidebar.html" %}
-      <div class="main-panel">
-        <!-- Navbar -->
-        {% include "navbar.html" %}
-        <!-- End Navbar -->
-        <div class="content">
-          <div class="content">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="card card-plain">
-                    <div class="card-header card-header-icon card-header-info">
-                      <div class="card-icon">
-                        <i class="material-icons">person</i>
-                      </div>
-                      <h4 class="card-title mt-0"> Suas atividades</h4>
-                      <p class="card-category"> Atividades recomendadas de acordo com o seu desempenho. </p>
-                    </div>
-                    <div class="card-body">
-                      <div class="table-responsive">
-                        {% if interests %}
-                        <table class="table table-hover">
-                          <thead class="" style="background-color: rgb(238, 238, 238) !important;">
-                            <tr>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 10%">
-                                Nome
-                              </th>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 70%">
-                                Descrição
-                              </th>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 20%">
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for interest in interests %}
-                            <tr>
-                              <td> <a href="/exercises/{{interest.list.id}}/"> {{interest.list.title}} </a>
-                              <td> <a href="/exercises/{{interest.list.id}}/"> {{interest.list.description}} </a>
-                              <td style="height: 75px;">
-                                <a class="btn btn-link btn-warning" style="display: inline;" href="/api/exercises/uninterest/{{interest.list.id}}/">Desmarcar interesse</a>
-                                <a class="btn btn-link btn-info" style="display: inline;" href="/api/exercises/complete/{{interest.list.id}}/">Marcar conclúido</a>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        {% else %}
-                          <p><i>Não há atividades sugeridas até o momento.</i></p>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                
-                </div>
-              </div>
-              <!-- <div class="row">
-                <div class="col-md-12">
-                  <div class="card card-plain">
-                    <div class="card-header card-header-icon card-header-info">
-                      <div class="card-icon">
-                        <i class="material-icons">assignment</i>
-                      </div>
-                      <h4 class="card-title mt-0"> Gerais</h4>
-                      <p class="card-category"> Todas as listas disponíveis estarão aqui! </p>
-                    </div>
-                    <div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table table-hover">
-                          <thead class="" style="background-color: rgb(238, 238, 238) !important;">
-                            <tr>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 10%">
-                                Nome
-                              </th>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 40%">
-                                Descrição
-                              </th>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 15%">
-                                Conclusões
-                              </th>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 15%">
-                                Última conclusão
-                              </th>
-                              <th style="background-color: rgb(238, 238, 238) !important; width: 20%">
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for exercise in exercises %}
-                            <tr>
-                              <td><a href="/exercises/{{exercise.id}}/"> {{exercise.title}} </a>
-                              <td><a href="/exercises/{{exercise.id}}/"> {{exercise.description}} </a>
-                              <td><a href="/exercises/{{exercise.id}}/"> {{exercise.completion_count}} </a>
-                              <td><a href="/exercises/{{exercise.id}}/"> {{exercise.last_completion}} </a>
-                              <td style="height: 75px;">
-                                <a class="btn btn-link btn-success" style="display: inline;" href="/api/exercises/interest/{{exercise.id}}/">Marcar interesse</a>
-                                <a class="btn btn-link btn-info" style="display: inline;" href="/api/exercises/complete/{{exercise.id}}/">Marcar conclúido</a>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-            </div>
-          </div>
+{% extends "base/page.html" %}
+
+{% block page %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-plain">
+      <div class="card-header card-header-icon card-header-info">
+        <div class="card-icon">
+          <i class="material-icons">person</i>
         </div>
-        {% include "footer.html" %}
+        <h4 class="card-title mt-0"> Suas atividades</h4>
+        <p class="card-category"> Atividades recomendadas de acordo com o seu desempenho. </p>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          {% if interests %}
+          <table class="table table-hover">
+            <thead class="" style="background-color: rgb(238, 238, 238) !important;">
+              <tr>
+                <th style="background-color: rgb(238, 238, 238) !important; width: 10%">
+                  Nome
+                </th>
+                <th style="background-color: rgb(238, 238, 238) !important; width: 70%">
+                  Descrição
+                </th>
+                <th style="background-color: rgb(238, 238, 238) !important; width: 20%">
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for interest in interests %}
+              <tr>
+                <td> <a href="/exercises/{{interest.list.id}}/"> {{interest.list.title}} </a></td>
+                <td> <a href="/exercises/{{interest.list.id}}/"> {{interest.list.description}} </a></td>
+                <td style="height: 75px;">
+                  <a class="btn btn-link btn-warning" style="display: inline;" href="/api/exercises/uninterest/{{interest.list.id}}/">Desmarcar interesse</a>
+                  <a class="btn btn-link btn-info" style="display: inline;" href="/api/exercises/complete/{{interest.list.id}}/">Marcar conclúido</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <p><i>Não há atividades sugeridas até o momento.</i></p>
+          {% endif %}
+        </div>
       </div>
     </div>
-    <!--   Core JS Files   -->
-    <script src="/static/essay_manager/js/core/jquery.min.js"></script>
-    <script src="/static/essay_manager/js/core/popper.min.js"></script>
-    <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
-    <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!-- Plugin for the momentJs  -->
-    <script src="/static/essay_manager/js/plugins/moment.min.js"></script>
-    <!--  Plugin for Sweet Alert -->
-    <script src="/static/essay_manager/js/plugins/sweetalert2.js"></script>
-    <!-- Forms Validations Plugin -->
-    <script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
-    <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-    <script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
-    <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-    <script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
-    <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-    <script src="/static/essay_manager/js/plugins/bootstrap-datetimepicker.min.js"></script>
-    <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-    <script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
-    <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-    <script src="/static/essay_manager/js/plugins/bootstrap-tagsinput.js"></script>
-    <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-    <script src="/static/essay_manager/js/plugins/jasny-bootstrap.min.js"></script>
-    <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-    <script src="/static/essay_manager/js/plugins/fullcalendar.min.js"></script>
-    <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-    <script src="/static/essay_manager/js/plugins/jquery-jvectormap.js"></script>
-    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-    <script src="/static/essay_manager/js/plugins/nouislider.min.js"></script>
-    <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-    <!-- Library for adding dinamically elements -->
-    <script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
-    <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-    <!-- Chartist JS -->
-    <script src="/static/essay_manager/js/plugins/chartist.min.js"></script>
-    <!--  Notifications Plugin    -->
-    <script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
-    <!-- <style>
-      .ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {
-           stroke: goldenrod !important;
-      }
-      .ct-series-c .ct-bar, .ct-series-c .ct-line, .ct-series-c .ct-point, .ct-series-c .ct-slice-donut {
-            stroke: greenyellow !important;
-      }
-    </style> -->
-    <script>
-      startAnimationForLineChart = function(chart) {
-        chart.on('draw', function(data) {
-          if (data.type === 'line' || data.type === 'area') {
-            data.element.animate({
-              d: {
-                begin: 600,
-                dur: 700,
-                from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-                to: data.path.clone().stringify(),
-                easing: Chartist.Svg.Easing.easeOutQuint
-              }
-            });
-          } else if (data.type === 'point') {
-            seq++;
-            data.element.animate({
-              opacity: {
-                begin: seq * delays,
-                dur: durations,
-                from: 0,
-                to: 1,
-                easing: 'ease'
-              }
-            });
-          }
-        });
-
-        seq = 0;
-      };
-
-      $(document).ready(function() {
-        datagradesChart = {
-          series: [
-            {{grades}},
-          ]
-        };
-
-        optionsgradesChart = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-        }
-
-        datagrades2Chart = {
-          series: [
-            {{gradesc1}},
-            {{gradesc2}},
-            {{gradesc3}},
-            {{gradesc4}},
-            {{gradesc5}},
-          ]
-        };
-        optionsgrades2Chart = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-        }
-
-        datagrades3Chart = {
-          series: [
-            {{avg_gradesc1}},
-            {{avg_gradesc2}},
-            {{avg_gradesc3}},
-            {{avg_gradesc4}},
-            {{avg_gradesc5}},
-          ]
-        };
-        optionsgrades3Chart = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-        }
-        
-        var gradesChart = new Chartist.Line('#gradesChart', datagradesChart, optionsgradesChart);
-        var grades2Chart = new Chartist.Bar('#grades2Chart', datagrades2Chart, optionsgrades2Chart);
-        var grades3Chart = new Chartist.Pie('#grades3Chart', datagrades3Chart, optionsgrades3Chart);
-        startAnimationForLineChart(gradesChart);
-        startAnimationForLineChart(grades2Chart);
-        startAnimationForLineChart(grades3Chart);
-      });
-
-    </script>
-    <script>
-      $(document).ready(function() {
-        $().ready(function() {
-          
-          {% if registered == 'True' %}
-              md.showNotification('top', 'center', 'Usuário registrado com sucesso!', 'success');
-          {% endif %}
-          {% if authed == 'True' %}
-              md.showNotification('top', 'center', 'Login bem sucedido!', 'success');
-          {% endif %}
-
-
-          $sidebar = $('.sidebar');
-          
-          $sidebar_img_container = $sidebar.find('.sidebar-background');
-          
-          $full_page = $('.full-page');
-          
-          $sidebar_responsive = $('body > .navbar-collapse');
-          
-          window_width = $(window).width();
-          
-          fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
-          
-          if (window_width > 767 && fixed_plugin_open == 'Dashboard') {
-            if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
-              $('.fixed-plugin .dropdown').addClass('open');
-            }
-            
-          }
-          
-          $('.fixed-plugin a').click(function(event) {
-            // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
-            if ($(this).hasClass('switch-trigger')) {
-              if (event.stopPropagation) {
-                event.stopPropagation();
-              } else if (window.event) {
-                window.event.cancelBubble = true;
-              }
-            }
-          });
-          
-          $('.fixed-plugin .active-color span').click(function() {
-            $full_page_background = $('.full-page-background');
-            
-            $(this).siblings().removeClass('active');
-            $(this).addClass('active');
-            
-            var new_color = $(this).data('color');
-            
-            if ($sidebar.length != 0) {
-              $sidebar.attr('data-color', new_color);
-            }
-            
-            if ($full_page.length != 0) {
-              $full_page.attr('filter-color', new_color);
-            }
-            
-            if ($sidebar_responsive.length != 0) {
-              $sidebar_responsive.attr('data-color', new_color);
-            }
-          });
-          
-          $('.fixed-plugin .background-color .badge').click(function() {
-            $(this).siblings().removeClass('active');
-            $(this).addClass('active');
-            
-            var new_color = $(this).data('background-color');
-            
-            if ($sidebar.length != 0) {
-              $sidebar.attr('data-background-color', new_color);
-            }
-          });
-          
-          $('.fixed-plugin .img-holder').click(function() {
-            $full_page_background = $('.full-page-background');
-            
-            $(this).parent('li').siblings().removeClass('active');
-            $(this).parent('li').addClass('active');
-            
-            
-            var new_image = $(this).find("img").attr('src');
-            
-            if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-              $sidebar_img_container.fadeOut('fast', function() {
-                $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-                $sidebar_img_container.fadeIn('fast');
-              });
-            }
-            
-            if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-              var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-              
-              $full_page_background.fadeOut('fast', function() {
-                $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-                $full_page_background.fadeIn('fast');
-              });
-            }
-            
-            if ($('.switch-sidebar-image input:checked').length == 0) {
-              var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
-              var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-              
-              $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-              $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-            }
-            
-            if ($sidebar_responsive.length != 0) {
-              $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
-            }
-          });
-          
-          $('.switch-sidebar-image input').change(function() {
-            $full_page_background = $('.full-page-background');
-            
-            $input = $(this);
-            
-            if ($input.is(':checked')) {
-              if ($sidebar_img_container.length != 0) {
-                $sidebar_img_container.fadeIn('fast');
-                $sidebar.attr('data-image', '#');
-              }
-              
-              if ($full_page_background.length != 0) {
-                $full_page_background.fadeIn('fast');
-                $full_page.attr('data-image', '#');
-              }
-              
-              background_image = true;
-            } else {
-              if ($sidebar_img_container.length != 0) {
-                $sidebar.removeAttr('data-image');
-                $sidebar_img_container.fadeOut('fast');
-              }
-              
-              if ($full_page_background.length != 0) {
-                $full_page.removeAttr('data-image', '#');
-                $full_page_background.fadeOut('fast');
-              }
-              
-              background_image = false;
-            }
-          });
-          
-          $('.switch-sidebar-mini input').change(function() {
-            $body = $('body');
-            
-            $input = $(this);
-            
-            if (md.misc.sidebar_mini_active == true) {
-              $('body').removeClass('sidebar-mini');
-              md.misc.sidebar_mini_active = false;
-              
-              $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
-              
-            } else {
-              
-              $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
-              
-              setTimeout(function() {
-                $('body').addClass('sidebar-mini');
-                
-                md.misc.sidebar_mini_active = true;
-              }, 300);
-            }
-            
-            // we simulate the window Resize so the charts will get updated in realtime.
-            var simulateWindowResize = setInterval(function() {
-              window.dispatchEvent(new Event('resize'));
-            }, 180);
-            
-            // we stop the simulation of Window Resize after the animations are completed
-            setTimeout(function() {
-              clearInterval(simulateWindowResize);
-            }, 1000);
-            
-          });
-        });
-      });
-    </script>
-  </body>
-  
-  </html>
-  
+    
+  </div>
+</div>
+{% endblock %}

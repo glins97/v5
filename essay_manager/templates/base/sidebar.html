@@ -24,14 +24,12 @@
 				</a>
 			</li>
 			{% endif %}
-			{% if user.obj|has_permission:'student' %}
 			<li class="nav-item {% if title == 'Temas' %}active{%endif%}">
 				<a class="nav-link" href="/themes/">
 					<i class="material-icons">content_paste</i>
 					<p>Temas</p>
 				</a>
 			</li>
-			{% endif %}
 			<li class="nav-item {% if title == 'Redações' %}active{%endif%}">
 				<a class="nav-link" href="/essays/">
 					<i class="material-icons">assignment</i>
@@ -93,6 +91,14 @@
 				<a class="nav-link" href="/mentoring/">
 					<i class="material-icons">comment</i>
 					<p>Mentoria</p>
+				</a>
+			</li>
+			{% endif %}
+			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
+			<li class="nav-item {% if title == 'Acesso' %}active{%endif%}">
+				<a class="nav-link" href="/access/">
+					<i class="material-icons">person</i>
+					<p>Acesso</p>
 				</a>
 			</li>
 			{% endif %}
