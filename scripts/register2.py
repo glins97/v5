@@ -45,7 +45,7 @@ def generate_ascii(length):
 
 from django.contrib.auth.models import User
 students = []
-with open('students2.csv', 'r') as f:
+with open('scripts/csvs/students2.csv', 'r') as f:
     data = f.read().split('\n')
     for line in data:
         name, email, school, password = line.split(',')
