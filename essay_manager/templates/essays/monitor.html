@@ -2,6 +2,7 @@
 
 {% block page %}
 <script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
+<script>console.log('????')</script>
 <div class="row">
 	<div class="col-lg-4 col-md-6 col-sm-12">
 		<div class="card card-stats">
@@ -264,35 +265,28 @@
 	</div>
 </div>
 <script>
-	$(document).ready(function() {
-		$().ready(function() {
-			
-			{% if added == 'True' %}
-			md.showNotification('top', 'center', 'Redação adicionada com sucesso!', 'success');
-			{% elif added == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao adicionar redação. Selecione um tema e um arquivo!', 'danger');
-			{% endif %}
-			{% if created == 'True' %}
-			md.showNotification('top', 'center', 'Correção salva com sucesso!', 'success');
-			{% elif created == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao iniciar correção.', 'danger');
-			{% endif %}
-			{% if updated == 'True' %}
-			md.showNotification('top', 'center', 'Correção atualizada com sucesso!', 'success');
-			{% elif updated == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao atualizar correção. Contate o administrador.', 'danger');
-			{% endif %}
-			{% if mailed == 'True' %}
-			md.showNotification('top', 'center', 'Correção enviada com sucesso!', 'success');
-			{% elif updated == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao enviar correção. Contate o administrador.', 'danger');
-			{% endif %}
-			
-		});
-	});
-</script>
-<script>
-	$(document).ready(function() {
+	function pageReady() {
+		{% if added == 'True' %}
+		md.showNotification('top', 'center', 'Redação adicionada com sucesso!', 'success');
+		{% elif added == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao adicionar redação. Selecione um tema e um arquivo!', 'danger');
+		{% endif %}
+		{% if created == 'True' %}
+		md.showNotification('top', 'center', 'Correção salva com sucesso!', 'success');
+		{% elif created == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao iniciar correção.', 'danger');
+		{% endif %}
+		{% if updated == 'True' %}
+		md.showNotification('top', 'center', 'Correção atualizada com sucesso!', 'success');
+		{% elif updated == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao atualizar correção. Contate o administrador.', 'danger');
+		{% endif %}
+		{% if mailed == 'True' %}
+		md.showNotification('top', 'center', 'Correção enviada com sucesso!', 'success');
+		{% elif updated == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao enviar correção. Contate o administrador.', 'danger');
+		{% endif %}
+
 		$('#uncorrected-essays-table').DataTable({
 			'pagingType': 'full_numbers',
 			'order': [[0, 'asc']],
@@ -365,7 +359,9 @@
 				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
 			}
 		});
-	});
+	}
+	$(document).ready(function() { pageReady() });
+	pageReady();
 </script>
 
 {% endblock %}

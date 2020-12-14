@@ -62,7 +62,7 @@
 			{% endif %}
 			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
 			<li class="nav-item {% if title == 'Gestão' %}active{%endif%}">
-				<a class="nav-link" data-toggle="collapse" href="#management">
+				<a class="nav-link" data-toggle="collapse" href="#management" skip-pjax="true">
 				  <i class="material-icons">schedule</i>
 				  <p> Gestão
 					<b class="caret"></b>
