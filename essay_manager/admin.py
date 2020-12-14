@@ -116,6 +116,23 @@ class MentoringAdmin(admin.ModelAdmin):
     search_fields = ('student', 'mentor', 'active')
     list_per_page = 100
 
+class ExerciseListAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'file')
+    search_fields = ('title', 'description',)
+    list_per_page = 100
+
+class InterestedExerciseListAdmin(admin.ModelAdmin):
+    list_display = ('name', 'list', 'recommended', 'completed')
+    list_filter = ('list', 'completed')
+    search_fields = ('list', 'name')
+    list_per_page = 100
+
+    def name(self, obj):
+        return f'{obj.user.first_name} {obj.user.last_name}'
+
+    def recommended(self, obj):
+        return f'{obj.essay != None}'
+
 admin.site.register(Theme, ThemeAdmin)
 admin.site.register(Essay, EssayAdmin)
 # admin.site.register(Profile)
@@ -123,6 +140,7 @@ admin.site.register(Correction, CorrectionAdmin)
 admin.site.register(ErrorClassification, ErrorClassificationAdmin)
 admin.site.register(GenericErrorClassification, GenericErrorClassificationAdmin)
 # admin.site.register(Event)
-# admin.site.register(ExerciseList)
-# admin.site.register(Notification)
+admin.site.register(ExerciseList, ExerciseListAdmin)
+admin.site.register(InterestedExerciseList, InterestedExerciseListAdmin)
+admin.site.register(Notification)
 admin.site.register(Mentoring, MentoringAdmin)

@@ -4,6 +4,7 @@
 {% include "base/head.html" %}
 {% load chunks %}
 <body class="">
+  <script src="/static/essay_manager/js/exercise-list.js?{% now 'U' %}"></script>
   <div class="wrapper ">
     {% include "base/sidebar.html" %}
     <div class="main-panel">
@@ -52,14 +53,70 @@
             </div>
           </div>
 
-          <button class="btn btn-info" data-toggle="modal" data-target="#manualModal"> Consultar manual </button>
-          <button class="btn btn-info" data-toggle="modal" data-target="#themeModal"> Visualizar tema </button>
-          <!-- <a class="btn btn-info" style="color: white;" href="/api/essays/download/{{essay.id}}/"> Baixar correção </a> -->
+          <a class="btn btn-info" style="color: white;" data-toggle="modal" data-target="#manualModal"> Manual </a>
+          <a class="btn btn-info" style="color: white;" data-toggle="modal" data-target="#themeModal"> Tema </a>
           <div class="float-right">
-            <button class="btn btn-warning" onclick="document.getElementById('status-input').value='ACTIVE';updateExportCorrectionData();"> Salvar sem finalizar  </button>
-            <!-- <button class="btn btn-danger" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false"> Anular redação </button> -->
+            <a class="btn btn-info" style="color: white;"  data-toggle="modal" data-target="#exercisesModal" data-backdrop="static" data-keyboard="false">
+              <i class="material-icons">fitness_center</i>
+            </a>
+            <a class="btn btn-success" style="color: white;" href="/api/essays/download/{{essay.id}}/">
+              <i class="material-icons">save_alt</i>
+            </a>
+            <a class="btn btn-warning" style="color: white;" data-toggle="modal" data-target="#saveModal"  data-backdrop="static" data-keyboard="false">
+              <i class="material-icons">save</i>
+            </a>
           </div>
-          
+
+          <div class="modal has-info show" id="saveModal" role="dialog" aria-labelledby="saveModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog ml-auto mr-auto">
+              <div class="modal-content ml-auto mr-auto">
+                <div class="modal-header">
+                  <h4 class="modal-title">Salvar sem finalizar</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                  Tem certeza que deseja salvar a correção sem a finalizar?
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-danger btn-link float-right pull-right" data-dismiss="modal">Não</button>
+                  <button class="btn btn-success btn-link float-right pull-right" data-dismiss="modal" onclick="document.getElementById('status-input').value='ACTIVE';updateExportCorrectionData();">Sim</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal has-info show" id="exercisesModal" role="dialog" aria-labelledby="exercisesModal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog ml-auto mr-auto">
+              <div class="modal-content ml-auto mr-auto">
+                <div class="modal-header">
+                  <h4 class="modal-title">Exercícios recomendados</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="exerciseList.discardAssociatedExercises();">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  {% for exercise in exercises %}
+                  <div class="form-check col-sm">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="exercise-{{exercise.id}}"
+                        onclick="exerciseList.holdTempExercise({{exercise.id}});"> {{exercise.title}}
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                  </div>
+                  {% endfor %}
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-danger btn-link float-right pull-right" data-dismiss="modal" onclick="exerciseList.discardAssociatedExercises();">Cancelar</button>
+                  <button class="btn btn-success btn-link float-right pull-right" data-dismiss="modal"  onclick="exerciseList.saveAssociatedExercises();">Salvar recomendações</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="modal has-info show" id="manualModal" role="dialog" aria-labelledby="manualModal" style="display: none;" aria-hidden="true">
             <div class="modal-dialog ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
               <div class="modal-content ml-auto mr-auto" style="width:90% !important; max-width:90% !important;">
@@ -491,25 +548,25 @@
         </script>
         <script>
           $(document).ready(function() {
-            $().ready(function() {
-              setUsername('{{username}}');
-              importCorrectionData({{data}});
-              
-              {% if created == 'True' %}
-              md.showNotification('top', 'center', 'Correção iniciada.', 'success');
-              {% elif created == 'False' %}
-              md.showNotification('top', 'center', 'Falha ao iniciar correção. Contate o administrador e corrija outra redação.', 'danger');
-              {% endif %}
-
+            var allCheckboxes = document.querySelectorAll('input[type=checkbox]');
+            [].forEach.call(allCheckboxes, function (checkbox) {
+              checkbox.checked = checkbox.defaultChecked;
             });
           });
         </script>
         <script>
           $(document).ready(function() {
-            var allCheckboxes = document.querySelectorAll('input[type=checkbox]');
-            [].forEach.call(allCheckboxes, function (checkbox) {
-              checkbox.checked = checkbox.defaultChecked;
-            });
+            setUsername('{{username}}');
+            importCorrectionData({{data}});
+            
+            {% if created == 'True' %}
+            md.showNotification('top', 'center', 'Correção iniciada.', 'success');
+            {% elif created == 'False' %}
+            md.showNotification('top', 'center', 'Falha ao iniciar correção. Contate o administrador e corrija outra redação.', 'danger');
+            {% endif %}
+
+            exerciseList.setCurrentEssay({{essay.id}});
+            exerciseList.loadAssociatedExercises({{associated_exercises}});
           });
         </script>
         

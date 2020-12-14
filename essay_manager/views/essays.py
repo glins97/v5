@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from essay_manager.decorators import login_required, has_permission
-from essay_manager.models import Essay, Correction, ErrorClassification, GenericErrorClassification 
+from essay_manager.models import *
 from essay_manager.utils import get_view_by_permission, get_user_details
 from bauth.views import e403_view
 from django.shortcuts import redirect
@@ -97,6 +97,7 @@ def _student_essay_view(request, id):
         'user': get_user_details(request.user),
         'username': first_name[0].upper() + first_name[1:].lower(), 
         'data': mark_safe(corrections[0].data) if corrections else {},
+        'associated_exercises': [o.list for o in InterestedExerciseList.objects.filter(essay=essay)],
     }
     if essay.theme.jury == 'VUNESP':
         return render(request, 'essay/student/vunesp.html', data)
@@ -126,6 +127,8 @@ def _monitor_essay_view(request, id):
         'username': first_name[0].upper() + first_name[1:].lower(), 
         'created': request.GET.get('created', None),
         'data': mark_safe(corrections[0].data),
+        'exercises': ExerciseList.objects.filter(active=True),
+        'associated_exercises': [o.list.id for o in InterestedExerciseList.objects.filter(essay=essay)],
     }
     if essay.theme.jury == 'ENEM':
         data['error_classifications_c1'] = wrap_errors([o.get_html() for o in sorted(list(ErrorClassification.objects.filter(competency='1')), key=lambda e: int(e.code)) if o.parent is None])

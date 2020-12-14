@@ -452,6 +452,7 @@ class ExerciseList(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     file = models.FileField(upload_to='uploads/')
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title 
@@ -465,6 +466,7 @@ class InterestedExerciseList(models.Model):
     list = models.ForeignKey(ExerciseList, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     completion_date = models.DateTimeField(blank=True, null=True)
+    essay = models.ForeignKey('Essay', on_delete=models.CASCADE, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.completed and not self.completion_date:

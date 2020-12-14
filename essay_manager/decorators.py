@@ -20,7 +20,7 @@ def login_required(f, *args, **kwargs):
 def has_permission(perm, *args, **kwargs):
     def has_permission_(f, *args, **kwargs):
         def wrapper(request, *args, **kwargs):
-            if request.user.groups.filter(name=perm).exists():
+            if request.user.groups.filter(name=perm).exists() or request.user.groups.filter(name='superuser').exists():
                 return f(request, *args, **kwargs)
             else:
                 return e403_view(request, *args, **kwargs)

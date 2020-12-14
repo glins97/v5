@@ -96,6 +96,8 @@ urlpatterns = [
     path('api/exercises/interest/<int:id>/', interest_exercise_endpoint),
     path('api/exercises/uninterest/<int:id>/', uninterest_exercise_endpoint),
     path('api/exercises/complete/<int:id>/', complete_exercise_endpoint),
+    path('api/exercises/recommendations/save/', save_exercise_recommendation),
+    
     path('api/notifications/read/all/', read_all_notifications_endpoint),
     path('api/mentoring/start/<int:id>/', start_mentoring_endpoint),
     path('api/mentoring/finish/<int:id>/', finish_mentoring_endpoint),

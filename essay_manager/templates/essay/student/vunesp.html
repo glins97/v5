@@ -14,6 +14,20 @@
 			<div class="content">
 				<div class="content">
 					<div class="container-fluid">
+						{% if associated_exercises %}
+						<div class="row mx-5" style="border-radius: 15px; color:white; background-color: #4caf50;">
+							<div class="px-5 py-4">
+								<p>Com base na sua performance, seu corretor recomendou os seguintes exercícios: <br>
+									<ul>
+										{% for exercise in associated_exercises %}
+										<li><i><small><a href="/exercises/{{exercise.id}}" style="color: white;">{{exercise.title}}</small></a></i></li>
+										{% endfor %}
+									</ul>
+									Você pode acessá-los clicando em seus links acima, ou no menu de exercícios.
+								</p>
+							</div>
+						</div>
+						{% endif %}
 						<div class="row">
 							<div class="col-md-12">
 								<h3 style="text-align: center; color:#aa1100" id="nullified" hidden="true";>Atenção: redação seria anulada no ENEM!</h3 style="text-align: center;">
