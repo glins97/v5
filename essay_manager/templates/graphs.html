@@ -17,6 +17,7 @@
 <div class="tab-content tab-space tab-subcategories">
   <div class="tab-pane ml-3 active" id="enem">
     {% if enem_count %}
+    {% if enem_count > 2 %}
     <div class="row">
       <div class="col-md-12">
         <div class="card card-plain">
@@ -32,6 +33,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     <div class="row">
       <div class="col-md-12">
         <div class="card card-plain">
@@ -69,6 +71,7 @@
   </div>
   <div class="tab-pane" id="vunesp">
     {% if vunesp_count %}
+    {% if vunesp_count > 2 %}
     <div class="row">
       <div class="col-md-12">
         <div class="card card-plain">
@@ -84,6 +87,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     <div class="row">
       <div class="col-md-12">
         <div class="card card-plain">
@@ -118,4 +122,155 @@
     {% endif %}
   </div>
 </div>
+<script>
+  startAnimationForLineChart = function(chart) {
+    chart.on('draw', function(data) {
+      if (data.type === 'line' || data.type === 'area') {
+        data.element.animate({
+          d: {
+            begin: 600,
+            dur: 700,
+            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+            to: data.path.clone().stringify(),
+            easing: Chartist.Svg.Easing.easeOutQuint
+          }
+        });
+      } else if (data.type === 'point') {
+        seq++;
+        data.element.animate({
+          opacity: {
+            begin: seq * delays,
+            dur: durations,
+            from: 0,
+            to: 1,
+            easing: 'ease'
+          }
+        });
+      }
+    });
+
+    seq = 0;
+  };
+
+  {% if enem_count %}
+  $(document).ready(function() {
+    datagradesChart = {
+      series: [
+        {{enem_grades}},
+      ]
+    };
+
+    optionsgradesChart = {
+      low: 0,
+      high: 1000,
+      height: '300px',
+    }
+
+    datagrades2Chart = {
+      labels: {{enem_essays}},
+      series: [
+        {{gradesc1}},
+        {{gradesc2}},
+        {{gradesc3}},
+        {{gradesc4}},
+        {{gradesc5}},
+      ]
+    };
+    optionsgrades2Chart = {
+      height: '200px',
+    }
+
+    datagrades3Chart = {
+      series: [
+        {{avg_gradesc1}},
+        {{avg_gradesc2}},
+        {{avg_gradesc3}},
+        {{avg_gradesc4}},
+        {{avg_gradesc5}},
+      ]
+    };
+    optionsgrades3Chart = {
+      height: '200px',
+      lineSmooth: Chartist.Interpolation.cardinal({
+        tension: 0
+      }),
+    }
+    
+    var gradesChart = new Chartist.Line('#gradesChartENEM', datagradesChart, optionsgradesChart);
+    var grades2Chart = new Chartist.Bar('#grades2ChartENEM', datagrades2Chart, optionsgrades2Chart);
+    var grades3Chart = new Chartist.Pie('#grades3ChartENEM', datagrades3Chart, optionsgrades3Chart);
+    startAnimationForLineChart(gradesChart);
+    startAnimationForLineChart(grades2Chart);
+    startAnimationForLineChart(grades3Chart);
+  });
+  {% endif %}
+  {% if vunesp_count %}
+  $(document).ready(function() {
+    datagradesChart = {
+      series: [
+        {{vunesp_grades}},
+      ]
+    };
+
+    optionsgradesChart = {
+      low: 0,
+      high: 11,
+      height: '300px',
+      lineSmooth: Chartist.Interpolation.cardinal({
+        tension: 0
+      }),
+    }
+
+    datagrades2Chart = {
+      labels: {{vunesp_essays}},
+      series: [
+        {{gradesa}},
+        {{gradesb}},
+        {{gradesc}},
+      ]
+    };
+    optionsgrades2Chart = {
+      height: '200px',
+      lineSmooth: Chartist.Interpolation.cardinal({
+        tension: 0
+      }),
+    }
+
+    datagrades3Chart = {
+      height: '200px',
+      series: [
+        {{avg_gradesa}},
+        {{avg_gradesb}},
+        {{avg_gradesc}},
+      ]
+    };
+    optionsgrades3Chart = {
+      lineSmooth: Chartist.Interpolation.cardinal({
+        tension: 0
+      }),
+    }
+    
+    var gradesChart = new Chartist.Line('#gradesChartVUNESP', datagradesChart, optionsgradesChart);
+    var grades2Chart = new Chartist.Bar('#grades2ChartVUNESP', datagrades2Chart, optionsgrades2Chart);
+    var grades3Chart = new Chartist.Pie('#grades3ChartVUNESP', datagrades3Chart, optionsgrades3Chart);
+    startAnimationForLineChart(gradesChart);
+    startAnimationForLineChart(grades2Chart);
+    startAnimationForLineChart(grades3Chart);
+    
+  });
+  {% endif %}  
+</script>
+<script>
+  $(document).ready(function() {
+      $('.nav-link').click(function (){
+          var simulateWindowResize = setInterval(function() {
+              window.dispatchEvent(new Event('resize'));
+          }, 100);
+          
+          setTimeout(function() {
+              clearInterval(simulateWindowResize);
+          }, 1000); 
+      });
+  });
+</script>
 {% endblock %}
