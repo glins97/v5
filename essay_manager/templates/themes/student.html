@@ -1,0 +1,224 @@
+{% extends "base/page.html" %}
+
+{% block page%}
+<div class="page-categories">
+	<ul class="nav nav-pills nav-pills-info nav-pills-icons" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#all" role="tablist">
+				Todas as bancas
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#enem" role="tablist">
+				ENEM
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#vunesp" role="tablist">
+				VUNESP
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#cespe" role="tablist">
+				CESPE
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content tab-space tab-subcategories">
+		<div class="tab-pane active" id="all">
+			{% if themes_by_axes.all %}
+			{% for axis in themes_by_axes.all %}
+			<div class="row">
+				<div class="card card-plain ml-4 mr-4">
+					<div class="card-header card-header-icon card-header-{% if axis.done == axis.total %}success{% else %}info{% endif %}">
+						<div class="card-icon">
+							<i class="material-icons">assignment</i>
+						</div>
+						<h4 class="card-title mt-0"> {{axis.description}}</h4>
+						<p class="card-category"> {{axis.done}} temas feitos de {{axis.total}} </p>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+									<tr>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
+											Nome
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+											Banca
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
+											Última redação
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for theme in axis.themes %}
+									<tr>
+										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+			{% endfor %}
+			{% else %}
+			<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+			{% endif %}
+		</div>
+		<div class="tab-pane" id="enem">
+			{% if themes_by_axes.enem %}
+			{% for axis in themes_by_axes.enem %}
+			<div class="row">
+				<div class="card card-plain ml-4 mr-4">
+					<div class="card-header card-header-icon card-header-{% if axis.done == axis.total %}success{% else %}info{% endif %}">
+						<div class="card-icon">
+							<i class="material-icons">assignment</i>
+						</div>
+						<h4 class="card-title mt-0"> {{axis.description}}</h4>
+						<p class="card-category"> {{axis.done}} temas feitos de {{axis.total}} </p>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+									<tr>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
+											Nome
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+											Banca
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
+											Última redação
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for theme in axis.themes %}
+									<tr>
+										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+			{% endfor %}
+			{% else %}
+			<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+			{% endif %}
+		</div>
+		<div class="tab-pane" id="vunesp">
+			{% if themes_by_axes.%}
+			{% for axis in themes_by_axes.vunesp %}
+			<div class="row">
+				<div class="card card-plain ml-4 mr-4">
+					<div class="card-header card-header-icon card-header-{% if axis.done == axis.total %}success{% else %}info{% endif %}">
+						<div class="card-icon">
+							<i class="material-icons">assignment</i>
+						</div>
+						<h4 class="card-title mt-0"> {{axis.description}}</h4>
+						<p class="card-category"> {{axis.done}} temas feitos de {{axis.total}} </p>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+									<tr>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
+											Nome
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+											Banca
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
+											Última redação
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for theme in axis.themes %}
+									<tr>
+										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+			{% endfor %}
+			{% else %}
+			<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+			{% endif %}
+		</div>
+		<div class="tab-pane" id="cespe">
+			{% if themes_by_axes.%}
+			{% for axis in themes_by_axes.cespe %}
+			<div class="row">
+				<div class="card card-plain ml-4 mr-4">
+					<div class="card-header card-header-icon card-header-{% if axis.done == axis.total %}success{% else %}info{% endif %}">
+						<div class="card-icon">
+							<i class="material-icons">assignment</i>
+						</div>
+						<h4 class="card-title mt-0"> {{axis.description}}</h4>
+						<p class="card-category"> {{axis.done}} temas feitos de {{axis.total}} </p>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead class="" style="background-color: rgb(238, 238, 238) !important;">
+									<tr>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 70%">
+											Nome
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important; width: 10%;">
+											Banca
+										</th>
+										<th class="sm-hidden md-hidden" style="background-color: rgb(238, 238, 238) !important">
+											Última redação
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for theme in axis.themes %}
+									<tr>
+										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+			{% endfor %}
+			{% else %}
+			<p class="ml-5"><i>Sem temas disponíveis para a banca selecionada!</i></p>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+					
