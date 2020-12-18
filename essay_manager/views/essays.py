@@ -123,10 +123,11 @@ def _monitor_essay_view(request, id):
     data = {
         'title': 'Redações',
         'essay': essay,
+        'correction': corrections[0],
         'user': get_user_details(request.user),
         'username': first_name[0].upper() + first_name[1:].lower(), 
         'created': request.GET.get('created', None),
-        'data': mark_safe(corrections[0].data),
+        'data': mark_safe(correction.data),
         'exercises': ExerciseList.objects.filter(active=True),
         'associated_exercises': [o.list.id for o in InterestedExerciseList.objects.filter(essay=essay)],
     }

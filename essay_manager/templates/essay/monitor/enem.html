@@ -3,6 +3,7 @@
   <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
 {% include "base/head.html" %}
 {% load chunks %}
+{% load permissions %}
 <body class="">
   <script src="/static/essay_manager/js/exercise-list.js?{% now 'U' %}"></script>
   <div class="wrapper ">
@@ -59,12 +60,16 @@
             <a class="btn btn-info" style="color: white;"  data-toggle="modal" data-target="#exercisesModal" data-backdrop="static" data-keyboard="false">
               <i class="material-icons">fitness_center</i>
             </a>
+            {% if user.obj|has_permission:'superuser' %}
             <a class="btn btn-success" style="color: white;" href="/api/essays/download/{{essay.id}}/">
               <i class="material-icons">save_alt</i>
             </a>
+            {% endif %}
+            {% if correction.status == 'ACTIVE' %}
             <a class="btn btn-warning" style="color: white;" data-toggle="modal" data-target="#saveModal"  data-backdrop="static" data-keyboard="false">
               <i class="material-icons">save</i>
             </a>
+            {% endif %}
             <a class="btn btn-danger" style="color: white;" data-toggle="modal" data-target="#zeroModal" data-backdrop="static" data-keyboard="false">
               <i class="material-icons">close</i>
             </a>
@@ -723,7 +728,13 @@
               <br>
               <div class="row">
                 <div class="col-md-12">
+                  {% if correction.status == 'ACTIVE' %}
                   <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Finalizar </button>
+                  {% else %}
+                    {% if user.obj|has_permission:'superuser' %}
+                    <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Sobrescrever correção </button>
+                    {% endif %}
+                  {% endif %}
                   <form id="submitUpdateForm" class="form" method="post" action="/corrections/update/{{essay.id}}/">
                     <input type="hidden" class="form-control" name="data" maxlength="150" required="" id="formInput">
                     <input type="hidden" class="form-control" id="status-input" name="status" maxlength="150" value="DONE">

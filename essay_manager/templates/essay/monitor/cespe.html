@@ -3,6 +3,7 @@
   <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
 {% include "base/head.html" %}
 {% load chunks %}
+{% load permissions %}
 <style type="text/css">
   .tg  {border-collapse:collapse;border-spacing:0;width:100%;}
   .tg td{border-color:black;border-style:solid;border-width:1px;font-family:'Montserrat';font-size:14px;
@@ -730,7 +731,13 @@
 
               <div class="row">
                 <div class="col-md-12">
+                  {% if correction.status == 'ACTIVE' %}
                   <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Finalizar </button>
+                  {% else %}
+                    {% if user.obj|has_permission:'superuser' %}
+                    <button type="button" class="btn btn-success" style="width:100% !important" onclick="document.getElementById('status-input').value='DONE';updateExportCorrectionData();"> Sobrescrever correção </button>
+                    {% endif %}
+                  {% endif %}
                   <form id="submitUpdateForm" class="form" method="post" action="/corrections/update/{{essay.id}}/">
                     <input type="hidden" class="form-control" name="data" maxlength="150" required="" id="formInput">
                     <input type="hidden" class="form-control" id="status-input" name="status" maxlength="150" value="DONE">
