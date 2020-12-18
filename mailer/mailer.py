@@ -26,10 +26,9 @@ def send_templated_mail(template, to, subject, attachments=[], *args, **kwargs):
 
 def send_mail(to, subject, message, attachments=''):
     msg = MIMEMultipart()
-    msg['From'] = 'adm.ppa.digital@gmail.com'
     msg['To'] = to
     msg['Subject'] = subject
-    password = 'campusppa'
+    msg['From'] = 'PPA <contato@ppa.digital>'
     
     if type(attachments) != list:
         attachments = [attachments]
@@ -45,6 +44,6 @@ def send_mail(to, subject, message, attachments=''):
     msg.attach(MIMEText(message, 'html'))
     with smtplib.SMTP('smtp.gmail.com: 587') as server:
         server.starttls()
-        server.login(msg['From'], password)
+        server.login('adm.ppa.digital@gmail.com', 'campusppa')
         server.sendmail(msg['From'], msg['To'], msg.as_string())
     return True

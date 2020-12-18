@@ -13,8 +13,8 @@ def send_mail(email, subject, message, attachments='', multiple_attachments=Fals
     msg = MIMEMultipart()
     password = 'campusppa'
     msg['To'] = email
-    msg['From'] = 'adm.ppa.digital@gmail.com'
-    msg['Subject'] = 'PPA Digital: ' + subject
+    msg['From'] = 'PPA <contato@ppa.digital>'
+    msg['Subject'] = subject
     
     if not multiple_attachments:
         attachments = [attachments]
@@ -30,8 +30,8 @@ def send_mail(email, subject, message, attachments='', multiple_attachments=Fals
     msg.attach(MIMEText(message, 'html'))
     with smtplib.SMTP('smtp.gmail.com: 587') as server:
         server.starttls()
-        server.login(msg['From'], password)
-        server.sendmail(msg['From'], msg['To'], msg.as_string())
+        server.login('adm.ppa.digital@gmail.com', 'campusppa')
+        server.login(msg['From'], msg['To'], msg.as_string())
     return True
 from django.contrib.auth.models import Group
 group = Group.objects.get(name='student')

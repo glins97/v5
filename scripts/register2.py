@@ -9,30 +9,8 @@ from email.mime.application import MIMEApplication
 from email.encoders import encode_base64
 import codecs
 from threading import _start_new_thread
-def send_mail(email, subject, message, attachments='', multiple_attachments=False):
-    msg = MIMEMultipart()
-    password = 'campusppa'
-    msg['To'] = email
-    msg['From'] = 'adm.ppa.digital@gmail.com'
-    msg['Subject'] = 'PPA Digital: ' + subject
-    
-    if not multiple_attachments:
-        attachments = [attachments]
+from mailer.mailer import send_mail
 
-    for attachment in attachments:
-        if not attachment: continue
-        openedfile = None
-        with open(attachment, 'rb') as opened:
-            openedfile = opened.read()
-        attachedfile = MIMEApplication(openedfile, _subtype = "pdf", _encoder=encode_base64)
-        attachedfile.add_header('content-disposition', 'attachment', filename=attachment.split('/')[-1])
-        msg.attach(attachedfile)
-    msg.attach(MIMEText(message, 'html'))
-    with smtplib.SMTP('smtp.gmail.com: 587') as server:
-        server.starttls()
-        server.login(msg['From'], password)
-        server.sendmail(msg['From'], msg['To'], msg.as_string())
-    return True
 from django.contrib.auth.models import Group
 group = Group.objects.get(name='student')
 

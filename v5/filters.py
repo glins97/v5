@@ -15,7 +15,7 @@ def send_mail():
         msg = MIMEMultipart()
         password = 'campusppa'
         msg['To'] = 'gabriel.lins97@gmail.com'
-        msg['From'] = 'adm.ppa.digital@gmail.com'
+        msg['From'] = 'PPA <contato@ppa.digital>'
         msg['Subject'] = 'Error@PPA_Digital'
 
         openedfile = None
@@ -28,8 +28,8 @@ def send_mail():
 
         with smtplib.SMTP('smtp.gmail.com: 587') as server:
             server.starttls()
-            server.login(msg['From'], password)
-            server.sendmail(msg['From'], msg['To'], msg.as_string())
+            server.login('adm.ppa.digital@gmail.com', 'campusppa')
+            server.login(msg['From'], msg['To'], msg.as_string())
         return True
     except Exception as e:
         logger.warning(f'send_mail@filters::Failed to send mail | {e}')

@@ -118,8 +118,8 @@ def send_mail(email, subject, message, attachment):
         msg = MIMEMultipart()
         password = 'campusppa'
         msg['To'] = email
-        msg['From'] = 'adm.ppa.digital@gmail.com'
-        msg['Subject'] = 'PPA Digital: ' + subject
+        msg['From'] = 'PPA <contato@ppa.digital>'
+        msg['Subject'] = subject
 
         if attachment:
             openedfile = None
@@ -131,8 +131,8 @@ def send_mail(email, subject, message, attachment):
         msg.attach(MIMEText(message, 'html'))
         with smtplib.SMTP('smtp.gmail.com: 587') as server:
             server.starttls()
-            server.login(msg['From'], password)
-            server.sendmail(msg['From'], msg['To'], msg.as_string())
+            server.login('adm.ppa.digital@gmail.com', 'campusppa')
+            server.login(msg['From'], msg['To'], msg.as_string())
         return True
     except Exception as e:
         logger.error('exception @send_mail ->', e)
