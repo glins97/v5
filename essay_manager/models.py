@@ -102,6 +102,7 @@ class Essay(models.Model):
     grade = models.IntegerField(default=0)
     mailed = models.BooleanField(default=False)
     nullified = models.BooleanField(default=False)
+    reported = models.BooleanField(default=False)
     mode = models.CharField(default='1', choices=essay_mode, max_length=255)
 
     def __str__(self):

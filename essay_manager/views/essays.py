@@ -31,7 +31,7 @@ def get_verbose_mode(mode):
 @has_permission('monitor')
 @login_required
 def _monitor_essays_view(request):
-    essays = Essay.objects.filter().order_by('id')
+    essays = Essay.objects.filter(reported=False).order_by('id')
     uncorrected_essays_free = []
     uncorrected_essays_paid = []
     for essay in essays:
@@ -61,6 +61,7 @@ def _monitor_essays_view(request):
     data = {
         'title': 'Redações',
         'added': request.GET.get('added', 'None'),
+        'reported': request.GET.get('reported', 'None'),
         'mailed': request.GET.get('mailed', 'None'),
         'essays_free': uncorrected_essays_free,
         'essays_paid': uncorrected_essays_paid,
@@ -127,7 +128,7 @@ def _monitor_essay_view(request, id):
         'user': get_user_details(request.user),
         'username': first_name[0].upper() + first_name[1:].lower(), 
         'created': request.GET.get('created', None),
-        'data': mark_safe(correction.data),
+        'data': mark_safe(corrections[0].data),
         'exercises': ExerciseList.objects.filter(active=True),
         'associated_exercises': [o.list.id for o in InterestedExerciseList.objects.filter(essay=essay)],
     }

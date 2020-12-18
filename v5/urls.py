@@ -88,6 +88,7 @@ urlpatterns = [
     path('api/essays/mail/<int:id>/', mail_essay_endpoint),
     path('api/essays/download/<int:id>/', download_essay_endpoint),
     path('api/essays/create/', create_essay_endpoint),
+    path('api/essays/report/<int:id>/', report_essay_endpoint),
     path('api/password/change/', change_password_endpoint),
     path('api/events/', get_events_endpoint),
     path('api/events/new/', create_event_endpoint),

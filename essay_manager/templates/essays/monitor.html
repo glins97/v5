@@ -287,7 +287,11 @@
 			{% elif updated == 'False' %}
 			md.showNotification('top', 'center', 'Falha ao enviar correção. Contate o administrador.', 'danger');
 			{% endif %}
-			
+			{% if reported == 'True' %}
+			md.showNotification('top', 'center', 'Redação reportada com sucesso!', 'success');
+			{% elif reported == 'False' %}
+			md.showNotification('top', 'center', 'Falha ao reportar redação. Pode reclamar com o Gabriel burro.', 'danger');
+			{% endif %}
 		});
 	});
 </script>

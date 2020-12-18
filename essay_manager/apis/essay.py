@@ -6,6 +6,7 @@ from essay_manager.decorators import login_required, has_permission
 from essay_manager.models import Theme, Essay, Correction
 from essay_manager.apis.document import Document
 from essay_manager.apis.pdf_filler import fill_pdf_fields
+from mailer.mailer import send_templated_mail
 
 import time
 import subprocess
@@ -43,6 +44,19 @@ def create_essay_endpoint(request):
     except Exception as e:
         logger.error(f'create_essay_endpoint@essay::Exception thrown | {request.user} {request} {repr(e)}')
         return redirect('/essays/?added=False')
+
+@has_permission('monitor')
+@login_required
+def report_essay_endpoint(request, id):
+    try:
+        essay = Essay.objects.get(id=id)
+        essay.reported = True
+        essay.save()
+        send_templated_mail('base.html', 'gabriel.lins97@gmail.com', 'Erro reportado', title=f'Redação #{id}', body=f'Erro reportado na redação #{id} pelo corretor {request.user}.<br>Favor averiguar.', footer="Equipe PPA")
+    except Exception as e:
+        logger.error(f'report_essay_endpoint@essay::Exception thrown | {request.user} {request} {repr(e)}')
+        return redirect('/essays/?reported=False')
+    return redirect('/essays/?reported=True')
         
 def create_correction_pdf(request, id):
     final_destination = ''
