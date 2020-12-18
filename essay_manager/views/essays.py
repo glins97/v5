@@ -34,7 +34,12 @@ def _monitor_essays_view(request):
     essays = Essay.objects.filter(reported=False).order_by('id')
     uncorrected_essays_free = []
     uncorrected_essays_paid = []
-    for essay in essays:
+    for essay in list(essays):
+        mentoring = Mentoring.objects.filter(student=essay.user).last()
+        if mentoring and mentoring.mentor != request.user:
+            essays.exclude(id=essay.id)
+            continue
+
         essay.verbose_mode = get_verbose_mode(essay.mode)
         if not Correction.objects.filter(essay=essay).count():
             if essay.theme.description == 'Solidário':
@@ -44,14 +49,14 @@ def _monitor_essays_view(request):
 
     uncorrected_essays_count = len(uncorrected_essays_free) + len(uncorrected_essays_paid) 
 
-    active_correction_essays = [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay, status='ACTIVE')]
+    active_correction_essays = [essay for essay in essays if Correction.objects.filter(essay=essay, status='ACTIVE')]
     for index, essay in enumerate(active_correction_essays):
         active_correction_essays[index].verbose_mode = get_verbose_mode(essay.mode)
         active_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='ACTIVE').get().user
     active_corrections_essays_count = len(active_correction_essays)
 
     done_correction_essays = sorted(
-        [essay for essay in Essay.objects.filter() if Correction.objects.filter(essay=essay, status='DONE').count()],
+        [essay for essay in essays if Correction.objects.filter(essay=essay, status='DONE').count()],
         key=lambda essay: (Correction.objects.filter(essay=essay, status='DONE').first().end_date, Correction.objects.filter(essay=essay, status='DONE').first().id),
         reverse=True)
     for index, essay in enumerate(done_correction_essays):
