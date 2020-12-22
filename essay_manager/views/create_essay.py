@@ -12,4 +12,4 @@ def create_essay_view(request):
         'added': request.GET.get('added', 'None'),
         'user': get_user_details(request.user),
     }
-    return render(request, 'create_essay.html', data)
+    return render(request, 'essays/new.html', data)

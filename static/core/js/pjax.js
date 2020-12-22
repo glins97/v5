@@ -1,9 +1,20 @@
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function sidebarLoader(activePage) {
+    let lis = document.getElementsByTagName('li');
+    console.log(lis);
+    for (var i = 0; i < lis.length; i++) {
+        if (lis[i].getAttribute('page-id') == activePage) {
+            lis[i].classList.add('active');
+            console.log('active', lis[i]);
+            document.getElementById('page-title').text = lis[i].getAttribute('page-title');
+        }
+        else {
+            lis[i].classList.remove('active');
+            console.log('inactive', lis[i]);
+        }
+    }
 }
 
 function execBodyScripts(el) {
-    console.log('@execBodyScripts')
     function nodeName(elem, name) {
         return elem.nodeName && elem.nodeName.toUpperCase() ===
         name.toUpperCase();
@@ -50,7 +61,7 @@ function execBodyScripts(el) {
 
 pjax = {
     _: console.log('loaded pjax'),
-    
+
     request: function(url, method) {
         var me = this;
         method = method || 'GET';
@@ -80,17 +91,22 @@ pjax = {
     },
     
     load: function() {
-        let elements = document.getElementsByTagName('a');
+        let elements = document.getElementsByClassName('pjax');
         for (var i = 0; i < elements.length; i++) {
             let element = elements[i];
             let href = element.getAttribute('href');
             let pref = element.getAttribute('pref');
-            let skip = element.getAttribute('skip-pjax') || element.getAttribute('data-toggle');
-            if (href && !pref && !skip) {
+            let activePage = element.getAttribute('active-page');
+            if (href && !pref) {
                 element.setAttribute('pref', href);
-                element.removeAttribute('href');
                 element.setAttribute('style', 'cursor: pointer;');
-                element.setAttribute('onclick', "pjax.request('" + href + "', 'GET')");
+                let clickEvent = "pjax.request('" + href + "', 'GET');";
+                element.removeAttribute('href');
+                console.log(activePage);
+                if (activePage) {
+                    clickEvent += 'sidebarLoader("' + activePage + '");'
+                }
+                element.setAttribute('onclick', clickEvent);
             } 
         }
     }

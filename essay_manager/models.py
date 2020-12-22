@@ -10,8 +10,19 @@ import PIL
 from PIL import Image
 
 def  to_str(self, *args, **kwargs):
-    return '{} {}'.format(self.first_name, self.last_name)
+    first_name = self.first_name.split(' ')
+    if first_name:
+        first_name = first_name[0].capitalize()
+
+    last_name = self.last_name.split(' ')
+    if last_name:
+        last_name = last_name[0].capitalize()
+    return f'{first_name} {last_name}'
 User.__str__ = to_str
+
+from django.db.models import CharField
+from django.db.models.functions import Lower
+CharField.register_lookup(Lower)
 
 juries = (
     ('ENEM', 'ENEM'),

@@ -31,52 +31,14 @@ def get_verbose_mode(mode):
 @has_permission('monitor')
 @login_required
 def _monitor_essays_view(request):
-    essays = Essay.objects.filter().order_by('id')
-    uncorrected_essays_free = []
-    uncorrected_essays_paid = []
-    for essay in essays:
-        essay.verbose_mode = get_verbose_mode(essay.mode)
-        if not Correction.objects.filter(essay=essay).count():
-            if essay.theme.description == 'Solidário':
-                uncorrected_essays_free.append(essay)
-            else:
-                uncorrected_essays_paid.append(essay)
-
-    uncorrected_essays_count = len(uncorrected_essays_free) + len(uncorrected_essays_paid) 
-
-    active_correction_essays = [essay for essay in Essay.objects.filter().order_by('id') if Correction.objects.filter(essay=essay, status='ACTIVE')]
-    for index, essay in enumerate(active_correction_essays):
-        active_correction_essays[index].verbose_mode = get_verbose_mode(essay.mode)
-        active_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='ACTIVE').get().user
-    active_corrections_essays_count = len(active_correction_essays)
-
-    done_correction_essays = sorted(
-        [essay for essay in Essay.objects.filter() if Correction.objects.filter(essay=essay, status='DONE').count()],
-        key=lambda essay: (Correction.objects.filter(essay=essay, status='DONE').first().end_date, Correction.objects.filter(essay=essay, status='DONE').first().id),
-        reverse=True)
-    for index, essay in enumerate(done_correction_essays):
-        done_correction_essays[index].monitor = Correction.objects.filter(essay=essay, status='DONE').get().user
-    done_corrections_count = len(done_correction_essays)
-
     data = {
         'title': 'Redações',
         'added': request.GET.get('added', 'None'),
         'mailed': request.GET.get('mailed', 'None'),
-        'essays_free': uncorrected_essays_free,
-        'essays_paid': uncorrected_essays_paid,
-        'active_correction_essays': active_correction_essays,
-        'done_correction_essays': done_correction_essays,
-
-        'done_corrections_count': done_corrections_count,
-        'active_corrections_essays_count': active_corrections_essays_count,
-        'uncorrected_essays_count': uncorrected_essays_count,
-        
-        'active_corrections_essays_card_type': 'success' if active_corrections_essays_count == 0 else 'warning',
-        'active_corrections_essays_icon': 'check' if active_corrections_essays_count == 0 else 'warning',
-        'uncorrected_essays_card_type': 'success' if uncorrected_essays_count == 0 else 'warning',
-        'uncorrected_essays_icon': 'check' if uncorrected_essays_count == 0 else 'warning',
-
         'user': get_user_details(request.user),
+        'uncorrected_essays_count': Essay.objects.filter(correction__isnull=True).count(),
+        'active_corrections_essays_count': Essay.objects.filter(correction__status='ACTIVE').count(),
+        'done_corrections_count': Essay.objects.filter(correction__status='DONE').count(),
         'created': request.GET.get('created', None),
         'updated': request.GET.get('updated', None),
     }
