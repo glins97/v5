@@ -191,3 +191,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     '/usr/local/lib/python3.6/dist-packages/django/contrib/admin/static',
 )
+
+import locale
+locale.setlocale(locale.LC_TIME, "pt_BR")

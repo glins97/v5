@@ -1,245 +1,216 @@
-<!DOCTYPE html>
-  <html lang="en">
-    {% include "base/head.html" %}
-  <body class="">
-    <div class="wrapper ">
-      {% include "base/sidebar.html" %}
-      <div class="main-panel">
-        {% include "base/navbar.html" %}
-        <div class="content">
-          <div class="content">
-            <button data-toggle="modal" id="openEventModal" data-target="#eventModal" hidden="true"></button>
-            <button data-toggle="modal" id="openUpdateEventModal" data-target="#updateEventModal" hidden="true"></button>
-            <div class="modal has-info show" id="eventModal" role="dialog" aria-labelledby="eventModal" style="display: none;" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-body">
-                    <label for="eventTextArea">Tema:</label>
-                    <textarea class="form-control" id="eventTextArea"></textarea>
-                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveEvent();">Salvar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal has-info show" id="updateEventModal" role="dialog" aria-labelledby="updateEventModal" style="display: none;" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-body">
-                    <label for="updateEventTextArea">Tema:</label>
-                    <textarea class="form-control" id="updateEventTextArea"></textarea>
-                    <button class="btn btn-danger btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.deleteEvent();">Deletar</button>
-                    <button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveEvent();">Salvar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                  <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">assignment</i>
-                      </div>
-                      <p class="card-category">Entregues</p>
-                      <h3 class="card-title">{{ essays_count }}</h3>
-                    </div>
-                    <div class="card-footer">
-                      <div class="stats">
-                        {{ essays_msg }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                  <div class="card card-stats">
-                    <div class="card-header card-header-{{correcting_essays_card_type}} card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">{{ correcting_essays_icon }}</i>
-                      </div>
-                      <p class="card-category">A corrigir</p>
-                      <h3 class="card-title">{{ correcting_essays_count }}</h3>
-                    </div>
-                    <div class="card-footer">
-                      <div class="stats">
-                        {{ correcting_essays_msg }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-md-12 col-sm-12">
-                  <div class="card card-stats">
-                    <div class="card-header card-header-success card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">check</i>
-                      </div>
-                      <p class="card-category">Corrigidas</p>
-                      <h3 class="card-title">{{ corrected_essays_count }}</h3>
-                    </div>
-                    <div class="card-footer">
-                      <div class="stats">
-                        {{ corrected_essays_msg }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                {% if theme_enem %}
-                <div class="col-md-6">
-                  <div style="height: 420px; cursor: pointer;" class="card" onclick="location.href='/themes/{{theme_enem.id}}/';">
-                    <div id="week-theme-header" class="card-header card-header-{% if theme_enem.done %}success{% else %}info{% endif %} card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">content_paste</i>
-                      </div>
-                      <h4 class="card-title">Tema da semana - Enem</h4>
-                    </div>
-                    <div class="card-footer" style="height: 100%;">
-                      <div id='week-theme-img' class="fill" style="background-image: url('/{{theme_enem.file}}');"></div>
-                    </div>
-                    <div class="card-footer">
-                      <h5><i>" {{theme_enem.description}} "</i></h5>
-                    </div>
-                    <div class="card-footer">
-                      <div class="stats">
-                        {% if theme_enem.done %}Tema já entregue!{% else %}Você ainda não entregou uma redação com esse tema!{% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {% endif %}
-                {% if theme_vunesp %}
-                <div class="col-md-6">
-                  <div style="height: 420px; cursor: pointer;" class="card" onclick="location.href='/themes/{{theme_vunesp.id}}/';">
-                    <div id="week-theme-header" class="card-header card-header-{% if theme_vunesp.done %}success{% else %}info{% endif %} card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">content_paste</i>
-                      </div>
-                      <h4 class="card-title">Tema da semana - Vunesp</h4>
-                    </div>
-                    <div class="card-footer" style="height: 100%;">
-                      <div id='week-theme-img' class="fill" style="background-image: url('/{{theme_vunesp.file}}');"></div>
-                    </div>
-                    <div class="card-footer">
-                      <h5><i>" {{theme_vunesp.description}} "</i></h5>
-                    </div>
-                    <div class="card-footer">
-                      <div class="stats">
-                        {% if theme_vunesp.done %}Tema já entregue!{% else %}Você ainda não entregou uma redação com esse tema!{% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {% endif %}
-              </div>
-              {% if essays_count > 0 %}
-              <div class="row">
-                <div class={% if theme %}"col-xl-8 col-lg-6 col-md-12 col-sm-12"{% else %}"col-md-12"{% endif %}>
-                  <div class="card" id="user-essays">
-                    <div class="card-header card-header-icon card-header-info">
-                      <div class="card-icon">
-                        <i class="material-icons">assignment</i>
-                      </div>
-                      <h4 class="card-title ">Boletim</h4>
-                    </div>
-                    <div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table table-hover">
-                          <thead class="text-bold">
-                            <th> ID </th>
-                            <th> Banca </th>
-                            <th> Tema</th>
-                            <th> Data de Submissão</th>
-                            <th> Data de Correção</th>
-                            <th> Nota</th>
-                          </thead>
-                          
-                          <tbody>
-                            {% for essay in essays %}
-                            <tr>
-                              <td><a href='essays/{{essay.id}}/'> {{ essay.id }} </a></td>
-                              <td><a href='essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
-                              <td><a href='essays/{{essay.id}}/'> {{ essay.theme|truncatechars:40 }}</a></td>
-                              <td><a href='essays/{{essay.id}}/'> {{ essay.upload_date }} </a></td>
-                              <td><a href='essays/{{essay.id}}/'> {{ essay.correction_date }} </a></td>
-                              <td class="text-bold"><a href='essays/{{essay.id}}/'> {{ essay.grade }} </a></td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <div class="stats">
-                        {% if essays|length ==   0 %}
-                        Sem redações cadastradas. Cadastre sua primeira na página de redações, acessível pelo menu à esquerda! (ou no botão ao lado!)
-                        {% else %}
-                        Aqui serão mostradas apenas suas últimas 5 redações!
-                        {% endif %}
-                      </div>
-                      <a class="btn btn-info pull-right" href="/essays/new/">Adicionar nova redação</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {% endif %}
-              </div>
-              <div class="row">
-                <div class="col-md-12 ml-auto mr-auto">
-                  <div class="card card-calendar">
-                    <div class="card-header card-header-info card-header-icon">
-                      <div class="card-icon">
-                        <i class="material-icons">history</i>
-                      </div>
-                      <h4 class="card-title">Meu planejamento</h4>
-                    </div>
-                    <div class="card-body ">
-                      <div id="fullCalendar"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <br>
-            </div>
-          </div>
-        </div>
-        {% include "base/footer.html" %}
-      </div>
-    </div>
-    <script src="/static/essay_manager/js/core/jquery.min.js"></script>
-    <script src="/static/essay_manager/js/core/popper.min.js"></script>
-    <script src="/static/essay_manager/js/core/bootstrap-material-design.min.js"></script>
-    <script src="/static/essay_manager/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <script src="/static/essay_manager/js/plugins/moment.min.js"></script>
-    <script src="/static/essay_manager/js/plugins/sweetalert2.js"></script>
-    <script src="/static/essay_manager/js/plugins/jquery.validate.min.js"></script>
-    <script src="/static/essay_manager/js/plugins/jquery.bootstrap-wizard.js"></script>
-    <script src="/static/essay_manager/js/plugins/bootstrap-selectpicker.js"></script>
-    <script src="/static/essay_manager/js/plugins/fullcalendar.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-    <script src="/static/essay_manager/js/plugins/arrive.min.js"></script>
-    <script src="/static/essay_manager/js/plugins/bootstrap-notify.js"></script>
-    <script src="/static/essay_manager/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        md.initFullCalendar();
-        md.loadEvents();
-      });
-    </script>
-    <script>
-      $(document).ready(function() {
-        $().ready(function() {
-          {% if registered == 'True' %}
-              md.showNotification('top', 'center', 'Usuário registrado com sucesso!', 'success');
-          {% endif %}
-          {% if authed == 'True' %}
-              md.showNotification('top', 'center', 'Login bem-sucedido!', 'success');
-          {% endif %}
-        });
-      });
-    </script>
-  </body>
-  
-  </html>
-  
+{% extends "base/page.html" %}
+
+{% block page%}
+
+<script>
+	$(document).ready(function() {
+		md.initFullCalendar();
+		md.loadEvents();
+	});
+</script>
+<script>
+	$(document).ready(function() {
+		$().ready(function() {
+			{% if registered == 'True' %}
+			md.showNotification('top', 'center', 'Usuário registrado com sucesso!', 'success');
+			{% endif %}
+			{% if authed == 'True' %}
+			md.showNotification('top', 'center', 'Login bem-sucedido!', 'success');
+			{% endif %}
+		});
+	});
+</script>
+
+<button data-toggle="modal" id="openEventModal" data-target="#eventModal" hidden="true"></button>
+<button data-toggle="modal" id="openUpdateEventModal" data-target="#updateEventModal" hidden="true"></button>
+<div class="modal has-info show" id="eventModal" role="dialog" aria-labelledby="eventModal" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<label for="eventTextArea">Tema:</label>
+				<textarea class="form-control" id="eventTextArea"></textarea>
+				<button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveEvent();">Salvar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal has-info show" id="updateEventModal" role="dialog" aria-labelledby="updateEventModal" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<label for="updateEventTextArea">Tema:</label>
+				<textarea class="form-control" id="updateEventTextArea"></textarea>
+				<button class="btn btn-danger btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.deleteEvent();">Deletar</button>
+				<button class="btn btn-success btn-link float-right pull-right" id="save" data-dismiss="modal" onclick="md.saveEvent();">Salvar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-4 col-md-6 col-sm-12">
+			<div class="card card-stats">
+				<div class="card-header card-header-info card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">assignment</i>
+					</div>
+					<p class="card-category">Entregues</p>
+					<h3 class="card-title">{{ essays_count }}</h3>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						{{ essays_msg }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12">
+			<div class="card card-stats">
+				<div class="card-header card-header-{{correcting_essays_card_type}} card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">{{ correcting_essays_icon }}</i>
+					</div>
+					<p class="card-category">A corrigir</p>
+					<h3 class="card-title">{{ correcting_essays_count }}</h3>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						{{ correcting_essays_msg }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-12 col-sm-12">
+			<div class="card card-stats">
+				<div class="card-header card-header-success card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">check</i>
+					</div>
+					<p class="card-category">Corrigidas</p>
+					<h3 class="card-title">{{ corrected_essays_count }}</h3>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						{{ corrected_essays_msg }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		{% if theme_enem %}
+		<div class="col-md-6">
+			<div style="height: 420px; cursor: pointer;" class="card" onclick="location.href='/themes/{{theme_enem.id}}/';">
+				<div id="week-theme-header" class="card-header card-header-{% if theme_enem.done %}success{% else %}info{% endif %} card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">content_paste</i>
+					</div>
+					<h4 class="card-title">Tema da semana - Enem</h4>
+				</div>
+				<div class="card-footer" style="height: 100%;">
+					<div id='week-theme-img' class="fill" style="background-image: url('/{{theme_enem.file}}');"></div>
+				</div>
+				<div class="card-footer">
+					<h5><i>" {{theme_enem.description}} "</i></h5>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						{% if theme_enem.done %}Tema já entregue!{% else %}Você ainda não entregou uma redação com esse tema!{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		{% if theme_vunesp %}
+		<div class="col-md-6">
+			<div style="height: 420px; cursor: pointer;" class="card" onclick="location.href='/themes/{{theme_vunesp.id}}/';">
+				<div id="week-theme-header" class="card-header card-header-{% if theme_vunesp.done %}success{% else %}info{% endif %} card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">content_paste</i>
+					</div>
+					<h4 class="card-title">Tema da semana - Vunesp</h4>
+				</div>
+				<div class="card-footer" style="height: 100%;">
+					<div id='week-theme-img' class="fill" style="background-image: url('/{{theme_vunesp.file}}');"></div>
+				</div>
+				<div class="card-footer">
+					<h5><i>" {{theme_vunesp.description}} "</i></h5>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						{% if theme_vunesp.done %}Tema já entregue!{% else %}Você ainda não entregou uma redação com esse tema!{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+	{% if essays_count > 0 %}
+	<div class="row">
+		<div class={% if theme %}"col-xl-8 col-lg-6 col-md-12 col-sm-12"{% else %}"col-md-12"{% endif %}>
+			<div class="card" id="user-essays">
+				<div class="card-header card-header-icon card-header-info">
+					<div class="card-icon">
+						<i class="material-icons">assignment</i>
+					</div>
+					<h4 class="card-title ">Boletim</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead class="text-bold">
+								<th> ID </th>
+								<th> Banca </th>
+								<th> Tema</th>
+								<th> Data de Submissão</th>
+								<th> Data de Correção</th>
+								<th> Nota</th>
+							</thead>
+							
+							<tbody>
+								{% for essay in essays %}
+								<tr>
+									<td><a href='essays/{{essay.id}}/'> {{ essay.id }} </a></td>
+									<td><a href='essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
+									<td><a href='essays/{{essay.id}}/'> {{ essay.theme|truncatechars:40 }}</a></td>
+									<td><a href='essays/{{essay.id}}/'> {{ essay.upload_date }} </a></td>
+									<td><a href='essays/{{essay.id}}/'> {{ essay.correction_date }} </a></td>
+									<td class="text-bold"><a href='essays/{{essay.id}}/'> {{ essay.grade }} </a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						{% if essays|length ==   0 %}
+						Sem redações cadastradas. Cadastre sua primeira na página de redações, acessível pelo menu à esquerda! (ou no botão ao lado!)
+						{% else %}
+						Aqui serão mostradas apenas suas últimas 5 redações!
+						{% endif %}
+					</div>
+					<a class="pjax text-white btn btn-info pull-right" href="/essays/new/">Adicionar nova redação</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+</div>
+<div class="row">
+	<div class="col-md-12 ml-auto mr-auto">
+		<div class="card card-calendar">
+			<div class="card-header card-header-info card-header-icon">
+				<div class="card-icon">
+					<i class="material-icons">history</i>
+				</div>
+				<h4 class="card-title">Meu planejamento</h4>
+			</div>
+			<div class="card-body ">
+				<div id="fullCalendar"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

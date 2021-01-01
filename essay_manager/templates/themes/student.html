@@ -56,9 +56,10 @@
 								<tbody>
 									{% for theme in axis.themes %}
 									<tr>
-										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+										<td> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -104,9 +105,10 @@
 								<tbody>
 									{% for theme in axis.themes %}
 									<tr>
-										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+										<td> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -152,9 +154,10 @@
 								<tbody>
 									{% for theme in axis.themes %}
 									<tr>
-										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+										<td> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -200,9 +203,10 @@
 								<tbody>
 									{% for theme in axis.themes %}
 									<tr>
-										<td> <a href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
-										<td class="sm-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
-										<td class="sm-hidden md-hidden"> <a href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
+										<td> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.description}} </a> </td>
+										<td class="sm-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.jury}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.done_essays}} </a> </td>
+										<td class="sm-hidden md-hidden"> <a class="pjax" href="/themes/{{theme.id}}/"> {{theme.last_essay}} </a> </td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -221,4 +225,3 @@
 </div>
 
 {% endblock %}
-					

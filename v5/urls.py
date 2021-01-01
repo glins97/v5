@@ -1,3 +1,6 @@
+from ninja import NinjaAPI
+api = NinjaAPI()
+
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.conf import settings
@@ -80,7 +83,10 @@ urlpatterns = [
     path('exercises/', exercises_view),
     path('password/change/', change_password_view),
 
-    # - apis
+    # - ninja apis
+    path('ninja/', api.urls),
+
+    # - manual apis
     path('corrections/new/<int:id>/', create_correction_endpoint),
     path('corrections/update/<int:id>/', update_correction_endpoint),
     path('api/profile/update/', update_profile_endpoint),

@@ -6,7 +6,8 @@ from essay_manager.decorators import login_required, has_permission
 from essay_manager.models import Theme, Essay, Correction
 from essay_manager.apis.document import Document
 from essay_manager.apis.pdf_filler import fill_pdf_fields
-from mailer.mailer import send_templated_mail
+from mailer.mailer import send_mail
+from v5.urls import api
 
 import time
 import subprocess
@@ -117,18 +118,67 @@ def mail_essay_endpoint(request, id):
         logger.error(f'mail_essay_endpoint@essay::Exception thrown | {request.user} {request} {repr(e)}')
         return redirect('/essays/?mailed=False')
 
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
-from email.encoders import encode_base64
-import codecs
-from threading import _start_new_thread
-import logging
-logger = logging.getLogger('django')
-
-def send_mail(email, subject, message, attachment):
+def get_correction_record_data(record):
+    return [
+        record.essay.id, 
+        f'{record.essay.user}', 
+        f'{record.user}', 
+        f'{record.essay.theme.jury}', 
+        f'{record.essay.theme.description.capitalize()}', 
+        f'{record.essay.upload_date.strftime("%d de %B, %Y").title().replace("De", "de")}', 
+        f'{record.essay.grade}', 
+    ]
+    
+@api.post("tables/corrections/{status}/")
+def get_table_data(request, status: str):
+    response = {}
     try:
+        draw = int(request.POST.get('draw', 0))
+        start = int(request.POST.get('start', 0))
+        length = int(request.POST.get('length', 0))
+        search = request.POST.get('search[value]', '')
+    
+        print('status', status)
+        records = Correction.objects.filter(status=status.upper()).order_by('-id')
+        records_filtered = []
+    
+        response['draw'] = draw
+        response['recordsTotal'] = records.count()
+        if search:
+            filtered_record_data = []
+            for record in records:
+                record_data = get_correction_record_data(record)
+                for attr in record_data:
+                    if search.lower() in str(attr).lower():
+                        filtered_record_data.append(record_data)
+                        break
+            response['recordsFiltered'] = len(filtered_record_data)
+            response['data'] = [record_data for record_data in filtered_record_data[start : start + length]]
+        else:
+            records_filtered = list(records)
+            response['recordsFiltered'] = len(records_filtered)
+            response['data'] = [get_correction_record_data(record) for record in records[start : start + length]]
+
+    except Exception as e:
+        print('exception', e)
+        response['error'] = e
+    return response
+
+def get_essay_record_data(record):
+    return [
+        record.id, 
+        f'{record.user}', 
+        f'Jornada {record.mode}', 
+        f'{record.theme.jury}', 
+        f'{record.theme.description.capitalize()}', 
+        f'{record.upload_date.strftime("%d de %B, %Y").title().replace("De", "de")}', 
+    ]
+
+@api.post("tables/essays/{mode}/")
+def get_table_data(request, mode: str):
+    response = {}
+    try:
+<<<<<<< HEAD
         msg = MIMEMultipart()
         password = 'campusppa'
         msg['To'] = email
@@ -148,6 +198,33 @@ def send_mail(email, subject, message, attachment):
             server.login('adm.ppa.digital@gmail.com', 'campusppa')
             server.login(msg['From'], msg['To'], msg.as_string())
         return True
+=======
+        draw = int(request.POST.get('draw', 0))
+        start = int(request.POST.get('start', 0))
+        length = int(request.POST.get('length', 0))
+        search = request.POST.get('search[value]', '')
+    
+        records = Essay.objects.filter(correction__isnull=True, theme__type=mode.upper()) 
+        records_filtered = []
+        response['draw'] = draw
+        response['recordsTotal'] = records.count()
+        if search:
+            filtered_record_data = []
+            for record in records:
+                record_data = get_essay_record_data(record)
+                for attr in record_data:
+                    if search.lower() in str(attr).lower():
+                        filtered_record_data.append(record_data)
+                        break
+            response['recordsFiltered'] = len(filtered_record_data)
+            response['data'] = [record_data for record_data in filtered_record_data[start : start + length]]
+        else:
+            records_filtered = list(records)
+            response['recordsFiltered'] = len(records_filtered)
+            response['data'] = [get_essay_record_data(record) for record in records[start : start + length]]
+
+>>>>>>> pjax
     except Exception as e:
-        logger.error('exception @send_mail ->', e)
-        return False
+        print('exception', e)
+        response['error'] = e
+    return response

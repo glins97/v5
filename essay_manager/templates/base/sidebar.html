@@ -1,61 +1,59 @@
 {% load permissions %}
 <div class="sidebar" data-color="azure" data-background-color="black" data-image="/static/essay_manager/img/sidebar-5.jpg">
-	<div class="logo"><a href="https://ppa.digital" class="simple-text logo-mini">
+	<div class="logo"><a href="https://ppa.digital" page-title="user" class="simple-text logo-mini">
 		{{ user.initials }}
 	</a>
-	<a href="https://ppa.digital" class="simple-text logo-normal">
+	<a href="https://ppa.digital" page-title="user" class="simple-text logo-normal">
 		{{ user.full_name }}
 	</a></div>
 	<div class="sidebar-wrapper">
 		<ul class="nav">
 			{% if user.obj|has_permission:'student' %}
-			<li class="nav-item {% if title == 'Preparação' %}active{%endif%}">
-				<a class="nav-link" href="/">
+			<li page-id="/" page-title="Preparação" class="nav-item {% if title == 'Preparação' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/" href="/">
 					<i class="material-icons">dashboard</i>
 					<p>Preparação</p>
 				</a>
 			</li>
 			{% endif %}
 			{% if user.obj|has_permission:'monitor' %}
-			<li class="nav-item {% if title == 'Inicial' %}active{%endif%}">
-				<a class="nav-link" href="/">
+			<li page-id="/" page-title="Inicial" class="nav-item {% if title == 'Inicial' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/" href="/">
 					<i class="material-icons">dashboard</i>
 					<p>Inicial</p>
 				</a>
 			</li>
 			{% endif %}
-			{% if user.obj|has_permission:'student' or user.obj|has_permission:'superuser' %}
-			<li class="nav-item {% if title == 'Temas' %}active{%endif%}">
-				<a class="nav-link" href="/themes/">
+			<li page-id="/themes/" page-title="Temas" class="nav-item {% if title == 'Temas' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/themes/" href="/themes/">
 					<i class="material-icons">content_paste</i>
 					<p>Temas</p>
 				</a>
 			</li>
-			{% endif %}
-			<li class="nav-item {% if title == 'Redações' %}active{%endif%}">
-				<a class="nav-link" href="/essays/">
+			<li page-id="/essays/" page-title="Redações" class="nav-item {% if title == 'Redações' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/essays/" href="/essays/">
 					<i class="material-icons">assignment</i>
 					<p>Redações </p>
 				</a>
 			</li>
 			{% if user.obj|has_permission:'student' %}
-			<li class="nav-item {% if title == 'Performance' %}active{%endif%}">
-				<a class="nav-link" href="/graphs/">
+			<li page-id="/graphs/" page-title="Performance" class="nav-item {% if title == 'Performance' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/graphs/" href="/graphs/">
 					<i class="material-icons">equalizer</i>
 					<p>Performance</p>
 				</a>
 			</li>
 			{% endif %}
 			{% if user.obj|has_permission:'student' %}
-			<li class="nav-item {% if title == 'Exercícios' %}active{%endif%}">
-				<a class="nav-link" href="/exercises/">
+			<li page-id="/exercises/" page-title="Exercícios" class="nav-item {% if title == 'Exercícios' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/exercises/" href="/exercises/">
 					<i class="material-icons">subject</i>
 					<p>Exercícios</p>
 				</a>
 			</li>
 			{% if user.obj|has_permission:'student' %}
-			<li class="nav-item {% if title == 'Perfil' %}active{%endif%}">
-				<a class="nav-link" href="/profile/">
+			<li page-id="/profile/" page-title="Perfil" class="nav-item {% if title == 'Perfil' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/profile/" href="/profile/">
 					<i class="material-icons">person</i>
 					<p>Perfil</p>
 				</a>
@@ -63,8 +61,8 @@
 			{% endif %}
 			{% endif %}
 			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
-			<li class="nav-item {% if title == 'Gestão' %}active{%endif%}">
-				<a class="nav-link" data-toggle="collapse" href="#management">
+			<li page-id="/management/" page-title="Gestão" class="nav-item {% if title == 'Gestão' %}active{%endif%}">
+				<a class="nav-link" active-page="" data-toggle="collapse" href="#management">
 				  <i class="material-icons">schedule</i>
 				  <p> Gestão
 					<b class="caret"></b>
@@ -72,14 +70,14 @@
 				</a>
 				<div class="collapse" id="management">
 				  <ul class="nav">
-					<li class="nav-item ">
-					  <a class="nav-link" href="/management/monitors/">
+					<li page-id="/management/monitors/" page-title="Gestão" class="nav-item ">
+					  <a class="nav-link pjax" active-page="/management/monitors/" href="/management/monitors/">
 						<span class="sidebar-mini"> M </span>
 						<span class="sidebar-normal"> Monitores </span>
 					  </a>
 					</li>
-					<li class="nav-item ">
-					  <a class="nav-link"href="/management/students/">
+					<li page-id="/management/students/" page-title="Gestão" class="nav-item ">
+					  <a class="nav-link pjax" active-page="/management/students/"href="/management/students/">
 						<span class="sidebar-mini"> A </span>
 						<span class="sidebar-normal"> Alunos </span>
 					  </a>
@@ -89,24 +87,24 @@
 			  </li>
 			{% endif %}
 			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
-			<li class="nav-item {% if title == 'Mentoria' %}active{%endif%}">
-				<a class="nav-link" href="/mentoring/">
+			<li page-id="/mentoring/" page-title="Mentoria" class="nav-item {% if title == 'Mentoria' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/mentoring/" href="/mentoring/">
 					<i class="material-icons">comment</i>
 					<p>Mentoria</p>
 				</a>
 			</li>
 			{% endif %}
 			{% if user.obj|has_permission:'superuser' and user.obj|has_permission:'monitor' %}
-			<li class="nav-item {% if title == 'Acesso' %}active{%endif%}">
-				<a class="nav-link" href="/access/">
+			<li page-id="/access/" page-title="Acesso" class="nav-item {% if title == 'Acesso' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="/access/" href="/access/">
 					<i class="material-icons">person</i>
 					<p>Acesso</p>
 				</a>
 			</li>
 			{% endif %}
 			<!-- {% if user.obj|has_permission:'monitor' %}
-			<li class="nav-item {% if title == 'Correções' %}active{%endif%}">
-				<a class="nav-link" href="/corrections/">
+			<li page-id="" page-title="Correções" class="nav-item {% if title == 'Correções' %}active{%endif%}">
+				<a class="nav-link pjax" active-page="" href="/corrections/">
 					<i class="material-icons">content_copy</i>
 					<p>Correções</p>
 				</a>

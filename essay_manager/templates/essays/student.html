@@ -1,6 +1,19 @@
 {% extends "base/page.html" %}
 
 {% block page %}
+<script>
+  $(document).ready(function() {
+    $().ready(function() {
+      
+      {% if added == 'True' %}
+      md.showNotification('top', 'center', 'Redação adicionada com sucesso!', 'success');
+      {% elif added == 'False' %}
+      md.showNotification('top', 'center', 'Falha ao adicionar redação. Selecione um tema e um arquivo!', 'danger');
+      {% endif %}
+      
+    });
+  });
+</script>
 {% if essays %}
 <div class="row ml-4">
   <h5 class="card-title">É fundamental conferir seus erros anteriores antes de produzir novas redações!</h5>
@@ -34,13 +47,13 @@
                 <td><a href='{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
                 <td><a href='{{essay.id}}/'> {{ essay.theme }} </a></td>
                 <td><a href='{{essay.id}}/'> {{ essay.upload_date }} </a></td>
-                <td class="text-bold"><a href='{{essay.id}}/'> {{ essay.grade }} </a></td>
+                <td class="text-bold"><a class="pjax" href='{{essay.id}}/'> {{ essay.grade }} </a></td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
-        <a class="btn btn-info pull-right" href="/essays/new/">Adicionar</a>
+        <a class="pjax text-white btn btn-info pull-right" style="color: white" href="/essays/new/">Adicionar</a>
         <div class="card-footer">
           <div class="stats">
             {% if essays|length == 0 %}
@@ -54,18 +67,5 @@
     </div>
   </div>
 </div>
-<script>
-  $(document).ready(function() {
-    $().ready(function() {
-      
-      {% if added == 'True' %}
-      md.showNotification('top', 'center', 'Redação adicionada com sucesso!', 'success');
-      {% elif added == 'False' %}
-      md.showNotification('top', 'center', 'Falha ao adicionar redação. Selecione um tema e um arquivo!', 'danger');
-      {% endif %}
-      
-    });
-  });
-</script>
 
 {% endblock %}

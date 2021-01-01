@@ -1393,6 +1393,9 @@ pre {
   max-width: 100%;
   margin-bottom: 1rem;
   background-color: transparent; }
+  .table tr {
+    height: 60px !important;
+  }
   .table th,
   .table td {
     padding: 0.75rem;

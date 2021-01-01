@@ -1,13 +1,160 @@
 {% extends "base/page.html" %}
 
 {% block page %}
-<script src="/static/essay_manager/js/plugins/jquery.dataTables.min.js"></script>
+<script>
+	console.log('@scriptLoader::pageReady')
+	function pageReady() {
+		console.log('@pageReady')
+		{% if added == 'True' %}
+		md.showNotification('top', 'center', 'Redação adicionada com sucesso!', 'success');
+		{% elif added == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao adicionar redação. Selecione um tema e um arquivo!', 'danger');
+		{% endif %}
+		{% if created == 'True' %}
+		md.showNotification('top', 'center', 'Correção salva com sucesso!', 'success');
+		{% elif created == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao iniciar correção.', 'danger');
+		{% endif %}
+		{% if updated == 'True' %}
+		md.showNotification('top', 'center', 'Correção atualizada com sucesso!', 'success');
+		{% elif updated == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao atualizar correção. Contate o administrador.', 'danger');
+		{% endif %}
+		{% if mailed == 'True' %}
+		md.showNotification('top', 'center', 'Correção enviada com sucesso!', 'success');
+		{% elif updated == 'False' %}
+		md.showNotification('top', 'center', 'Falha ao enviar correção. Contate o administrador.', 'danger');
+		{% endif %}
+
+		$('#uncorrected-essays-table').DataTable({
+			'pagingType': 'full_numbers',
+			'order': [[0, 'asc']],
+			'bSort': false,
+			"processing": true,
+			"serverSide": true,
+			"ajax": {
+				"url": "/ninja/tables/essays/paid/",
+				"type": "POST"
+			},
+			"fnInitComplete": function(oSettings, json) {
+				pjax.load();
+			},
+			'columnDefs': [
+				{
+					"targets": '_all',
+					"render": function ( data, type, row ) {
+						return '<a class="pjax" href=/essays/'+ row[0] + '/>' + data + "</a>";
+					}
+				},
+			],
+			'lengthMenu': [
+			[5, 10, 25, 50, -1],
+			[5, 10, 25, 50, 'Todos']
+			],
+			responsive: true,
+			language: {
+				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
+			}
+		});
+		$('#uncorrected-free-essays-table').DataTable({
+			'pagingType': 'full_numbers',
+			'order': [[0, 'asc']],
+			'bSort': false,
+			"processing": true,
+			"serverSide": true,
+			"ajax": {
+				"url": "/ninja/tables/essays/free/",
+				"type": "POST"
+			},
+			"fnInitComplete": function(oSettings, json) {
+				pjax.load();
+			},
+			'columnDefs': [
+				{
+					"targets": '_all',
+					"render": function ( data, type, row ) {
+						return '<a class="pjax" href=/essays/'+ row[0] + '/>' + data + "</a>";
+					}
+				},
+			],
+			'lengthMenu': [
+			[5, 10, 25, 50, -1],
+			[5, 10, 25, 50, 'Todos']
+			],
+			responsive: true,
+			language: {
+				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
+			}
+		});
+		$('#active-corrections-essays-table').DataTable({
+			'pagingType': 'full_numbers',
+			'order': [[0, 'asc']],
+			'bSort': false,
+			"processing": true,
+			"serverSide": true,
+			"ajax": {
+				"url": "/ninja/tables/corrections/active/",
+				"type": "POST"
+			},
+			"fnInitComplete": function(oSettings, json) {
+				pjax.load();
+			},
+			'columnDefs': [
+				{
+					"targets": '_all',
+					"render": function ( data, type, row ) {
+						return '<a class="pjax" href=/essays/'+ row[0] + '/>' + data + "</a>";
+					}
+				},
+			],
+			'lengthMenu': [
+			[5, 10, 25, 50, -1],
+			[5, 10, 25, 50, 'Todos']
+			],
+			responsive: true,
+			language: {
+				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
+			}
+		});
+		$('#corrected-essays-table').DataTable({
+			'pagingType': 'full_numbers',
+			'order': [[0, 'asc']],
+			'bSort': false,
+			"processing": true,
+			"serverSide": true,
+			"ajax": {
+				"url": "/ninja/tables/corrections/done/",
+				"type": "POST"
+			},
+			"fnInitComplete": function(oSettings, json) {
+				pjax.load();
+			},
+			'columnDefs': [
+				{
+					"targets": '_all',
+					"render": function ( data, type, row ) {
+						return '<a class="pjax" href=/essays/'+ row[0] + '/>' + data + "</a>";
+					}
+				},
+			],
+			'lengthMenu': [
+				[5, 10, 25, 50, -1],
+				[5, 10, 25, 50, 'Todos']
+			],
+			responsive: true,
+			language: {
+				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
+			}
+		});
+	}
+	$(document).ready(function() { pageReady() });
+</script>
 <div class="row">
 	<div class="col-lg-4 col-md-6 col-sm-12">
 		<div class="card card-stats">
-			<div class="card-header card-header-{{uncorrected_essays_card_type}} card-header-icon">
+			<div class="card-header card-header-success card-header-icon">
 				<div class="card-icon">
-					<i class="material-icons">{{uncorrected_essays_icon}}</i>
+					<i class="material-icons">content_paste</i>
 				</div>
 				<p class="card-category">Redações a corrigir</p>
 				<h3 class="card-title">{{ uncorrected_essays_count }}</h3>
@@ -18,9 +165,9 @@
 	</div>
 	<div class="col-lg-4 col-md-6 col-sm-12">
 		<div class="card card-stats">
-			<div class="card-header card-header-{{active_corrections_essays_card_type}} card-header-icon">
+			<div class="card-header card-header-success card-header-icon">
 				<div class="card-icon">
-					<i class="material-icons">{{ active_corrections_essays_icon }}</i>
+					<i class="material-icons">content_copy</i>
 				</div>
 				<p class="card-category">Total de correções ativas</p>
 				<h3 class="card-title">{{ active_corrections_essays_count }}</h3>
@@ -29,7 +176,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-4 col-md-6 col-sm-12">
+	<div class="col-lg-4 col-md-12 col-sm-12">
 		<div class="card card-stats">
 			<div class="card-header card-header-success card-header-icon">
 				<div class="card-icon">
@@ -50,7 +197,7 @@
 				<div class="card-icon">
 					<i class="material-icons">assignment</i>
 				</div>
-				<h4 class="card-title">Redações PPA - <small> {{essays_paid|length}}</small></h4>
+				<h4 class="card-title">Redações PPA</h4>
 			</div>
 			<div class="card-body has-info">
 				<div class="toolbar">
@@ -78,16 +225,6 @@
 							</tr>
 						</tfoot>
 						<tbody>
-							{% for essay in essays_paid %}
-							<tr>
-								<td><a href='/essays/{{essay.id}}/'>{{ essay.id }}</a></td>
-								<td><a href='/essays/{{essay.id}}/'> {{ essay.user.first_name }}{{ " " }}{{ essay.user.last_name }} </a></td>
-								<td><a href='/essays/{{essay.id}}/'> {{ essay.verbose_mode }} </a></td>
-								<td><a href='/essays/{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
-								<td><a href='/essays/{{essay.id}}/'> {{ essay.theme }} </a></td>
-								<td><div style="height: 40px !important; display: table-cell; vertical-align: middle;"><a href='/essays/{{essay.id}}/'> {{ essay.upload_date }} </a></div></td>
-							</tr>
-							{% endfor %}
 						</tbody>
 					</table>
 				</div>
@@ -102,7 +239,7 @@
 				<div class="card-icon">
 					<i class="material-icons">assignment</i>
 				</div>
-				<h4 class="card-title">Redações solidárias - <small> {{essays_free|length}}</small></h4>
+				<h4 class="card-title">Redações solidárias</h4>
 			</div>
 			<div class="card-body has-info">
 				<div class="toolbar">
@@ -114,6 +251,7 @@
 								<th>ID</th>
 								<th>Aluno</th>
 								<th>Jornada</th>
+								<th>Banca</th>
 								<th>Tema</th>
 								<th>Data de Submissão</th>
 							</tr>
@@ -123,20 +261,12 @@
 								<th>ID</th>
 								<th>Aluno</th>
 								<th>Jornada</th>
+								<th>Banca</th>
 								<th>Tema</th>
 								<th>Data de Submissão</th>
 							</tr>
 						</tfoot>
 						<tbody>
-							{% for essay in essays_free %}
-							<tr>
-								<td><a href='/essays/{{essay.id}}/'>{{ essay.id }}</a></td>
-								<td><a href='/essays/{{essay.id}}/'> {{ essay.user.first_name }}{{ " " }}{{ essay.user.last_name }} </a></td>
-								<td><a href='/essays/{{essay.id}}/'> {{ essay.verbose_mode }} </a></td>
-								<td><a href='/essays/{{essay.id}}/'> {{ essay.theme }} </a></td>
-								<td><div style="height: 40px !important; display: table-cell; vertical-align: middle;"><a href='/essays/{{essay.id}}/'> {{ essay.upload_date }} </a></div></td>
-							</tr>
-							{% endfor %}
 						</tbody>
 					</table>
 				</div>
@@ -146,7 +276,7 @@
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<div class="card">
+		<div class="card has-info">
 			<div class="card-header card-header-icon card-header-warning">
 				<div class="card-icon">
 					<i class="material-icons">assignment</i>
@@ -176,23 +306,10 @@
 						</tr>
 					</tfoot>
 					<tbody>
-						{% for essay in active_correction_essays %}
-						<tr>
-							<td><a href='{{essay.id}}/'> {{ essay.id }} </a></td>
-							<td><a href='{{essay.id}}/'> {{ essay.user.first_name }}{{ " " }}{{ essay.user.last_name }} </a></td>
-							<td><a href='{{essay.id}}/'> {{ essay.monitor.first_name }}{{ " " }}{{ essay.monitor.last_name }} </a></td>
-							<td><a href='{{essay.id}}/'> {{ essay.verbose_mode }} </a></td>
-							<td><a href='{{essay.id}}/'> {{ essay.theme }}</a></td>
-							<td><div style="height: 40px !important; display: table-cell; vertical-align: middle;"><a href='{{essay.id}}/'> {{ essay.upload_date }} </a></div></td>
-						</tr>
-						{% endfor %}
 					</tbody>
 				</table>
 				<div class="card-footer">
 					<div class="stats">
-						{% if active_correction_essays|length == 0 %}
-						Sem redações em correção.
-						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -201,7 +318,7 @@
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<div class="card">
+		<div class="card has-info">
 			<div class="card-header card-header-icon card-header-success">
 				<div class="card-icon">
 					<i class="material-icons">assignment</i>
@@ -233,29 +350,10 @@
 						</tr>
 					</tfoot>
 					<tbody>
-						{% for essay in done_correction_essays %}
-						<tr>
-							<td><div style="height: 40px !important; display: table-cell; vertical-align: middle;">
-								<a href='{{essay.id}}/'> {{ essay.id }} </a></div></td>
-								<td><a href='{{essay.id}}/'> {{ essay.user.first_name }}{{ " " }}{{ essay.user.last_name }} </a></td>
-								<td><a href='{{essay.id}}/'> {{ essay.monitor.first_name }}{{ " " }}{{ essay.monitor.last_name }} </a></td>
-								<td><a href='{{essay.id}}/'> {{ essay.theme.jury }} </a></td>
-								<td><a href='{{essay.id}}/'> {{ essay.theme }}</a></td>
-								<td><a href='{{essay.id}}/'> {{ essay.upload_date }} </a></td>
-								{% if essay.nullified %}
-								<td><a href='{{essay.id}}/' style="color: #aa1100;"> {{ essay.grade }} (ANULADA)</a></td>
-								{% else %}
-								<td><a href='{{essay.id}}/'> {{ essay.grade }}</a></td>
-								{% endif %}
-							</tr>
-							{% endfor %}
-						</tbody>
+					</tbody>
 					</table>
 					<div class="card-footer">
 						<div class="stats">
-							{% if done_correction_essays|length == 0 %}
-							Sem redações corrigidas.
-							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -263,113 +361,4 @@
 		</div>
 	</div>
 </div>
-<script>
-	$(document).ready(function() {
-		$().ready(function() {
-			
-			{% if added == 'True' %}
-			md.showNotification('top', 'center', 'Redação adicionada com sucesso!', 'success');
-			{% elif added == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao adicionar redação. Selecione um tema e um arquivo!', 'danger');
-			{% endif %}
-			{% if created == 'True' %}
-			md.showNotification('top', 'center', 'Correção salva com sucesso!', 'success');
-			{% elif created == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao iniciar correção.', 'danger');
-			{% endif %}
-			{% if updated == 'True' %}
-			md.showNotification('top', 'center', 'Correção atualizada com sucesso!', 'success');
-			{% elif updated == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao atualizar correção. Contate o administrador.', 'danger');
-			{% endif %}
-			{% if mailed == 'True' %}
-			md.showNotification('top', 'center', 'Correção enviada com sucesso!', 'success');
-			{% elif updated == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao enviar correção. Contate o administrador.', 'danger');
-			{% endif %}
-			{% if reported == 'True' %}
-			md.showNotification('top', 'center', 'Redação reportada com sucesso!', 'success');
-			{% elif reported == 'False' %}
-			md.showNotification('top', 'center', 'Falha ao reportar redação. Pode reclamar com o Gabriel burro.', 'danger');
-			{% endif %}
-		});
-	});
-</script>
-<script>
-	$(document).ready(function() {
-		$('#uncorrected-essays-table').DataTable({
-			'pagingType': 'full_numbers',
-			'order': [[0, 'asc']],
-			'bSort': false,
-			'columnDefs': [
-			{
-				"orderable": true,
-				"targets": 1,
-			}, 
-			{
-				"orderable": false,
-				"targets": "mt-head"
-			},
-			],
-			'lengthMenu': [
-			[10, 25, 50, -1],
-			[10, 25, 50, 'Todos']
-			],
-			responsive: true,
-			language: {
-				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
-			}
-		});
-		$('#uncorrected-free-essays-table').DataTable({
-			'pagingType': 'full_numbers',
-			'order': [[0, 'asc']],
-			'bSort': false,
-			'columnDefs': [
-			{
-				"orderable": true,
-				"targets": 1,
-			}, 
-			{
-				"orderable": false,
-				"targets": "mt-head"
-			},
-			],
-			'lengthMenu': [
-			[10, 25, 50, -1],
-			[10, 25, 50, 'Todos']
-			],
-			responsive: true,
-			language: {
-				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
-			}
-		});
-		$('#active-corrections-essays-table').DataTable({
-			'pagingType': 'full_numbers',
-			'order': [[0, 'asc']],
-			'bSort': false,
-			'lengthMenu': [
-			[10, 25, 50, -1],
-			[10, 25, 50, 'Todos']
-			],
-			responsive: true,
-			language: {
-				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
-			}
-		});
-		$('#corrected-essays-table').DataTable({
-			'pagingType': 'full_numbers',
-			'order': [[0, 'asc']],
-			'bSort': false,
-			'lengthMenu': [
-			[10, 25, 50, -1],
-			[10, 25, 50, 'Todos']
-			],
-			responsive: true,
-			language: {
-				url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
-			}
-		});
-	});
-</script>
-
 {% endblock %}
