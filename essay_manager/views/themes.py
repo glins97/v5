@@ -35,9 +35,9 @@ def get_axis_data(axis, jury=None, user=None):
 def _student_themes_view(request):
     themes_by_axes = {
         'all': get_jury_data(user=request.user),
-        'enem': get_jury_data('ENEM', user=request.user),
-        'vunesp': get_jury_data('VUNESP', user=request.user),
-        'cespe': get_jury_data('CESPE', user=request.user),
+        'enem': get_jury_data(jury='ENEM', user=request.user),
+        'vunesp': get_jury_data(jury='VUNESP', user=request.user),
+        'cespe': get_jury_data(jury='CESPE', user=request.user),
     }
 
     data = {
@@ -53,9 +53,9 @@ def _student_themes_view(request):
 def _superuser_themes_view(request):
     themes_by_axes = {
         'all': get_jury_data(),
-        'enem': get_jury_data('ENEM'),
-        'vunesp': get_jury_data('VUNESP'),
-        'cespe': get_jury_data('CESPE'),
+        'enem': get_jury_data(jury='ENEM'),
+        'vunesp': get_jury_data(jury='VUNESP'),
+        'cespe': get_jury_data(jury='CESPE'),
     }
 
     data = {

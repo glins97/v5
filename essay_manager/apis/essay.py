@@ -178,27 +178,6 @@ def get_essay_record_data(record):
 def get_table_data(request, mode: str):
     response = {}
     try:
-<<<<<<< HEAD
-        msg = MIMEMultipart()
-        password = 'campusppa'
-        msg['To'] = email
-        msg['From'] = 'PPA <contato@ppa.digital>'
-        msg['Subject'] = subject
-
-        if attachment:
-            openedfile = None
-            with open(attachment, 'rb') as opened:
-                openedfile = opened.read()
-            attachedfile = MIMEApplication(openedfile, _subtype = "pdf", _encoder=encode_base64)
-            attachedfile.add_header('content-disposition', 'attachment', filename=attachment.split('/')[-1])
-            msg.attach(attachedfile)
-        msg.attach(MIMEText(message, 'html'))
-        with smtplib.SMTP('smtp.gmail.com: 587') as server:
-            server.starttls()
-            server.login('adm.ppa.digital@gmail.com', 'campusppa')
-            server.login(msg['From'], msg['To'], msg.as_string())
-        return True
-=======
         draw = int(request.POST.get('draw', 0))
         start = int(request.POST.get('start', 0))
         length = int(request.POST.get('length', 0))
@@ -223,7 +202,6 @@ def get_table_data(request, mode: str):
             response['recordsFiltered'] = len(records_filtered)
             response['data'] = [get_essay_record_data(record) for record in records[start : start + length]]
 
->>>>>>> pjax
     except Exception as e:
         print('exception', e)
         response['error'] = e
